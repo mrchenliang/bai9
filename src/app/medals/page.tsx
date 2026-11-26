@@ -4,7 +4,10 @@ import { aromaById, brandById } from "@/catalog";
 import { tastings } from "@/tastings";
 
 export const metadata: Metadata = {
-  title: "National Famous Liquors",
+  title: "National Famous Liquors (中国名酒评比)",
+  description:
+    "China’s five state-run national liquor tastings from 1952 to 1989 — the historical medal record behind today’s famous bottles.",
+  alternates: { canonical: "/medals" },
 };
 
 export default function MedalsPage() {

@@ -4,7 +4,10 @@ import { aromaById, brandById, skuAroma, skuById } from "@/catalog";
 import { banquetBands, banquetRules } from "@/banquets";
 
 export const metadata: Metadata = {
-  title: "Banquet Guide",
+  title: "Banquet & Gifting Guide (选酒指南)",
+  description:
+    "What bottle to bring for Chinese banquets, graduations, and host gifts — price bands and etiquette without the guesswork.",
+  alternates: { canonical: "/banquets" },
 };
 
 export default function BanquetsPage() {

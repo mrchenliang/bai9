@@ -2,12 +2,14 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { ImageResponse } from "next/og";
 import { skus } from "@/catalog";
+import { SITE_NAME, SITE_NAME_ZH, SITE_TAGLINE } from "@/lib/site";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Chinese Baijiu Museum · 中国白酒博物馆";
+export const alt = `${SITE_NAME} · ${SITE_NAME_ZH}`;
 
-const HERO_BOTTLES = ["feitian", "guojiao", "puwu", "bofen", "honghualang"] as const;
+/** Iconic bottles that read clearly at iMessage preview size. */
+const HERO_BOTTLES = ["feitian", "puwu", "guojiao"] as const;
 
 async function readStudioBase64(imagePath?: string): Promise<string | null> {
   if (!imagePath || !imagePath.startsWith("/")) return null;
@@ -36,11 +38,11 @@ export default async function OpenGraphImage() {
         style={{
           width: "100%",
           height: "100%",
-          background: "#0b0b0d",
           display: "flex",
+          background: "#f4f2ee",
           position: "relative",
           overflow: "hidden",
-          fontFamily: "system-ui, -apple-system, sans-serif",
+          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
         }}
       >
         <div
@@ -48,7 +50,19 @@ export default async function OpenGraphImage() {
             position: "absolute",
             inset: 0,
             background:
-              "radial-gradient(circle at 18% 20%, rgba(200,30,30,0.22), transparent 42%), radial-gradient(circle at 82% 78%, rgba(255,255,255,0.08), transparent 36%)",
+              "radial-gradient(ellipse at 78% 55%, rgba(255,255,255,0.95) 0%, transparent 55%), linear-gradient(135deg, #efece6 0%, #f7f5f1 48%, #ebe7e0 100%)",
+            display: "flex",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            left: -80,
+            bottom: -120,
+            width: 420,
+            height: 420,
+            borderRadius: 999,
+            background: "rgba(200, 30, 30, 0.08)",
             display: "flex",
           }}
         />
@@ -60,62 +74,70 @@ export default async function OpenGraphImage() {
             width: "100%",
             height: "100%",
             display: "flex",
-            padding: "48px 56px",
-            justifyContent: "space-between",
+            padding: "52px 56px 48px",
             alignItems: "stretch",
-            gap: 40,
+            justifyContent: "space-between",
+            gap: 28,
           }}
         >
           <div
             style={{
+              width: 460,
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              width: 520,
-              paddingTop: 8,
+              paddingTop: 12,
               paddingBottom: 8,
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
               <div
                 style={{
-                  width: 56,
-                  height: 56,
-                  border: "2px solid #c81e1e",
+                  width: 88,
+                  height: 88,
+                  border: "3px solid #c81e1e",
                   color: "#c81e1e",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: 30,
+                  fontSize: 52,
                   fontWeight: 700,
-                  background: "rgba(255,255,255,0.04)",
+                  background: "#ffffff",
+                  boxShadow: "0 10px 30px rgba(11,11,13,0.08)",
                 }}
               >
                 酒
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                <span style={{ fontSize: 18, fontWeight: 700, color: "#ffffff", letterSpacing: "0.08em" }}>
-                  CHINESE BAIJIU MUSEUM
-                </span>
-                <span style={{ fontSize: 14, color: "rgba(255,255,255,0.55)", letterSpacing: "0.08em" }}>
-                  中国白酒博物馆
-                </span>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <div
+                  style={{
+                    fontSize: 18,
+                    fontWeight: 700,
+                    letterSpacing: "0.14em",
+                    color: "#c81e1e",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Permanent Archive
+                </div>
+                <div style={{ fontSize: 54, fontWeight: 700, color: "#111111", lineHeight: 1.05 }}>
+                  {SITE_NAME}
+                </div>
+                <div style={{ fontSize: 28, color: "#6a655c", lineHeight: 1.2 }}>{SITE_NAME_ZH}</div>
               </div>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-              <div style={{ fontSize: 58, fontWeight: 700, color: "#ffffff", lineHeight: 1.05 }}>
-                The grain spirits China actually argues about.
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <div style={{ fontSize: 28, fontWeight: 600, color: "#1a1a1a", lineHeight: 1.25, maxWidth: 430 }}>
+                {SITE_TAGLINE}
               </div>
-              <div style={{ fontSize: 24, color: "rgba(255,255,255,0.68)", lineHeight: 1.35 }}>
-                Permanent editorial archive — tiers, table signals, and tasting provenance.
+              <div style={{ display: "flex", alignItems: "center", gap: 12, color: "#7a756c", fontSize: 18 }}>
+                <span>{skus.length} specimens</span>
+                <span>·</span>
+                <span>Tier I–IV</span>
+                <span>·</span>
+                <span>@mr_chenliang</span>
               </div>
-            </div>
-
-            <div style={{ display: "flex", alignItems: "center", gap: 18, color: "rgba(255,255,255,0.55)", fontSize: 18 }}>
-              <span>{skus.length} specimens</span>
-              <span style={{ color: "rgba(255,255,255,0.28)" }}>·</span>
-              <span>by @mr_chenliang</span>
             </div>
           </div>
 
@@ -125,24 +147,25 @@ export default async function OpenGraphImage() {
               display: "flex",
               alignItems: "flex-end",
               justifyContent: "flex-end",
-              gap: 14,
-              paddingBottom: 4,
+              gap: 18,
+              paddingRight: 8,
             }}
           >
-            {bottles.slice(0, 4).map(({ sku, src }, index) => (
+            {bottles.map(({ sku, src }, index) => (
               <div
                 key={sku.id}
                 style={{
-                  width: index === 1 || index === 2 ? 168 : 148,
-                  height: index === 1 || index === 2 ? 420 : 360,
-                  borderRadius: 18,
+                  width: index === 1 ? 220 : 190,
+                  height: index === 1 ? 520 : 460,
+                  borderRadius: 28,
                   overflow: "hidden",
-                  background: "#f6f6f8",
-                  border: "1px solid rgba(255,255,255,0.14)",
+                  background: "#ffffff",
+                  border: "1px solid rgba(11,11,13,0.08)",
+                  boxShadow: "0 18px 40px rgba(11,11,13,0.12)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  marginBottom: index % 2 === 0 ? 28 : 0,
+                  marginBottom: index === 1 ? 0 : 24,
                 }}
               >
                 <img

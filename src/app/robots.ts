@@ -1,17 +1,15 @@
 import type { MetadataRoute } from "next";
-
-const siteOrigin = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
+import { siteOrigin } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
+  const origin = siteOrigin();
+  const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
   return {
     rules: {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: `${siteOrigin}/sitemap.xml`,
+    sitemap: `${origin}/sitemap.xml`,
+    ...(productionHost ? { host: productionHost } : {}),
   };
 }

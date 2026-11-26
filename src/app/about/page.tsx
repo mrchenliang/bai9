@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { creditById, creditUrl, moutaiNotice, priceBoard, skus } from "@/catalog";
 
 export const metadata: Metadata = {
-  title: "Archive Notes",
+  title: "Archive Notes (档案说明)",
+  description:
+    "How the Chinese Baijiu Museum is curated: tier definitions, price sources, national tasting records, and photograph credits.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

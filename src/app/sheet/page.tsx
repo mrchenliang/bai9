@@ -4,7 +4,10 @@ import { brandById, skuAroma, skuById } from "@/catalog";
 import { aromaChip, priceSheet, sheetNote, type SheetSpot } from "@/sheet";
 
 export const metadata: Metadata = {
-  title: "Price Bands",
+  title: "Price Bands (价格带)",
+  description:
+    "Six-band Chinese baijiu price sheet — from state-table icons to everyday grain bottles, with yuan reference figures.",
+  alternates: { canonical: "/sheet" },
 };
 
 function Bottle({ spot }: { spot: SheetSpot }) {

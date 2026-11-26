@@ -1,11 +1,6 @@
 import type { MetadataRoute } from "next";
 import { brands, skus } from "@/catalog";
-
-const siteOrigin = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
+import { siteOrigin } from "@/lib/site";
 
 const STATIC_PATHS = [
   "/",
@@ -22,22 +17,23 @@ const STATIC_PATHS = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const origin = siteOrigin();
   const now = new Date();
   return [
     ...STATIC_PATHS.map((path) => ({
-      url: `${siteOrigin}${path}`,
+      url: `${origin}${path}`,
       lastModified: now,
       changeFrequency: path === "/" ? ("daily" as const) : ("weekly" as const),
-      priority: path === "/" ? 1 : 0.7,
+      priority: path === "/" ? 1 : path === "/tiers" || path === "/table" ? 0.9 : 0.7,
     })),
     ...brands.map((brand) => ({
-      url: `${siteOrigin}/brand/${brand.id}`,
+      url: `${origin}/brand/${brand.id}`,
       lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.5,
     })),
     ...skus.map((sku) => ({
-      url: `${siteOrigin}/sku/${sku.id}`,
+      url: `${origin}/sku/${sku.id}`,
       lastModified: now,
       changeFrequency: "weekly" as const,
       priority: 0.8,

@@ -3,7 +3,10 @@ import Link from "next/link";
 import { aromaById, aromas, brandById } from "@/catalog";
 
 export const metadata: Metadata = {
-  title: "Aromas",
+  title: "Twelve Aromas (十二香型)",
+  description:
+    "Guide to China’s twelve official baijiu aroma standards — sauce, strong, light, rice, and the regional types that shape every bottle.",
+  alternates: { canonical: "/aromas" },
 };
 
 export default function AromasPage() {

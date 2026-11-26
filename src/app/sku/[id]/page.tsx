@@ -20,22 +20,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { id } = await params;
   const sku = skuById(id);
   if (!sku) return { title: { absolute: "Chinese Baijiu Museum · 酒" } };
+  const brand = brandById(sku.brandId);
   const aroma = skuAroma(sku);
   const note = fieldNoteFor(sku, aroma?.id);
   const title = `${sku.nameEn} (${sku.nameZh})`;
-  const description = `${note.tableSignal} · ${note.gbCode} (${GB_KIND_META[note.gbKind].zh}) · ${sku.abv}`;
+  const description = `${note.tableSignal} · ${note.gbCode} (${GB_KIND_META[note.gbKind].zh}) · ${sku.abv}${
+    brand ? ` · ${brand.nameEn}` : ""
+  }`;
   return {
     title,
     description,
+    alternates: { canonical: `/sku/${id}` },
     openGraph: {
       title: `${title} · 酒`,
-      description,
+      description: note.tableSignal,
       type: "article",
+      url: `/sku/${id}`,
     },
     twitter: {
       card: "summary_large_image",
       title: `${title} · 酒`,
-      description,
+      description: note.tableSignal,
     },
   };
 }
