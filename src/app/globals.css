@@ -832,10 +832,32 @@ h1 {
   font-size: 12px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 16px;
   flex-wrap: wrap;
 }
 .foot a { color: var(--muted); }
+.foot-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.by-x {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  color: var(--muted);
+}
+.by-x svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+}
+.by-x:hover {
+  color: var(--ash);
+}
 
 .wrap.has-compare { padding-bottom: 112px; }
 .compare {

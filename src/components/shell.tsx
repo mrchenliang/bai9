@@ -126,7 +126,23 @@ export function Shell({ children }: { children: ReactNode }) {
           <span>
             酒 · Chinese Baijiu Museum — Permanent Editorial Archive. Distilled grain spirit, typically 40%–60% ABV.
           </span>
-          <Link href="/about">Curatorial notes &amp; archive credits</Link>
+          <span className="foot-links">
+            <a
+              className="by-x"
+              href="https://x.com/mr_chenliang"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+                />
+              </svg>
+              by @mr_chenliang
+            </a>
+            <Link href="/about">Curatorial notes &amp; archive credits</Link>
+          </span>
         </footer>
       </main>
       {compare.length > 0 ? (
