@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { aromas, brandById, brands, skuAroma, skus, tierRank, tiers } from "@/catalog";
 import type { AromaId, TierId } from "@/types";
@@ -48,18 +49,47 @@ export function Collection() {
 
   return (
     <>
-      <p className="kicker">酒 · Collection · 中国白酒博物馆</p>
-      <h1>
-        Chinese Baijiu Museum <span className="zh-inline">中国白酒博物馆</span>
-      </h1>
-      <p className="sub">
-        A fixed editorial archive of the bottles China actually argues about — authentic Chinese names, the variation
-        in the glass, distillery histories, and national tasting records. No votes, no ratings, no submissions.
-      </p>
-      <p className="count">
-        {brands.length} houses · {skus.length} bottles
-        {query || aroma !== "all" || tier !== "all" || province !== "all" ? ` · ${visible.length} showing` : ""}
-      </p>
+      <section className="museum-hero">
+        <p className="kicker">Gallery I · Permanent Collection · 常设展厅</p>
+        <h1>
+          Chinese Baijiu Museum <span className="zh-inline">中国白酒博物馆</span>
+        </h1>
+        <p className="sub">
+          A permanent editorial exhibition of the grain spirits China actually argues about — authentic Chinese
+          calligraphy, aroma standards, distillery provenance, and national tasting records. Curated without crowd
+          votes, ratings, or submissions.
+        </p>
+        <div className="museum-stats" aria-label="Collection summary">
+          <div className="stat">
+            <b>{skus.length}</b>
+            <span>Catalogued Specimens · 藏品</span>
+          </div>
+          <div className="stat">
+            <b>{brands.length}</b>
+            <span>Archived Houses · 酒厂</span>
+          </div>
+          <div className="stat">
+            <b>12</b>
+            <span>Aroma Standards · 十二香型</span>
+          </div>
+          <div className="stat">
+            <b>5</b>
+            <span>State Tastings · 1952–1989</span>
+          </div>
+        </div>
+        <Link href="/tiers" className="tier-banner">
+          <div>
+            <span className="banner-kicker">Featured Hall · 四档梯队展厅</span>
+            <strong>Explore the Baijiu Tier System</strong>
+            <p>
+              Inspect all {skus.length} bottles ranked across Tier I State Table (国宴), Tier II Famous Liquor (名酒),
+              Tier III Fine Grain (佳酿), Tier IV Daily Grain (口粮), and Export (出口).
+            </p>
+          </div>
+          <span className="banner-cta">Enter Tier System →</span>
+        </Link>
+      </section>
+
       <div className="filters">
         <button type="button" className="pill" aria-pressed={aroma === "all"} onClick={() => setAroma("all")}>
           All aromas
@@ -114,7 +144,10 @@ export function Collection() {
           ))}
         </select>
       </div>
-      {visible.length === 0 ? <p className="empty">No bottle matches that search.</p> : null}
+      <p className="count">
+        Showing {visible.length} of {skus.length} catalogued specimens
+      </p>
+      {visible.length === 0 ? <p className="empty">No specimen matches that filter.</p> : null}
       <div className="grid">
         {visible.map((sku) => (
           <Card key={sku.id} sku={sku} />

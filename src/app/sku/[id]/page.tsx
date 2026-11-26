@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Card, CreditLine } from "@/components/card";
+import { accessionNumber, Card, CreditLine, tierNumeral } from "@/components/card";
 import { CompareButton } from "@/components/shell";
 import { brandById, skuAroma, skuById, skus, skusForBrand, tierById } from "@/catalog";
 import { sheetSpot } from "@/sheet";
@@ -34,7 +34,8 @@ export default async function SkuPage({ params }: PageProps) {
   return (
     <>
       <p className="crumb">
-        <Link href="/">Collection</Link> · <Link href={`/brand/${brand.id}`}>{brand.nameEn}</Link> · {sku.nameEn}
+        <Link href="/">Gallery</Link> · <Link href={`/tiers#${sku.tier}`}>Tier {tierNumeral(sku.tier)}</Link> ·{" "}
+        <Link href={`/brand/${brand.id}`}>{brand.nameEn}</Link> · {sku.nameEn}
       </p>
       <div className="sku-layout">
         <div>
@@ -56,7 +57,8 @@ export default async function SkuPage({ params }: PageProps) {
         </div>
         <div>
           <p className="kicker">
-            {brand.provinceEn} ({brand.provinceZh}) · {tier?.en} {tier?.zh}
+            Specimen {accessionNumber(sku.id)} · {brand.provinceEn} ({brand.provinceZh}) · Tier {tierNumeral(sku.tier)}{" "}
+            {tier?.zh}
           </p>
           <h1>
             {sku.nameEn} <span className="zh-inline">{sku.nameZh}</span>
@@ -87,7 +89,9 @@ export default async function SkuPage({ params }: PageProps) {
             </dd>
             <dt>Tier</dt>
             <dd>
-              {tier?.en} · <span className="zh-chip">{tier?.zh}</span>
+              <Link href={`/tiers#${sku.tier}`} className="tier-link">
+                Tier {tierNumeral(sku.tier)} · {tier?.en} <span className="zh-chip">{tier?.zh}</span> →
+              </Link>
             </dd>
           </dl>
           <p>{sku.role}</p>

@@ -34,8 +34,8 @@ function loadCompare(): string[] {
 }
 
 const NAV = [
-  { href: "/", label: "Collection" },
-  { href: "/tiers", label: "Tiers" },
+  { href: "/", label: "Gallery" },
+  { href: "/tiers", label: "Tier System", featured: true },
   { href: "/sheet", label: "Price Bands" },
   { href: "/banquets", label: "Banquets" },
   { href: "/medals", label: "Medals" },
@@ -44,7 +44,7 @@ const NAV = [
   { href: "/aromas", label: "Aromas" },
 ];
 
-const SEARCHABLE_PATHS = new Set(["/", "/brands", "/provinces"]);
+const SEARCHABLE_PATHS = new Set(["/", "/tiers", "/brands", "/provinces"]);
 
 export function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -84,24 +84,33 @@ export function Shell({ children }: { children: ReactNode }) {
   return (
     <MuseumContext.Provider value={{ query, setQuery, compare, toggleCompare }}>
       <a className="skip" href="#main">
-        Skip to bottles
+        Skip to gallery
       </a>
       <header className="top">
         <Link className="brand-lock" href="/">
+          <span className="seal-chop" aria-hidden="true">
+            酒
+          </span>
           <span className="word">
-            <b className="name-mark">酒</b>
-            <span>Chinese Baijiu Museum</span>
+            <b>Chinese Baijiu Museum</b>
+            <span>PERMANENT ARCHIVE · 中国白酒博物馆</span>
           </span>
         </Link>
-        <nav className="nav">
+        <nav className="nav" aria-label="Museum exhibitions">
           {NAV.map((item) => (
-            <Link key={item.href} href={item.href} aria-current={pathname === item.href ? "page" : undefined}>
+            <Link
+              key={item.href}
+              href={item.href}
+              className={item.featured ? "nav-featured" : undefined}
+              aria-current={pathname === item.href ? "page" : undefined}
+            >
               {item.label}
+              {item.featured ? <span className="nav-badge">I–IV</span> : null}
             </Link>
           ))}
         </nav>
         <label className="search">
-          <span className="visually-hidden">Search</span>
+          <span className="visually-hidden">Search archive</span>
           <input
             id="q"
             value={query}
@@ -115,10 +124,9 @@ export function Shell({ children }: { children: ReactNode }) {
         {children}
         <footer className="foot">
           <span>
-            酒 · Baijiu is distilled grain spirit, typically 40%–60% ABV. Legal drinking age is 19 in most of Canada and
-            21 in the United States.
+            酒 · Chinese Baijiu Museum — Permanent Editorial Archive. Distilled grain spirit, typically 40%–60% ABV.
           </span>
-          <Link href="/about">Archive notes &amp; image credits</Link>
+          <Link href="/about">Curatorial notes &amp; archive credits</Link>
         </footer>
       </main>
       {compare.length > 0 ? (
@@ -129,11 +137,7 @@ export function Shell({ children }: { children: ReactNode }) {
             return (
               <Link key={id} href={`/sku/${id}`}>
                 {sku.image ? (
-                  <img
-                    src={sku.image}
-                    alt=""
-                    style={sku.imagePosition ? { objectPosition: sku.imagePosition } : undefined}
-                  />
+                  <img src={sku.image} alt="" style={{ objectPosition: sku.imagePosition }} />
                 ) : (
                   <span className="mini">{sku.nameZh.slice(0, 1)}</span>
                 )}

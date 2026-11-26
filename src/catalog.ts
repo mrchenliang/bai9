@@ -28,8 +28,8 @@ export const tiers: Tier[] = [
   {
     id: "export",
     zh: "出口",
-    en: "Leaves China",
-    line: "Bottles listed for Canada and the United States. This row is a shopping fact, not a rank against Feitian.",
+    en: "Export",
+    line: "Bottles produced or formatted for overseas tables. A distribution record rather than a rank against State Table.",
   },
 ];
 
