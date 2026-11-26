@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { Shell } from "@/components/shell";
@@ -6,6 +6,13 @@ import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, siteOrigin } from "@/lib/sit
 import "./globals.css";
 
 const origin = siteOrigin();
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0b0d" },
+  ],
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(origin),
@@ -33,14 +40,18 @@ export const metadata: Metadata = {
   creator: "Chen Liang",
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "48x48" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
-      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+      { url: "/favicon.ico?v=2", sizes: "48x48" },
+      { url: "/favicon.svg?v=2", type: "image/svg+xml" },
+      { url: "/favicon-32.png?v=2", sizes: "32x32", type: "image/png" },
+      { url: "/icons/icon-192.png?v=2", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png?v=2", sizes: "512x512", type: "image/png" },
     ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
-    shortcut: ["/favicon.ico"],
+    apple: [{ url: "/apple-touch-icon.png?v=2", sizes: "180x180", type: "image/png" }],
+    shortcut: ["/favicon.ico?v=2"],
+    other: [
+      { rel: "mask-icon", url: "/safari-pinned-tab.svg?v=2", color: "#c41e1e" },
+      { rel: "apple-touch-icon-precomposed", url: "/apple-touch-icon-precomposed.png?v=2" },
+    ],
   },
   manifest: "/manifest.webmanifest",
   appleWebApp: {
@@ -118,9 +129,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@500;600;700&display=swap"
           rel="stylesheet"
         />
-        {/* Conventional Safari paths — Add Bookmark / Add to Home Screen resolve these first. */}
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-        <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
