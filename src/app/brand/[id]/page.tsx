@@ -36,13 +36,28 @@ export default async function BrandPage({ params }: PageProps) {
       </p>
       <p className="count">
         {brand.distilleryZh} · {aroma?.zh}
-        {aroma ? ` ${aroma.en}` : ""} · {bottles.length} bottles
+        {aroma ? ` ${aroma.en}` : ""} · {bottles.length} {bottles.length === 1 ? "bottle" : "bottles"}
         {brand.medals.length ? ` · 国家名酒 ${brand.medals.join(" / ")}` : ""}
       </p>
       <div className="split prose">
         <p>{brand.historyEn}</p>
         <p className="zh-copy">{brand.historyZh}</p>
       </div>
+      {brand.craftEn && brand.craftZh ? (
+        <>
+          <h2 className="section-label">Craft & Method · 工艺</h2>
+          <div className="split prose">
+            <p>{brand.craftEn}</p>
+            <p className="zh-copy">{brand.craftZh}</p>
+          </div>
+        </>
+      ) : null}
+      {brand.verse ? (
+        <blockquote className="verse">
+          <p className="zh-copy">{brand.verse.lines}</p>
+          <footer>— {brand.verse.by}</footer>
+        </blockquote>
+      ) : null}
       {brand.official ? (
         <p>
           <a className="btn" href={brand.official.url}>

@@ -85,4 +85,25 @@ export interface Brand {
   official?: { label: string; url: string };
   historyEn: string;
   historyZh: string;
+  craftEn?: string;
+  craftZh?: string;
+  verse?: { by: string; lines: string };
+}
+
+export interface TastingEntry {
+  brandId: string;
+  medalName: string;
+  isNew?: boolean;
+}
+
+export interface Tasting {
+  session: number;
+  year: string;
+  cityZh: string;
+  cityEn: string;
+  titleZh: string;
+  titleEn: string;
+  noteEn: string;
+  noteZh: string;
+  entries: TastingEntry[];
 }

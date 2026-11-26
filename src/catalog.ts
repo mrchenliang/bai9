@@ -187,6 +187,14 @@ export const brands: Brand[] = [
       "Maotai town stands on the Chishui River in Renhuai, Guizhou. Sauce aroma takes this liquor as its reference: sorghum, a wheat qu, and a year of repeated steaming, fermentation and distillation, the cycle distillers shorten to 12987. The bottle people mean is Flying Fairy at 53% vol and 500 ml. On 18 July 2026 the company set the i-Moutai retail price of the 2026 bottle at 1,639 yuan. Sina Finance’s Liquor Price Insider, sampling real tills, put the street average at 1,759 yuan on 23 November 2026. Provincial shops in Canada usually list the 500 ml bottle. United States chains more often list 200 ml or 375 ml.",
     historyZh:
       "茅台镇在贵州仁怀，赤水河边。酱香以它为准：高粱、小麦制曲，一年里反复蒸煮、发酵、取酒，酒厂把这套节奏收成「12987」。大家说的茅台，是53度、500毫升的飞天。2026年7月18日，公司把2026年飞天在i茅台的零售价定为1639元。新浪财经「酒价内参」按真实成交采样，2026年11月23日的终端均价是1759元。加拿大的省营店多半列500毫升。美国连锁更常见200毫升或375毫升。",
+    craftEn:
+      "Sorghum grain with high-temperature wheat qu, using more qu by weight than grain. Two grain additions (两次加生沙), eight fermentations, and nine distillations span eight to nine months, followed by at least three years of aging, blending, and another year of rest — nearly five years from grain to bottle. Sauce, cellar-bottom, and mellow-sweet base liquors are blended to 53% vol.",
+    craftZh:
+      "以高粱为原料、小麦制高温大曲，用曲量多于原料。经两次加生沙、八次发酵、九次蒸馏，生产周期八九个月，再陈贮三年以上、勾兑调配、复贮一年，全程近五年。由酱香、窖底香、醇甜三种基酒融合，酒度53度。",
+    verse: {
+      by: "陈毅",
+      lines: "金陵重逢饮茅台，万里长征洗脚来。深谢诗章传韵事，雪压江南饮一杯。",
+    },
   },
   {
     id: "wuliangye",
@@ -206,6 +214,14 @@ export const brands: Brand[] = [
       "Yibin sits where the Min and Jinsha rivers meet. The liquor is the five-grain strong aroma: sorghum, rice, glutinous rice, wheat and corn. The brand name dates to 1909. The bottle that carries the company now is eighth-generation Puwu, 52% vol, 500 ml. On 23 November 2026 the same Sina street sample put it at 781 yuan, and 1618 at 815 yuan. Export shelves in Canada and the United States often sell a different size. Jianzhuang is the cheap bottle from the same group, and it belongs with daily grain, not with Puwu.",
     historyZh:
       "宜宾在岷江、金沙江汇合处。这是五粮浓香：高粱、大米、糯米、小麦、玉米。品牌名字定于1909年。现在扛着公司的那瓶，是第八代普五，52度，500毫升。2026年11月23日同一份新浪终端采样里，普五781元，1618是815元。加拿大和美国货架上经常是另一种容量。尖庄是集团里的便宜酒，跟口粮放在一起，不跟普五放。",
+    craftEn:
+      "Five grains — red sorghum, glutinous rice, rice, wheat and corn — fermented with aged pure-wheat “baobao” (bun-shaped) qu and water drawn from the Min River. The distillery was consolidated in 1952 from older Yibin workshops including Lichuanyong, Changfasheng and Zhangwanhe, retaining old mud pits with fermentations running 70 days or longer under aged mud seals, layered distillation, and double-bottom fermentation.",
+    craftZh:
+      "以红高粱、糯米、大米、小麦、玉米五粮酿造，纯小麦制「包包曲」并用陈曲，取岷江江心水。1952年在利川永、长发升、张万和等老糟坊基础上建厂，沿用老窖，发酵期七十天以上、陈泥封窖，经分层蒸馏、量窖摘酒与双轮底发酵。",
+    verse: {
+      by: "华罗庚",
+      lines: "名酒五粮液，优选味更醇；省粮五百担，产量增五成。",
+    },
   },
   {
     id: "luzhou",
@@ -224,6 +240,14 @@ export const brands: Brand[] = [
       "Luzhou is the single-sorghum pole of strong aroma. The company dates its National Cellar group to 1573, in the Ming Wanli reign, and named Guojiao 1573 for that year. The continuous-use claim is the distillery’s own. What the medal lists do confirm is narrower and solid: Luzhou Daqu, later Tequ, is the only strong-aroma liquor on all five national tastings from 1952 through 1989. Tequ was the medal wine. 1573 is the later prestige bottle. Touqu and Erqu are the bottles people actually buy for a weeknight. In November 2026 the LCBO in Ontario listed both.",
     historyZh:
       "泸州是浓香里的单粱一极。公司把国宝窖池群定到明万历年间的1573年，国窖1573因此得名。连续使用是酒厂自己的说法。评酒会能坐实的更窄，也更硬：泸州大曲、后来的特曲，是1952到1989五届国家名酒里唯一每次都在的浓香。特曲是当年的奖牌酒。1573是后来的面子酒。头曲、二曲才是周中会买的酒。2026年11月，安大略LCBO两瓶都有货单。",
+    craftEn:
+      "Local glutinous sorghum, wheat qu, and Longquan well or Tuojiang water, made by mixed-steaming continuous fermentation and rested one to two years in earthenware jars before blending. In 1952 the state distillery organized around the Jinchuan workshop and graded Luzhou Daqu by style into Tequ, Touqu, Erqu and Sanqu. Its 1573 cellar group was listed as a national protected heritage site in 1996, and the brewing craft entered China’s first national intangible heritage list in 2006.",
+    craftZh:
+      "以当地糯高粱、小麦大曲及龙泉井水、沱江水酿造，采用传统混蒸连续发酵，麻坛贮存一二年后勾兑。1952年以金川酒厂为主组建国营第一曲酒厂，并将泸州大曲按风格细分为特曲、头曲、二曲、三曲。1573国宝窖池群于1996年列为全国重点文物保护单位，传统酿制技艺于2006年入选首批国家级非遗。",
+    verse: {
+      by: "华罗庚",
+      lines: "何以解忧，唯有杜康；而今无忧，特曲是尝；产自泸州，甘洌芬芳。",
+    },
   },
   {
     id: "fenjiu",
@@ -243,6 +267,10 @@ export const brands: Brand[] = [
       "The distillery is in Xinghua village, Fenyang, Shanxi. Du Mu’s poem about an apricot-blossom village is the story the brand tells. It is not a lab notebook. What is firm is the style: light aroma, sorghum, a barley-and-pea qu, two fermentations and two distillations, and a seat on the 1952 list of four. Qinghua 20 is the bottle people bring when they want Fenjiu to look serious. Glass Fen, 玻汾, is the people’s bottle. Zhuyeqing is a different thing: Fenjiu steeped with bamboo leaf, still made here, and not a straight white liquor.",
     historyZh:
       "酒厂在山西汾阳杏花村。杜牧写杏花村的诗，是品牌自己讲的故事，不是化验记录。坐得住的是风格：清香、高粱、大麦豌豆曲、两次发酵两次蒸馏，以及1952年四大名酒的位子。青花20是要把汾酒拿出手时的那瓶。玻汾是老百姓的瓶。竹叶青是另一回事：用汾酒浸竹叶，还是这里出的，但不是纯白的白酒。",
+    craftEn:
+      "Historical records cite “Fenqing” in the Book of Northern Qi and “dry-brewed Fenzhou liquor” in the Song-era Beishan Wine Classic. The modern lineage traces to the Baoquanyi workshop founded in 1875, renamed Yiquanyong in 1915 — the year Laobaifen won a gold medal at the Panama-Pacific International Exposition — then Jinyu in 1919, before becoming the state Xinghuacun Fenjiu Distillery on 1 June 1949. That September, its first state-run batch was served at the first CPPCC banquet.",
+    craftZh:
+      "史籍中《北齐书》载「吾饮汾清二杯」，宋《北山酒经》记「唐时汾州有乾酿酒」。近代脉络起于1875年宝泉益作坊，1915年易名义泉泳，同年「老白汾」在巴拿马万国博览会获甲等金质大奖章；1919年组建晋裕汾酒公司，1949年6月1日成立国营杏花村汾酒厂，同年9月首批汾酒送上首届全国政协餐桌。",
   },
   {
     id: "jiannanchun",
@@ -261,6 +289,14 @@ export const brands: Brand[] = [
       "Mianzhu, north of Chengdu. The name points at Jiannan, a Tang circuit, and the distillery treats that as its origin story. The modern medal starts in 1979. Crystal Sword, 水晶剑, 52% vol and 500 ml, is the bottle on tables now. On 23 November 2026 the Sina street sample held it at 402 yuan.",
     historyZh:
       "成都北面的绵竹。名字指向唐代的剑南道，酒厂把这当作来历。现代的奖牌从1979年开始。现在上桌的是水晶剑，52度，500毫升。2026年11月23日新浪终端采样停在402元。",
+    craftEn:
+      "Five grains — sorghum, rice, glutinous rice, corn and wheat — with wheat daqu, fermented at low temperature using red-mash capping (红糟盖顶), back-slopping, head-and-tail cuts, and double-bottom fermentation. The Mianzhu distillery was established in 1951 from older workshops including Zhu Tianyi, and the Sichuan poet Pang Shizhou coined the name “Jiannanchun” when its premium line began production in 1958.",
+    craftZh:
+      "以高粱、大米、糯米、玉米、小麦五粮为原料，小麦制大曲，采用红糟盖顶、回沙发酵、去头斩尾、清蒸熟糠、低温发酵与双轮底发酵。1951年在朱天益等老烧房基础上建绵竹酒厂，1958年投产高档白酒，由蜀中诗人庞石帚起名「剑南春」。",
+    verse: {
+      by: "启功",
+      lines: "美酒中山逐旧尘，何如今酿剑南春。海棠十万红生颊，却是西川醉前人。",
+    },
   },
   {
     id: "langjiu",
@@ -373,6 +409,10 @@ export const brands: Brand[] = [
       "Bozhou, Anhui. Gujing Gongjiu has been on the national famous list since 1963. The tribute-wine story, 贡酒, is the distillery’s history of itself. Gu 20 is the current vintage-slurry flagship, 52% vol and 500 ml, at 520 yuan on 23 November 2026. The white porcelain bottle in the photograph is a different liquor: 42% vol, 500 ml, ticketed at 39.90 yuan on a Beijing supermarket shelf on 9 November 2024.",
     historyZh:
       "安徽亳州。古井贡从1963年起就在国家名酒名单上。贡酒的故事是酒厂写给自己的历史。古20是现在的年份原浆旗舰，52度，500毫升，2026年11月23日终端520元。照片里的白瓷瓶是另一瓶酒：42度，500毫升，2024年11月9日北京一家超市的标价是39.90元。",
+    craftEn:
+      "Local sorghum fermented in aged pits with a mixed qu of barley, wheat and peas using mixed-steaming continuous fermentation. The distillery connects its name to Cao Cao’s 196 AD tribute memorial of “Nine-Brew Spring Wine” (九酝春酒) and a Bozhou well dated in local gazetteers to 532 AD, as well as the Ming-era Gongxing workshop. It became the provincial Boxian Gujing Distillery in 1959.",
+    craftZh:
+      "以本地高粱为原料，大麦、小麦、豌豆制曲，沿用老窖池混蒸连续发酵。酒厂渊源常上溯至公元196年曹操上表献「九酝春酒」的记载、地方志所记南北朝古井与明代公兴糟坊「减酒」；1959年转制为省营亳县古井酒厂。",
   },
   {
     id: "jinshiyuan",
@@ -409,6 +449,14 @@ export const brands: Brand[] = [
       "Fengxiang, in Baoji, Shaanxi. One of the four famous liquors of 1952, and the reference for feng aroma. It dropped off the 1979 list of eight and returned in 1984. The green glass bottle with the red phoenix label is the one people picture. The bottles in the photograph are marked 45% vol and 500 ml. A 55% bottling is the older high-proof memory of the same green bottle. Total Wine lists a separate 12-year, 375 ml.",
     historyZh:
       "陕西宝鸡凤翔。1952年四大名酒之一，也是凤香的标准。1979年的八大名酒里没有它，1984年回来。红凤凰标的绿瓶，是大家脑子里的西凤。照片里的瓶标着45度、500毫升。55度是同一绿瓶更老的高度记忆。Total Wine 另列了一瓶12年、375毫升。",
+    craftEn:
+      "Made in Liulin town, Fengxiang, from sorghum and a barley-and-pea qu using continuous-mash fermentation through open and closed pits (the six-stage cycle 立窖、破窖、顶窖、圆窖、插窖、挑窖), then aged three years or more before blending. Tasters describe feng aroma as holding light and strong notes together — five tastes (sour, sweet, bitter, spicy, aromatic) present without any one sticking out.",
+    craftZh:
+      "产于凤翔柳林镇，高粱为原料、大麦豌豆制曲，续渣发酵分明窖与暗窖，经立窖、破窖、顶窖、圆窖、插窖、挑窖六步，贮存三年以上勾兑。凤香兼有清、浓之长，行内常言「酸、甜、苦、辣、香五味俱全而各不出头」。",
+    verse: {
+      by: "苏轼（凤翔旧句）",
+      lines: "柳林酒，东湖柳，妇人手。",
+    },
   },
   {
     id: "dongjiu",
@@ -427,6 +475,14 @@ export const brands: Brand[] = [
       "Zunyi, Guizhou, downriver from the sauce-aroma towns and not one of them. Dongjiu uses two qu. One of them carries traditional medicinal plants, which is why the aroma has its own name, 董香, also called herbal aroma. It has been a national famous liquor since 1963. The classic bottle in the photograph is marked 54% vol, 500 ml, and 董香型.",
     historyZh:
       "贵州遵义，在酱香城镇的下游，但不是酱香。董酒用两种曲，其中一种加了传统草药，所以香型单独叫董香，也叫药香。1963年起就是国家名酒。照片里的经典瓶标着54度、500毫升、董香型。",
+    craftEn:
+      "Distilled in Donggongsi town, 7.5 km north of Zunyi, using sorghum and Shuikousi spring water in a twin-mash steam-through method (“two smalls, two bigs, double-mash serial distillation”): a small-qu, small-pit grain mash steamed through a large-qu, large-pit herbal aroma mash. Named “Dongjiu” in the early 1940s from the first and last characters of Donggongsi Jiaojiu, its recipe was classified by the Ministry of Light Industry in 1983 and reaffirmed in 1996 and 2006. Chemically it is noted for high ethyl butyrate, higher alcohols and total acids with low ethyl lactate.",
+    craftZh:
+      "产于遵义北郊董公寺镇，以高粱与水口寺泉水酿造，采用「两小、两大、双醅串蒸」：小曲小窖制酒醅、大曲大窖制香醅，百草入曲、双醅串蒸。四十年代初由「董公寺窖酒」取首尾二字定名「董酒」；1983年工艺配方被轻工部列为机密，1996年与2006年重申长期保密。酒体呈丁酸乙酯、高级醇、总酸较高而乳酸乙酯较低的「三高一低」特征。",
+    verse: {
+      by: "秦含章《董酒颂》",
+      lines: "董公寺内有酒神，百八中草品种珍，煮泡串蒸工艺巧，养生保健久驰名。",
+    },
   },
   {
     id: "jiugui",
