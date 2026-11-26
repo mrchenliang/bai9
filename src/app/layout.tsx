@@ -2,35 +2,91 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { Shell } from "@/components/shell";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, siteOrigin } from "@/lib/site";
 import "./globals.css";
 
-const siteOrigin = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
+const origin = siteOrigin();
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteOrigin),
+  metadataBase: new URL(origin),
   title: {
-    default: "Chinese Baijiu Museum · 酒",
+    default: `${SITE_NAME} · 酒`,
     template: "%s · 酒",
   },
-  description:
-    "酒 is a permanent editorial archive of Chinese baijiu: table signals, GB/T pure-grain truth, drinking passport, banquet survival guide, and provincial atlas.",
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  keywords: [
+    "baijiu",
+    "Chinese liquor",
+    "Chinese Baijiu Museum",
+    "Moutai",
+    "Wuliangye",
+    "National Cellar 1573",
+    "酱香",
+    "浓香",
+    "白酒博物馆",
+    "baijiu tier system",
+    "国宴",
+    "名酒",
+  ],
+  authors: [{ name: "Chen Liang", url: "https://x.com/mr_chenliang" }],
+  creator: "Chen Liang",
   icons: { icon: "/favicon.svg" },
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "Chinese Baijiu Museum · 酒",
-    description:
-      "The grain spirits China actually argues about — table signals, GB/T pure-grain standards, drinking passport, and banquet survival guide.",
+    title: `${SITE_NAME} · 酒`,
+    description: SITE_TAGLINE,
     type: "website",
+    siteName: SITE_NAME,
+    locale: "en_US",
+    url: origin,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Chinese Baijiu Museum · 酒",
-    description:
-      "The grain spirits China actually argues about — table signals, GB/T pure-grain standards, drinking passport, and banquet survival guide.",
+    title: `${SITE_NAME} · 酒`,
+    description: SITE_TAGLINE,
+    creator: "@mr_chenliang",
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  category: "food and drink",
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      name: SITE_NAME,
+      alternateName: ["酒", "中国白酒博物馆"],
+      url: origin,
+      description: SITE_DESCRIPTION,
+      inLanguage: ["en", "zh-Hans"],
+      publisher: {
+        "@type": "Person",
+        name: "Chen Liang",
+        url: "https://x.com/mr_chenliang",
+      },
+    },
+    {
+      "@type": "Museum",
+      name: SITE_NAME,
+      alternateName: ["酒", "中国白酒博物馆"],
+      description: SITE_DESCRIPTION,
+      url: origin,
+      sameAs: ["https://x.com/mr_chenliang"],
+    },
+  ],
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -42,6 +98,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link
           href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@500;600;700&display=swap"
           rel="stylesheet"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body>

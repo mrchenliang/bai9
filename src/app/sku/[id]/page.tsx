@@ -20,22 +20,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { id } = await params;
   const sku = skuById(id);
   if (!sku) return { title: { absolute: "Chinese Baijiu Museum · 酒" } };
+  const brand = brandById(sku.brandId);
   const aroma = skuAroma(sku);
   const note = fieldNoteFor(sku, aroma?.id);
   const title = `${sku.nameEn} (${sku.nameZh})`;
-  const description = `${note.tableSignal} · ${note.gbCode} (${GB_KIND_META[note.gbKind].zh}) · ${sku.abv}`;
+  const description = `${note.tableSignal} · ${note.gbCode} (${GB_KIND_META[note.gbKind].zh}) · ${sku.abv}${
+    brand ? ` · ${brand.nameEn}` : ""
+  }`;
   return {
     title,
     description,
+    alternates: { canonical: `/sku/${id}` },
     openGraph: {
       title: `${title} · 酒`,
-      description,
+      description: note.tableSignal,
       type: "article",
+      url: `/sku/${id}`,
     },
     twitter: {
       card: "summary_large_image",
       title: `${title} · 酒`,
-      description,
+      description: note.tableSignal,
     },
   };
 }
@@ -104,30 +109,25 @@ export default async function SkuPage({ params }: PageProps) {
             <p className="signal-quote">“{note.tableSignal}”</p>
           </div>
 
-          <div className="truth-strip">
-            <div className={`gb-card is-${note.gbKind}`}>
-              <div className="gb-head">
-                <span className="gb-code">{note.gbCode}</span>
-                <span className="gb-zh">{gbMeta.zh}</span>
-              </div>
-              <div className="gb-badge">{gbMeta.badge}</div>
-              <p className="gb-explain">{gbMeta.explain}</p>
+          <div className={`gb-card is-${note.gbKind} gb-inline`}>
+            <div className="gb-head">
+              <span className="gb-code">{note.gbCode}</span>
+              <span className="gb-zh">{gbMeta.zh}</span>
             </div>
-            <div className="shock-card">
-              <div className="shock-head">
-                <span>First-Timer Survival</span>
-                <span className="shock-score">{note.shock} / 5</span>
-              </div>
-              <div className="shock-dots" aria-label={`Shock index ${note.shock} out of 5`}>
+            <div className="gb-badge">{gbMeta.badge}</div>
+            <p className="gb-explain">{gbMeta.explain}</p>
+            <div className="shock-inline" aria-label={`Shock index ${note.shock} out of 5`}>
+              <span className="shock-score">{note.shock}/5</span>
+              <span className="shock-dots">
                 {[1, 2, 3, 4, 5].map((level) => (
                   <span key={level} className={level <= note.shock ? "dot is-on" : "dot"} />
                 ))}
-                <strong className="shock-title">
-                  {shockMeta.title} · {shockMeta.zh}
-                </strong>
-              </div>
-              <p className="shock-truth">{note.flavorTruth}</p>
+              </span>
+              <strong className="shock-title">
+                {shockMeta.title} · {shockMeta.zh}
+              </strong>
             </div>
+            <p className="shock-truth">{note.flavorTruth}</p>
           </div>
 
           <dl className="spec">
@@ -143,10 +143,6 @@ export default async function SkuPage({ params }: PageProps) {
             <dd>
               {brand.placeEn} · <span className="zh-chip">{brand.placeZh}</span>
             </dd>
-            <dt>Standard</dt>
-            <dd>
-              {note.gbCode} · {note.gbLabel}
-            </dd>
             <dt>Tier</dt>
             <dd>
               <Link href={`/tiers#${sku.tier}`} className="tier-link">
@@ -157,6 +153,7 @@ export default async function SkuPage({ params }: PageProps) {
           <p>{sku.role}</p>
           <div className="actions">
             <TastedButton id={sku.id} />
+            <CompareButton id={sku.id} />
             <SkuShareActions
               sku={sku}
               brand={brand}
@@ -168,21 +165,22 @@ export default async function SkuPage({ params }: PageProps) {
               accession={accession}
               note={note}
             />
-            <CompareButton id={sku.id} />
-            <Link className="btn" href={`/brand/${brand.id}`}>
-              More from {brand.nameEn}
-            </Link>
+          </div>
+          <p className="sku-links">
+            <Link href={`/brand/${brand.id}`}>More from {brand.nameEn}</Link>
             {sku.specUrl ? (
-              <a className="btn" href={sku.specUrl}>
-                Distillery spec page
-              </a>
+              <>
+                <span aria-hidden="true">·</span>
+                <a href={sku.specUrl}>Distillery spec</a>
+              </>
             ) : null}
             {brand.official ? (
-              <a className="btn" href={brand.official.url}>
-                {brand.official.label}
-              </a>
+              <>
+                <span aria-hidden="true">·</span>
+                <a href={brand.official.url}>{brand.official.label}</a>
+              </>
             ) : null}
-          </div>
+          </p>
         </div>
       </div>
       {siblings.length > 0 ? (

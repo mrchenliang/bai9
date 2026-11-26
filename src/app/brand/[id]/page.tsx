@@ -16,7 +16,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { id } = await params;
   const brand = brandById(id);
   if (!brand) return { title: { absolute: "Chinese Baijiu Museum · 酒" } };
-  return { title: `${brand.nameEn} (${brand.nameZh})` };
+  const title = `${brand.nameEn} (${brand.nameZh})`;
+  const description = `${brand.distilleryEn} · ${brand.placeEn}, ${brand.provinceEn}. ${brand.historyEn.slice(0, 140)}…`;
+  return {
+    title,
+    description,
+    alternates: { canonical: `/brand/${id}` },
+    openGraph: {
+      title: `${title} · 酒`,
+      description,
+      type: "article",
+      url: `/brand/${id}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} · 酒`,
+      description,
+    },
+  };
 }
 
 export default async function BrandPage({ params }: PageProps) {

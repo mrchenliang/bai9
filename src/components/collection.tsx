@@ -21,6 +21,11 @@ export function Collection() {
     [],
   );
 
+  const aromaOptions = useMemo(
+    () => aromas.filter((item) => item.id !== "prepared"),
+    [],
+  );
+
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
     const rows = skus.filter((sku) => {
@@ -50,84 +55,22 @@ export function Collection() {
   return (
     <>
       <section className="museum-hero">
-        <p className="kicker">Gallery I · Permanent Collection · 常设展厅</p>
+        <p className="kicker">Permanent Collection · 常设展厅</p>
         <h1>
           Chinese Baijiu Museum <span className="zh-inline">中国白酒博物馆</span>
         </h1>
         <p className="sub">
-          A permanent editorial exhibition of the grain spirits China actually argues about — authentic Chinese
-          calligraphy, aroma standards, distillery provenance, and national tasting records. Curated without crowd
-          votes, ratings, or submissions.
+          The grain spirits China actually argues about — curated without crowd votes, ratings, or submissions.
         </p>
-        <div className="museum-stats" aria-label="Collection summary">
-          <div className="stat">
-            <b>{skus.length}</b>
-            <span>Catalogued Specimens · 藏品</span>
-          </div>
-          <div className="stat">
-            <b>{brands.length}</b>
-            <span>Archived Houses · 酒厂</span>
-          </div>
-          <div className="stat">
-            <b>12</b>
-            <span>Aroma Standards · 十二香型</span>
-          </div>
-          <div className="stat">
-            <b>5</b>
-            <span>State Tastings · 1952–1989</span>
-          </div>
-        </div>
-        <Link href="/tiers" className="tier-banner">
-          <div>
-            <span className="banner-kicker">Featured Hall · 四档梯队展厅</span>
-            <strong>Explore the Baijiu Tier System &amp; Rank Your Own</strong>
-            <p>
-              Inspect all {skus.length} bottles ranked across Tier I State Table (国宴) to Tier IV Daily Grain (口粮),
-              or build and export your own PNG tier list.
-            </p>
-          </div>
-          <span className="banner-cta">Enter Tier System →</span>
-        </Link>
-        <div className="feature-duo">
-          <Link href="/table" className="feature-card">
-            <span className="banner-kicker">Interactive Desk · 局酒指南</span>
-            <strong>What Bottle Do I Bring?</strong>
-            <p>
-              Meeting your girlfriend’s father, closing a client, or 2am skewers — get the culturally truthful bottle
-              and unspoken regional table rule.
-            </p>
-            <span className="feature-cta">Open Table Guide →</span>
-          </Link>
-          <Link href="/passport" className="feature-card">
-            <span className="banner-kicker">Visitor Record · 喝过酒证</span>
-            <strong>Stamp Your Drinking Passport</strong>
-            <p>
-              Mark every bottle you’ve survived, unlock your curatorial rank, and print a verified museum receipt PNG
-              card for X.
-            </p>
-            <span className="feature-cta">Open Passport →</span>
-          </Link>
-        </div>
+        <p className="hero-cta">
+          <Link href="/tiers">Explore the Tier System</Link>
+          <span aria-hidden="true">·</span>
+          <Link href="/table">Table Guide</Link>
+          <span aria-hidden="true">·</span>
+          <Link href="/passport">Drinking Passport</Link>
+        </p>
       </section>
 
-      <div className="filters">
-        <button type="button" className="pill" aria-pressed={aroma === "all"} onClick={() => setAroma("all")}>
-          All aromas
-        </button>
-        {aromas
-          .filter((item) => item.id !== "prepared")
-          .map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className="pill"
-              aria-pressed={aroma === item.id}
-              onClick={() => setAroma(aroma === item.id ? "all" : item.id)}
-            >
-              {item.en.replace(" aroma", "")}
-            </button>
-          ))}
-      </div>
       <div className="filters">
         <button type="button" className="pill" aria-pressed={tier === "all"} onClick={() => setTier("all")}>
           All tiers
@@ -144,12 +87,19 @@ export function Collection() {
           </button>
         ))}
         <span className="grow" />
-        <button type="button" className="sort" aria-pressed={sort === "tier"} onClick={() => setSort("tier")}>
-          By tier
-        </button>
-        <button type="button" className="sort" aria-pressed={sort === "az"} onClick={() => setSort("az")}>
-          A–Z
-        </button>
+        <select
+          className="sort"
+          value={aroma}
+          onChange={(event) => setAroma(event.target.value as AromaId | "all")}
+          aria-label="Aroma"
+        >
+          <option value="all">All aromas</option>
+          {aromaOptions.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.en.replace(" aroma", "")}
+            </option>
+          ))}
+        </select>
         <select
           className="sort"
           value={province}
@@ -163,9 +113,15 @@ export function Collection() {
             </option>
           ))}
         </select>
+        <button type="button" className="sort" aria-pressed={sort === "tier"} onClick={() => setSort("tier")}>
+          By tier
+        </button>
+        <button type="button" className="sort" aria-pressed={sort === "az"} onClick={() => setSort("az")}>
+          A–Z
+        </button>
       </div>
       <p className="count">
-        Showing {visible.length} of {skus.length} catalogued specimens
+        {visible.length} of {skus.length} specimens
       </p>
       {visible.length === 0 ? <p className="empty">No specimen matches that filter.</p> : null}
       <div className="grid">
