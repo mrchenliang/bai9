@@ -221,7 +221,7 @@ h1 {
 }
 .face {
   aspect-ratio: 1;
-  background: var(--paper);
+  background: #f6f6f8;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -231,13 +231,7 @@ h1 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-.face.is-cutout {
-  background: var(--paper);
-  padding: 14px 12px 10px;
-}
-.face.is-cutout img {
-  object-fit: contain;
+  object-position: center;
 }
 .plate {
   height: 100%;
@@ -404,18 +398,17 @@ h1 {
   align-items: start;
 }
 .sku-photo {
-  background: var(--paper);
+  background: #f6f6f8;
   border-radius: 16px;
   border: 1px solid rgba(0, 0, 0, 0.06);
   overflow: hidden;
   aspect-ratio: 1;
 }
-.sku-photo img { width: 100%; height: 100%; object-fit: cover; }
-.sku-photo.is-cutout {
-  padding: 28px 24px;
-}
-.sku-photo.is-cutout img {
-  object-fit: contain;
+.sku-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 .caption {
   margin-top: 8px;
@@ -612,16 +605,13 @@ h1 {
   color: #b8860b;
 }
 .sheet-photo img {
-  width: 86px;
+  width: 108px;
   height: 132px;
   object-fit: cover;
-  border-radius: 6px;
-}
-.sheet-photo img.is-cutout {
-  width: 104px;
-  height: 144px;
-  object-fit: contain;
-  border-radius: 0;
+  object-position: center;
+  border-radius: 10px;
+  background: #f6f6f8;
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 .sheet-plate {
   width: 86px;
@@ -888,26 +878,21 @@ h1 {
   gap: 12px;
 }
 .banquet-thumb {
-  width: 56px;
-  height: 76px;
+  width: 64px;
+  height: 64px;
   flex: none;
   display: grid;
   place-items: center;
-  border-radius: 8px;
-  background: white;
+  border-radius: 10px;
+  background: #f6f6f8;
   border: 1px solid rgba(0, 0, 0, 0.06);
   overflow: hidden;
-  padding: 4px;
 }
 .banquet-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 4px;
-}
-.banquet-thumb img.is-cutout {
-  object-fit: contain;
-  border-radius: 0;
+  object-position: center;
 }
 .banquet-info {
   display: flex;

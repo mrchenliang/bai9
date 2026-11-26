@@ -129,7 +129,11 @@ export function Shell({ children }: { children: ReactNode }) {
             return (
               <Link key={id} href={`/sku/${id}`}>
                 {sku.image ? (
-                  <img src={sku.image} alt="" style={{ objectPosition: sku.imagePosition }} />
+                  <img
+                    src={sku.image}
+                    alt=""
+                    style={sku.imagePosition ? { objectPosition: sku.imagePosition } : undefined}
+                  />
                 ) : (
                   <span className="mini">{sku.nameZh.slice(0, 1)}</span>
                 )}

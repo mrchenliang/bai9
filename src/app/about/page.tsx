@@ -6,6 +6,7 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
+  const creditedSkus = skus.filter((sku) => sku.creditId);
   return (
     <>
       <p className="kicker">酒 · Archive Notes · 档案说明</p>
@@ -24,7 +25,7 @@ export default function AboutPage() {
           <a href={priceBoard.sourceUrl}>{priceBoard.sourceName}</a>. {priceBoard.method} That morning in China was the
           evening of {priceBoard.toronto}. The Flying Fairy (飞天茅台) i-Moutai price is the company’s own{" "}
           <a href={moutaiNotice.url}>{moutaiNotice.label}</a>. Yuan figures dated 9 November 2024 are shelf tickets
-          visible in photographs rather than that national sample.
+          visible in historical reference photographs rather than that national sample.
         </p>
         <p>
           National Famous Liquor (国家名酒) years follow China’s five state-run tastings: four liquors in Beijing in
@@ -37,11 +38,10 @@ export default function AboutPage() {
           with cross-links to full dossiers wherever a house is held in the main collection.
         </p>
       </div>
-      <h2 className="section-label">Photographs · 摄影署名</h2>
-      <ul className="credits">
-        {skus
-          .filter((sku) => sku.creditId)
-          .map((sku) => {
+      <h2 className="section-label">Photographs · 摄影说明</h2>
+      {creditedSkus.length > 0 ? (
+        <ul className="credits">
+          {creditedSkus.map((sku) => {
             const credit = creditById(sku.creditId);
             if (!credit) return null;
             return (
@@ -51,7 +51,17 @@ export default function AboutPage() {
               </li>
             );
           })}
-      </ul>
+        </ul>
+      ) : (
+        <div className="prose">
+          <p>
+            All {skus.length} bottle plates in this archive use uniform 1:1 studio photographs shot upright on a soft
+            off-white gallery backdrop (#f6f6f8) with diffused lighting and subtle contact shadow, so bottles across
+            tiers, price bands, and banquet guides can be compared side by side without shelf clutter or mismatched
+            aspect ratios.
+          </p>
+        </div>
+      )}
     </>
   );
 }

@@ -38,16 +38,12 @@ export default async function SkuPage({ params }: PageProps) {
       </p>
       <div className="sku-layout">
         <div>
-          <div className={sku.image?.startsWith("/images/bottles/") ? "sku-photo is-cutout" : "sku-photo"}>
+          <div className="sku-photo">
             {sku.image ? (
               <img
                 src={sku.image}
                 alt={`${sku.nameEn} (${sku.nameZh})`}
-                style={
-                  sku.image.startsWith("/images/bottles/")
-                    ? undefined
-                    : { objectPosition: sku.imagePosition ?? "50% 40%" }
-                }
+                style={sku.imagePosition ? { objectPosition: sku.imagePosition } : undefined}
               />
             ) : (
               <div className="plate">

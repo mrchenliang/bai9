@@ -20,12 +20,7 @@ function Bottle({ spot }: { spot: SheetSpot }) {
           <img
             src={sku.image}
             alt={sku.nameEn}
-            className={sku.image.startsWith("/images/bottles/") ? "is-cutout" : undefined}
-            style={
-              sku.image.startsWith("/images/bottles/")
-                ? undefined
-                : { objectPosition: sku.imagePosition ?? "50% 40%" }
-            }
+            style={sku.imagePosition ? { objectPosition: sku.imagePosition } : undefined}
           />
         ) : (
           <div className="sheet-plate">

@@ -51,11 +51,7 @@ export default function BanquetsPage() {
                   <Link key={pick.skuId} href={`/sku/${sku.id}`} className="house-card is-archived banquet-card">
                     {sku.image ? (
                       <div className="banquet-thumb">
-                        <img
-                          src={sku.image}
-                          alt={sku.nameEn}
-                          className={sku.image.startsWith("/images/bottles/") ? "is-cutout" : undefined}
-                        />
+                        <img src={sku.image} alt={sku.nameEn} />
                       </div>
                     ) : null}
                     <div className="banquet-info">
