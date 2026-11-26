@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: "%s · 酒",
   },
   description:
-    "酒 is a fixed editorial archive of Chinese baijiu: English dossiers with authentic Chinese names, tasting history, provincial atlas, and North American retail listings.",
+    "酒 is a fixed editorial archive of Chinese baijiu: English dossiers with authentic Chinese names, tasting history, banquet guide, and provincial atlas.",
   icons: { icon: "/favicon.svg" },
 };
 

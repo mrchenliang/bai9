@@ -42,7 +42,6 @@ const NAV = [
   { href: "/provinces", label: "Provinces" },
   { href: "/brands", label: "Houses" },
   { href: "/aromas", label: "Aromas" },
-  { href: "/shops", label: "Shops" },
 ];
 
 const SEARCHABLE_PATHS = new Set(["/", "/brands", "/provinces"]);

@@ -6,7 +6,7 @@ import type { AromaId, TierId } from "@/types";
 import { Card } from "@/components/card";
 import { useMuseum } from "@/components/shell";
 
-type SortId = "tier" | "az" | "shop";
+type SortId = "tier" | "az";
 
 export function Collection() {
   const { query } = useMuseum();
@@ -28,7 +28,6 @@ export function Collection() {
       if (aroma !== "all" && skuAroma(sku)?.id !== aroma) return false;
       if (tier !== "all" && sku.tier !== tier) return false;
       if (province !== "all" && brand.provinceEn !== province) return false;
-      if (sort === "shop" && sku.shops.length === 0) return false;
       if (!q) return true;
       const hay = [sku.nameZh, sku.nameEn, brand.nameZh, brand.nameEn, brand.pinyin, brand.provinceEn, brand.provinceZh]
         .join(" ")
@@ -55,14 +54,11 @@ export function Collection() {
       </h1>
       <p className="sub">
         A fixed editorial archive of the bottles China actually argues about — authentic Chinese names, the variation
-        in the glass, distillery histories, and the shops in Canada and the United States that list them. No votes, no
-        ratings, no submissions.
+        in the glass, distillery histories, and national tasting records. No votes, no ratings, no submissions.
       </p>
       <p className="count">
         {brands.length} houses · {skus.length} bottles
-        {query || aroma !== "all" || tier !== "all" || province !== "all" || sort === "shop"
-          ? ` · ${visible.length} showing`
-          : ""}
+        {query || aroma !== "all" || tier !== "all" || province !== "all" ? ` · ${visible.length} showing` : ""}
       </p>
       <div className="filters">
         <button type="button" className="pill" aria-pressed={aroma === "all"} onClick={() => setAroma("all")}>
@@ -103,14 +99,6 @@ export function Collection() {
         </button>
         <button type="button" className="sort" aria-pressed={sort === "az"} onClick={() => setSort("az")}>
           A–Z
-        </button>
-        <button
-          type="button"
-          className="sort"
-          aria-pressed={sort === "shop"}
-          onClick={() => setSort(sort === "shop" ? "tier" : "shop")}
-        >
-          Listed in NA
         </button>
         <select
           className="sort"

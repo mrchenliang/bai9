@@ -111,28 +111,6 @@ export default async function SkuPage({ params }: PageProps) {
               </a>
             ) : null}
           </div>
-          <h2 className="section-label">Canada &amp; the United States</h2>
-          {sku.shops.length === 0 ? (
-            <p className="caption">
-              No verified direct retail page for this exact bottle. See the <Link href="/shops">Shops directory</Link>{" "}
-              for chains that carry baijiu in North America.
-            </p>
-          ) : (
-            <div className="shops">
-              {sku.shops.map((shop) => (
-                <a key={shop.url} className="shop" href={shop.url}>
-                  <span className="meta">{shop.country === "Canada" ? "Canada" : "US"}</span>
-                  <span>
-                    <span className="shop-name">
-                      {shop.retailer} · {shop.place}
-                    </span>
-                    <small>{shop.note}</small>
-                  </span>
-                  <span className="amt">{shop.price}</span>
-                </a>
-              ))}
-            </div>
-          )}
         </div>
       </div>
       {siblings.length > 0 ? (

@@ -33,12 +33,8 @@ export default function AboutPage() {
           for each tasting; modern bottlings are often lower in ABV.
         </p>
         <p>
-          The 27-province regional atlas surveys over 135 local Chinese distilleries grouped by province and region,
+          The 27-province regional atlas surveys over 140 local Chinese distilleries grouped by province and region,
           with cross-links to full dossiers wherever a house is held in the main collection.
-        </p>
-        <p>
-          Shop links open the retailer directly. This archive does not sell alcohol. Availability, tax, and legal
-          drinking age remain the responsibility of the retailer and local jurisdiction.
         </p>
       </div>
       <h2 className="section-label">Photographs · 摄影署名</h2>
