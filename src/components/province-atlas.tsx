@@ -7,16 +7,16 @@ import { useMuseum } from "@/components/shell";
 
 type AromaFilter = "all" | RegionalHouse["aromaGroup"];
 
-const AROMA_FILTERS: { id: AromaFilter; label: string; zh?: string }[] = [
+const AROMA_FILTERS: { id: AromaFilter; label: string }[] = [
   { id: "all", label: "All aromas" },
-  { id: "nong", label: "Strong", zh: "浓香" },
-  { id: "jiang", label: "Sauce", zh: "酱香" },
-  { id: "qing", label: "Light", zh: "清香" },
-  { id: "jian", label: "Mixed", zh: "兼香" },
-  { id: "feng", label: "Feng", zh: "凤香" },
-  { id: "mi", label: "Rice", zh: "米香" },
-  { id: "chi", label: "Chi", zh: "豉香" },
-  { id: "other", label: "Other", zh: "董/芝/特/馥郁/老白干" },
+  { id: "nong", label: "Strong" },
+  { id: "jiang", label: "Sauce" },
+  { id: "qing", label: "Light" },
+  { id: "jian", label: "Mixed" },
+  { id: "feng", label: "Feng" },
+  { id: "mi", label: "Rice" },
+  { id: "chi", label: "Chi" },
+  { id: "other", label: "Other" },
 ];
 
 export function ProvinceAtlas() {
@@ -81,7 +81,7 @@ export function ProvinceAtlas() {
             aria-pressed={region === item.id}
             onClick={() => setRegion(region === item.id ? "all" : item.id)}
           >
-            {item.en} <span className="zh-chip">{item.zh}</span>
+            {item.en}
           </button>
         ))}
       </div>
@@ -96,7 +96,6 @@ export function ProvinceAtlas() {
             onClick={() => setAroma(aroma === item.id ? "all" : item.id)}
           >
             {item.label}
-            {item.zh ? <span className="zh-chip"> {item.zh}</span> : null}
           </button>
         ))}
         <span className="grow" />

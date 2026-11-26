@@ -15,13 +15,10 @@ export function Collection() {
   const [province, setProvince] = useState("all");
   const [sort, setSort] = useState<SortId>("tier");
 
-  const provinces = useMemo(() => {
-    const map = new Map<string, string>();
-    for (const brand of brands) {
-      if (!map.has(brand.provinceEn)) map.set(brand.provinceEn, brand.provinceZh);
-    }
-    return [...map.entries()].sort((a, b) => a[0].localeCompare(b[0]));
-  }, []);
+  const provinces = useMemo(
+    () => [...new Set(brands.map((brand) => brand.provinceEn))].sort((a, b) => a.localeCompare(b)),
+    [],
+  );
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -81,7 +78,7 @@ export function Collection() {
               aria-pressed={aroma === item.id}
               onClick={() => setAroma(aroma === item.id ? "all" : item.id)}
             >
-              {item.en.replace(" aroma", "")} <span className="zh-chip">{item.zh}</span>
+              {item.en.replace(" aroma", "")}
             </button>
           ))}
       </div>
@@ -97,7 +94,7 @@ export function Collection() {
             aria-pressed={tier === item.id}
             onClick={() => setTier(tier === item.id ? "all" : item.id)}
           >
-            {item.en} <span className="zh-chip">{item.zh}</span>
+            {item.en}
           </button>
         ))}
         <span className="grow" />
@@ -122,9 +119,9 @@ export function Collection() {
           aria-label="Province"
         >
           <option value="all">All provinces</option>
-          {provinces.map(([en, zh]) => (
+          {provinces.map((en) => (
             <option key={en} value={en}>
-              {en} · {zh}
+              {en}
             </option>
           ))}
         </select>
