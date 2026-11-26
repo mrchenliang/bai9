@@ -5,17 +5,17 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "中国白酒博物馆 · 酒",
+    default: "Chinese Baijiu Museum · 酒",
     template: "%s · 酒",
   },
   description:
-    "酒 is a fixed editorial archive of Chinese baijiu: Chinese names, bottle variations, distillery history, and where bottles are listed in Canada and the United States.",
+    "酒 is a fixed editorial archive of Chinese baijiu: English dossiers with authentic Chinese names, tasting history, provincial atlas, and North American retail listings.",
   icons: { icon: "/favicon.svg" },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="zh-Hans">
+    <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

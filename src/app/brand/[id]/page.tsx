@@ -15,8 +15,8 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const brand = brandById(id);
-  if (!brand) return { title: { absolute: "酒" } };
-  return { title: `${brand.nameZh} · ${brand.nameEn}` };
+  if (!brand) return { title: { absolute: "Chinese Baijiu Museum · 酒" } };
+  return { title: `${brand.nameEn} (${brand.nameZh})` };
 }
 
 export default async function BrandPage({ params }: PageProps) {
@@ -28,27 +28,27 @@ export default async function BrandPage({ params }: PageProps) {
   return (
     <>
       <p className="crumb">
-        <Link href="/brands">品牌</Link> · {brand.provinceZh} · {brand.provinceEn}
+        <Link href="/brands">Houses</Link> · {brand.provinceEn} ({brand.provinceZh})
       </p>
-      <h1>{brand.nameZh}</h1>
+      <h1>
+        {brand.nameEn} <span className="zh-inline">{brand.nameZh}</span>
+      </h1>
       <p className="en-title">
-        {brand.nameEn} · {brand.pinyin}
+        {brand.distilleryEn} · {brand.distilleryZh}
       </p>
       <p className="count">
-        {brand.distilleryZh} · {aroma?.zh}
-        {aroma ? ` ${aroma.en}` : ""} · {bottles.length} {bottles.length === 1 ? "bottle" : "bottles"}
-        {brand.medals.length ? ` · 国家名酒 ${brand.medals.join(" / ")}` : ""}
+        {brand.placeEn} ({brand.placeZh}) · {aroma ? `${aroma.en} ${aroma.zh}` : ""} · {bottles.length}{" "}
+        {bottles.length === 1 ? "bottle" : "bottles"}
+        {brand.medals.length ? ` · National Famous Liquor (国家名酒) ${brand.medals.join(" / ")}` : ""}
       </p>
-      <div className="split prose">
+      <div className="prose">
         <p>{brand.historyEn}</p>
-        <p className="zh-copy">{brand.historyZh}</p>
       </div>
-      {brand.craftEn && brand.craftZh ? (
+      {brand.craftEn ? (
         <>
-          <h2 className="section-label">Craft & Method · 工艺</h2>
-          <div className="split prose">
+          <h2 className="section-label">Craft &amp; Method · 工艺</h2>
+          <div className="prose">
             <p>{brand.craftEn}</p>
-            <p className="zh-copy">{brand.craftZh}</p>
           </div>
         </>
       ) : null}
@@ -65,7 +65,7 @@ export default async function BrandPage({ params }: PageProps) {
           </a>
         </p>
       ) : null}
-      <h2 className="section-label">Bottles</h2>
+      <h2 className="section-label">Bottles · 藏品</h2>
       <div className="grid">
         {bottles.map((sku) => (
           <Card key={sku.id} sku={sku} />

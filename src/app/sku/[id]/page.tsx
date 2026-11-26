@@ -17,8 +17,8 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const sku = skuById(id);
-  if (!sku) return { title: { absolute: "酒" } };
-  return { title: `${sku.nameZh} · ${sku.nameEn}` };
+  if (!sku) return { title: { absolute: "Chinese Baijiu Museum · 酒" } };
+  return { title: `${sku.nameEn} (${sku.nameZh})` };
 }
 
 export default async function SkuPage({ params }: PageProps) {
@@ -34,13 +34,17 @@ export default async function SkuPage({ params }: PageProps) {
   return (
     <>
       <p className="crumb">
-        <Link href="/">藏品</Link> · <Link href={`/brand/${brand.id}`}>{brand.nameZh}</Link> · {sku.nameZh}
+        <Link href="/">Collection</Link> · <Link href={`/brand/${brand.id}`}>{brand.nameEn}</Link> · {sku.nameEn}
       </p>
       <div className="sku-layout">
         <div>
           <div className="sku-photo">
             {sku.image ? (
-              <img src={sku.image} alt={sku.nameZh} style={{ objectPosition: sku.imagePosition ?? "50% 40%" }} />
+              <img
+                src={sku.image}
+                alt={`${sku.nameEn} (${sku.nameZh})`}
+                style={{ objectPosition: sku.imagePosition ?? "50% 40%" }}
+              />
             ) : (
               <div className="plate">
                 <b>{brand.nameZh.slice(0, 2)}</b>
@@ -52,48 +56,49 @@ export default async function SkuPage({ params }: PageProps) {
         </div>
         <div>
           <p className="kicker">
-            {brand.provinceZh} · {brand.provinceEn} · {tier?.zh} {tier?.en}
+            {brand.provinceEn} ({brand.provinceZh}) · {tier?.en} {tier?.zh}
           </p>
-          <h1>{sku.nameZh}</h1>
-          <p className="en-title">{sku.nameEn}</p>
+          <h1>
+            {sku.nameEn} <span className="zh-inline">{sku.nameZh}</span>
+          </h1>
           <p className="sub">
-            {brand.nameZh} · {brand.distilleryZh}
+            {brand.nameEn} · {brand.distilleryZh}
           </p>
           {sku.chinaPrice ? <p className="price">{sku.chinaPrice}</p> : null}
           {sku.chinaNote ? <p className="caption">{sku.chinaNote}</p> : null}
           {printed ? (
             <p className="caption">
-              The price-band sheet prints {printed.yuan} for {printed.label}. That number is the sheet’s.
+              The six-band price sheet prints {printed.yuan} for {printed.label}. That figure reflects the reference
+              sheet rather than today’s spot quote.
             </p>
           ) : null}
           <dl className="spec">
-            <dt>香型</dt>
+            <dt>Aroma</dt>
             <dd>
-              {aroma?.zh} · {aroma?.en}
+              {aroma?.en} · <span className="zh-chip">{aroma?.zh}</span>
             </dd>
-            <dt>酒精度</dt>
+            <dt>ABV</dt>
             <dd>{sku.abv}</dd>
-            <dt>净含量</dt>
+            <dt>Volume</dt>
             <dd>{sku.volume}</dd>
-            <dt>产地</dt>
+            <dt>Origin</dt>
             <dd>
-              {brand.placeZh} · {brand.placeEn}
+              {brand.placeEn} · <span className="zh-chip">{brand.placeZh}</span>
             </dd>
-            <dt>梯队</dt>
+            <dt>Tier</dt>
             <dd>
-              {tier?.zh} · {tier?.en}
+              {tier?.en} · <span className="zh-chip">{tier?.zh}</span>
             </dd>
           </dl>
           <p>{sku.role}</p>
-          <p className="zh-copy">{sku.roleZh}</p>
           <div className="actions">
             <CompareButton id={sku.id} />
             <Link className="btn" href={`/brand/${brand.id}`}>
-              {brand.nameZh}的其他酒
+              More from {brand.nameEn}
             </Link>
             {sku.specUrl ? (
               <a className="btn" href={sku.specUrl}>
-                酒厂产品页
+                Distillery spec page
               </a>
             ) : null}
             {brand.official ? (
@@ -102,10 +107,11 @@ export default async function SkuPage({ params }: PageProps) {
               </a>
             ) : null}
           </div>
-          <h2 className="section-label">Canada and the United States</h2>
+          <h2 className="section-label">Canada &amp; the United States</h2>
           {sku.shops.length === 0 ? (
             <p className="caption">
-              No verified retail page for this exact bottle. The 何处买 index lists the chains that carry the category.
+              No verified direct retail page for this exact bottle. See the <Link href="/shops">Shops directory</Link>{" "}
+              for chains that carry baijiu in North America.
             </p>
           ) : (
             <div className="shops">
@@ -127,7 +133,9 @@ export default async function SkuPage({ params }: PageProps) {
       </div>
       {siblings.length > 0 ? (
         <>
-          <h2 className="section-label">Other bottles · {brand.nameZh}</h2>
+          <h2 className="section-label">
+            Other bottles from {brand.nameEn} · {brand.nameZh}
+          </h2>
           <div className="grid">
             {siblings.map((item) => (
               <Card key={item.id} sku={item} />

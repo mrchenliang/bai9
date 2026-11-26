@@ -3,18 +3,20 @@ import Link from "next/link";
 import { aromaById, aromas, brandById } from "@/catalog";
 
 export const metadata: Metadata = {
-  title: "香型",
+  title: "Aromas",
 };
 
 export default function AromasPage() {
   return (
     <>
-      <p className="kicker">Aroma · 香型</p>
-      <h1>十二种香型</h1>
-      <p className="en-title">The twelve national types, plus one steeped wine.</p>
+      <p className="kicker">Aromas · 十二香型</p>
+      <h1>
+        The Twelve Aromas <span className="zh-inline">十二香型</span>
+      </h1>
       <p className="sub">
-        Each type has a reference distillery. Yanghe’s “soft strong aroma” stays inside strong aroma. It is not a
-        thirteenth type.
+        China classifies baijiu by fermentation and aroma profile, not by grain or barrel age. Twelve national aroma
+        standards exist, plus steeped botanical spirits (露酒). Each style has a benchmark distillery; Yanghe’s “soft
+        strong aroma” (绵柔浓香) sits inside strong aroma rather than forming a thirteenth standard.
       </p>
       <div className="aroma-grid">
         {aromas.map((item) => {
@@ -22,12 +24,14 @@ export default function AromasPage() {
           const aroma = aromaById(item.id);
           return (
             <Link key={item.id} className="aroma" href={`/brand/${item.referenceBrandId}`}>
-              <div className="name-zh">
-                {aroma?.zh} · {aroma?.en}
+              <div className="aroma-head">
+                <span className="name-en-main">{aroma?.en}</span>
+                <span className="zh-inline-sm">{aroma?.zh}</span>
               </div>
               <p>{item.taste}</p>
-              <p className="zh-copy">{item.tasteZh}</p>
-              <p className="meta">标准 · {brand?.nameZh}</p>
+              <p className="meta">
+                Reference · {brand?.nameEn} ({brand?.nameZh})
+              </p>
             </Link>
           );
         })}

@@ -17,7 +17,11 @@ export function Face({ sku, brand }: { sku: Sku; brand: Brand }) {
   }
   return (
     <div className="face">
-      <img src={sku.image} alt={sku.nameZh} style={{ objectPosition: sku.imagePosition ?? "50% 40%" }} />
+      <img
+        src={sku.image}
+        alt={`${sku.nameEn} (${sku.nameZh})`}
+        style={{ objectPosition: sku.imagePosition ?? "50% 40%" }}
+      />
       <span className="tier-tag">{tier?.zh}</span>
     </div>
   );
@@ -29,8 +33,8 @@ export function Card({ sku }: { sku: Sku }) {
   return (
     <Link className="card" href={`/sku/${sku.id}`}>
       <Face sku={sku} brand={brand} />
-      <div className="name-zh">{sku.nameZh}</div>
-      <div className="name-en">{sku.nameEn}</div>
+      <div className="name-en-main">{sku.nameEn}</div>
+      <div className="name-zh-sub">{sku.nameZh}</div>
       <div className="meta">
         {sku.abv} · {sku.volume}
       </div>

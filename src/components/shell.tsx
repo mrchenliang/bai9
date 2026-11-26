@@ -34,14 +34,17 @@ function loadCompare(): string[] {
 }
 
 const NAV = [
-  { href: "/", label: "藏品" },
-  { href: "/tiers", label: "梯队" },
-  { href: "/sheet", label: "价格带" },
-  { href: "/medals", label: "名酒" },
-  { href: "/brands", label: "品牌" },
-  { href: "/aromas", label: "香型" },
-  { href: "/shops", label: "何处买" },
+  { href: "/", label: "Collection" },
+  { href: "/tiers", label: "Tiers" },
+  { href: "/sheet", label: "Price Bands" },
+  { href: "/medals", label: "Medals" },
+  { href: "/provinces", label: "Provinces" },
+  { href: "/brands", label: "Houses" },
+  { href: "/aromas", label: "Aromas" },
+  { href: "/shops", label: "Shops" },
 ];
+
+const SEARCHABLE_PATHS = new Set(["/", "/brands", "/provinces"]);
 
 export function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -67,7 +70,7 @@ export function Shell({ children }: { children: ReactNode }) {
 
   function setQuery(value: string) {
     setQueryState(value);
-    if (pathname !== "/") router.push("/");
+    if (!SEARCHABLE_PATHS.has(pathname)) router.push("/");
   }
 
   function toggleCompare(id: string) {
@@ -87,7 +90,7 @@ export function Shell({ children }: { children: ReactNode }) {
         <Link className="brand-lock" href="/">
           <span className="word">
             <b className="name-mark">酒</b>
-            <span>中国白酒博物馆</span>
+            <span>Chinese Baijiu Museum</span>
           </span>
         </Link>
         <nav className="nav">
@@ -102,7 +105,7 @@ export function Shell({ children }: { children: ReactNode }) {
           <input
             id="q"
             value={query}
-            placeholder="搜 飞天 / Fenjiu"
+            placeholder="Search Moutai, Fenjiu, 酱香"
             onChange={(event) => setQuery(event.target.value)}
           />
           <kbd>/</kbd>
@@ -111,8 +114,11 @@ export function Shell({ children }: { children: ReactNode }) {
       <main id="main" className={compare.length ? "wrap has-compare" : "wrap"}>
         {children}
         <footer className="foot">
-          <span>酒 · 白酒是蒸馏酒，常见四十到六十度。加拿大多数地方十九岁，美国二十一岁。</span>
-          <Link href="/about">档案说明与图片来源</Link>
+          <span>
+            酒 · Baijiu is distilled grain spirit, typically 40%–60% ABV. Legal drinking age is 19 in most of Canada and
+            21 in the United States.
+          </span>
+          <Link href="/about">Archive notes &amp; image credits</Link>
         </footer>
       </main>
       {compare.length > 0 ? (
@@ -127,7 +133,9 @@ export function Shell({ children }: { children: ReactNode }) {
                 ) : (
                   <span className="mini">{sku.nameZh.slice(0, 1)}</span>
                 )}
-                <span className="nm">{sku.nameZh}</span>
+                <span className="nm">
+                  {sku.nameEn} <em className="nm-zh">{sku.nameZh}</em>
+                </span>
               </Link>
             );
           })}
@@ -138,7 +146,7 @@ export function Shell({ children }: { children: ReactNode }) {
               setCompare([]);
             }}
           >
-            清空
+            Clear
           </button>
         </div>
       ) : null}
@@ -150,7 +158,7 @@ export function CompareButton({ id }: { id: string }) {
   const { compare, toggleCompare } = useMuseum();
   return (
     <button type="button" className="btn solid" onClick={() => toggleCompare(id)}>
-      {compare.includes(id) ? "移出对照" : "放入对照"}
+      {compare.includes(id) ? "Remove from compare" : "Add to compare"}
     </button>
   );
 }

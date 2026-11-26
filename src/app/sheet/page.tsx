@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { brandById, skuAroma, skuById } from "@/catalog";
-import { aromaChip, priceSheet, sheetNote, sheetNoteZh, type SheetSpot } from "@/sheet";
+import { aromaChip, priceSheet, sheetNote, type SheetSpot } from "@/sheet";
 
 export const metadata: Metadata = {
-  title: "价格带",
+  title: "Price Bands",
 };
 
 function Bottle({ spot }: { spot: SheetSpot }) {
@@ -17,7 +17,11 @@ function Bottle({ spot }: { spot: SheetSpot }) {
       <div className="sheet-photo">
         <b className="sheet-yuan">{spot.yuan}</b>
         {sku?.image ? (
-          <img src={sku.image} alt={spot.label} style={{ objectPosition: sku.imagePosition ?? "50% 40%" }} />
+          <img
+            src={sku.image}
+            alt={sku.nameEn}
+            style={{ objectPosition: sku.imagePosition ?? "50% 40%" }}
+          />
         ) : (
           <div className="sheet-plate">
             <b>{brand?.nameZh.slice(0, 2)}</b>
@@ -25,7 +29,8 @@ function Bottle({ spot }: { spot: SheetSpot }) {
         )}
         {mark ? <span className="aroma-chip">{mark}</span> : null}
       </div>
-      <div className="sheet-name">{spot.label}</div>
+      <div className="sheet-name">{sku?.nameEn ?? spot.label}</div>
+      <div className="sheet-zh">{spot.label}</div>
     </Link>
   );
 }
@@ -33,11 +38,11 @@ function Bottle({ spot }: { spot: SheetSpot }) {
 export default function SheetPage() {
   return (
     <>
-      <p className="kicker">Sheet · 价格带</p>
-      <h1>六排价格</h1>
-      <p className="en-title">Six rows, dearest at the top.</p>
+      <p className="kicker">Price Bands · 六排价格带</p>
+      <h1>
+        Six Price Bands <span className="zh-inline">价格带</span>
+      </h1>
       <p className="sub">{sheetNote}</p>
-      <p className="sub zh-copy">{sheetNoteZh}</p>
       <div className="sheet">
         {priceSheet.map((band) => (
           <section key={band[0]?.skuId} className="sheet-band">

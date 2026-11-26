@@ -3,19 +3,20 @@ import { Card } from "@/components/card";
 import { retailers, skus } from "@/catalog";
 
 export const metadata: Metadata = {
-  title: "何处买",
+  title: "Where to Buy",
 };
 
 export default function ShopsPage() {
   return (
     <>
-      <p className="kicker">Shops · 何处买</p>
-      <h1>加拿大与美国</h1>
-      <p className="en-title">Where a bottle was actually listed.</p>
+      <p className="kicker">Shops · 北美购酒</p>
+      <h1>
+        Canada &amp; the United States <span className="zh-inline">何处买</span>
+      </h1>
       <p className="sub">
-        Provincial boards decide most of the Canadian shelf. A page can be out of stock the same week. United States
-        chains often sell 200 ml, 375 ml or 750 ml, while the China price is for 500 ml. Read the label. Prices below
-        were copied from the retailer page in November 2026.
+        Provincial liquor boards decide most of the Canadian shelf, and listings go in and out of stock week to week.
+        United States chains often sell 200 ml, 375 ml, or 750 ml bottles while China street prices are for 500 ml —
+        always check the volume on the label. Prices below were recorded from retailer pages in November 2026.
       </p>
       <div className="shop-index">
         {(["Canada", "United States"] as const).map((country) => (
@@ -34,7 +35,7 @@ export default function ShopsPage() {
           </section>
         ))}
       </div>
-      <h2 className="section-label">Bottles with a direct page</h2>
+      <h2 className="section-label">Bottles with a direct retail listing</h2>
       <div className="grid">
         {skus
           .filter((sku) => sku.shops.length > 0)
