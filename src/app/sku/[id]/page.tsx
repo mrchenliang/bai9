@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Card, CreditLine } from "@/components/card";
 import { CompareButton } from "@/components/shell";
 import { brandById, skuAroma, skuById, skus, skusForBrand, tierById } from "@/catalog";
+import { sheetSpot } from "@/sheet";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -28,6 +29,7 @@ export default async function SkuPage({ params }: PageProps) {
   if (!brand) notFound();
   const aroma = skuAroma(sku);
   const tier = tierById(sku.tier);
+  const printed = sheetSpot(sku.id);
   const siblings = skusForBrand(brand.id).filter((item) => item.id !== sku.id);
   return (
     <>
@@ -59,6 +61,11 @@ export default async function SkuPage({ params }: PageProps) {
           </p>
           {sku.chinaPrice ? <p className="price">{sku.chinaPrice}</p> : null}
           {sku.chinaNote ? <p className="caption">{sku.chinaNote}</p> : null}
+          {printed ? (
+            <p className="caption">
+              The price-band sheet prints {printed.yuan} for {printed.label}. That number is the sheet’s.
+            </p>
+          ) : null}
           <dl className="spec">
             <dt>香型</dt>
             <dd>

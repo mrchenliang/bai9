@@ -36,6 +36,7 @@ function loadCompare(): string[] {
 const NAV = [
   { href: "/", label: "藏品" },
   { href: "/tiers", label: "梯队" },
+  { href: "/sheet", label: "价格带" },
   { href: "/brands", label: "品牌" },
   { href: "/aromas", label: "香型" },
   { href: "/shops", label: "何处买" },
