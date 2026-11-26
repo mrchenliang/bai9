@@ -24,8 +24,9 @@ const COMPARE_KEY = "baijiu-museum-compare";
 type SortId = "tier" | "zh" | "shop";
 
 function readHash(): string {
-  const raw = window.location.hash.replace(/^#/, "");
-  return raw.startsWith("/") ? raw : "/";
+  const path = window.location.hash.replace(/^#/, "").split("?")[0];
+  if (!path.startsWith("/")) return "/";
+  return path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path || "/";
 }
 
 function useHash(): string {
@@ -117,7 +118,7 @@ export function App() {
           ? brandById(path.slice(7))
           : undefined;
     const name = title && "nameZh" in title ? `${title.nameZh} · ${title.nameEn}` : "中国白酒博物馆";
-    document.title = `${name} · Chinese Baijiu Museum`;
+    document.title = `${name} · 酒`;
   }, [path]);
 
   useEffect(() => {
@@ -180,9 +181,8 @@ export function App() {
       </a>
       <header className="top">
         <a className="brand-lock" href="#/">
-          <span className="seal">酒</span>
           <span className="word">
-            <b>baijiu</b>
+            <b className="name-mark">酒</b>
             <span>中国白酒博物馆</span>
           </span>
         </a>
@@ -243,7 +243,7 @@ export function App() {
         {route[0] === "shops" ? <ShopIndex /> : null}
         {route[0] === "about" ? <About /> : null}
         <footer className="foot">
-          <span>白酒是蒸馏酒，常见四十到六十度。加拿大多数地方十九岁，美国二十一岁。</span>
+          <span>酒 · 白酒是蒸馏酒，常见四十到六十度。加拿大多数地方十九岁，美国二十一岁。</span>
           <a href="#/about">档案说明与图片来源</a>
         </footer>
       </main>
@@ -305,7 +305,7 @@ function Collection({
 }) {
   return (
     <>
-      <p className="kicker">Collection · 藏品</p>
+      <p className="kicker">酒 · 藏品</p>
       <h1>中国白酒博物馆</h1>
       <p className="en-title">Chinese Baijiu Museum</p>
       <p className="sub">
@@ -678,7 +678,7 @@ function ShopIndex() {
 function About() {
   return (
     <>
-      <p className="kicker">About · 说明</p>
+      <p className="kicker">酒 · 说明</p>
       <h1>这份档案不收人投稿</h1>
       <p className="en-title">A fixed editorial order.</p>
       <div className="prose">

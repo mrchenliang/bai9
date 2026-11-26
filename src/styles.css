@@ -55,28 +55,17 @@ img { max-width: 100%; display: block; }
   margin-right: 8px;
   min-width: 0;
 }
-.seal {
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
-  background: var(--ash);
-  color: white;
-  display: grid;
-  place-items: center;
-  font-family: var(--serif);
-  font-size: 16px;
-  flex: none;
-}
 .word {
   display: flex;
   flex-direction: column;
   line-height: 1.05;
 }
-.word b {
-  font-family: var(--mono);
-  font-weight: 500;
-  font-size: 12px;
-  letter-spacing: 0.01em;
+.name-mark {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: 0.04em;
 }
 .word span {
   font-family: var(--serif);
