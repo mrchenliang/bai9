@@ -41,23 +41,34 @@ export default function BanquetsPage() {
               <div className="prov-zh">{band.titleZh}</div>
               <p className="banquet-occ">{band.occasion}</p>
             </div>
-            <div className="prov-grid">
+            <div className="banquet-grid">
               {band.picks.map((pick) => {
                 const sku = skuById(pick.skuId);
                 if (!sku) return null;
                 const brand = brandById(sku.brandId);
                 const aroma = skuAroma(sku) ?? (brand ? aromaById(brand.aroma) : undefined);
                 return (
-                  <Link key={pick.skuId} href={`/sku/${sku.id}`} className="house-card is-archived">
-                    <div className="house-top">
-                      <span className="house-zh">{sku.nameZh}</span>
-                      {aroma ? <span className="house-aroma">{aroma.zh}</span> : null}
-                    </div>
-                    <div className="house-en">{sku.nameEn}</div>
-                    <div className="banquet-note">{pick.note}</div>
-                    <div className="house-meta">
-                      {sku.abv} · {sku.volume}
-                      {sku.chinaPrice ? ` · ${sku.chinaPrice}` : ""}
+                  <Link key={pick.skuId} href={`/sku/${sku.id}`} className="house-card is-archived banquet-card">
+                    {sku.image ? (
+                      <div className="banquet-thumb">
+                        <img
+                          src={sku.image}
+                          alt={sku.nameEn}
+                          className={sku.image.startsWith("/images/bottles/") ? "is-cutout" : undefined}
+                        />
+                      </div>
+                    ) : null}
+                    <div className="banquet-info">
+                      <div className="house-top">
+                        <span className="house-zh">{sku.nameZh}</span>
+                        {aroma ? <span className="house-aroma">{aroma.zh}</span> : null}
+                      </div>
+                      <div className="house-en">{sku.nameEn}</div>
+                      <div className="banquet-note">{pick.note}</div>
+                      <div className="house-meta">
+                        {sku.abv} · {sku.volume}
+                        {sku.chinaPrice ? ` · ${sku.chinaPrice}` : ""}
+                      </div>
                     </div>
                   </Link>
                 );

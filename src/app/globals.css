@@ -232,6 +232,13 @@ h1 {
   height: 100%;
   object-fit: cover;
 }
+.face.is-cutout {
+  background: var(--paper);
+  padding: 14px 12px 10px;
+}
+.face.is-cutout img {
+  object-fit: contain;
+}
 .plate {
   height: 100%;
   display: flex;
@@ -404,6 +411,12 @@ h1 {
   aspect-ratio: 1;
 }
 .sku-photo img { width: 100%; height: 100%; object-fit: cover; }
+.sku-photo.is-cutout {
+  padding: 28px 24px;
+}
+.sku-photo.is-cutout img {
+  object-fit: contain;
+}
 .caption {
   margin-top: 8px;
   color: var(--muted);
@@ -603,6 +616,12 @@ h1 {
   height: 132px;
   object-fit: cover;
   border-radius: 6px;
+}
+.sheet-photo img.is-cutout {
+  width: 104px;
+  height: 144px;
+  object-fit: contain;
+  border-radius: 0;
 }
 .sheet-plate {
   width: 86px;
@@ -856,6 +875,46 @@ h1 {
   font-size: 12px;
   color: var(--muted);
   line-height: 1.35;
+}
+.banquet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  align-content: start;
+}
+.banquet-card {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+.banquet-thumb {
+  width: 56px;
+  height: 76px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  padding: 4px;
+}
+.banquet-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.banquet-thumb img.is-cutout {
+  object-fit: contain;
+  border-radius: 0;
+}
+.banquet-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
 }
 
 .verse {

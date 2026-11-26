@@ -1015,7 +1015,8 @@ export const skus: Sku[] = [
     chinaNote: "Street average, 23 Nov 2026.",
     role: "The classic five-grain bottle. Export listings under the bare name Wuliangye are often another size.",
     roleZh: "经典的五粮瓶。海外只写 Wuliangye 的货单，常常是另一种容量。",
-    caption: "No clean public photograph of the current eighth-generation bottle is in this archive.",
+    image: "/images/bottles/puwu.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [
       {
         country: "Canada",
@@ -1083,7 +1084,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "The cheap bottle from the Wuliangye group. This is what a lot of Sichuan actually drinks.",
     roleZh: "五粮液集团里的便宜酒。四川真正喝掉的，有很大一部分是它。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/jianzhuang.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1099,6 +1101,7 @@ export const skus: Sku[] = [
     chinaNote: "Street average, 23 Nov 2026.",
     role: "The prestige bottle, named for the cellar group the company dates to 1573. Tequ is the older medal wine.",
     roleZh: "面子酒，名字来自酒厂定为1573年的窖池群。特曲才是更老的奖牌酒。",
+    image: "/images/bottles/guojiao.png",
     caption: "No pack photograph of 1573 in this archive. The Luzhou photograph on Daqu is a different bottle.",
     shops: [],
   },
@@ -1112,7 +1115,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "The medal wine. Five national tastings, 1952 through 1989. The only strong aroma with that record.",
     roleZh: "奖牌酒。1952到1989五届国家名酒。浓香里只有它有这份记录。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/tequ.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1125,7 +1129,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "The weeknight bottle above Erqu. Ontario and Quebec both list it.",
     roleZh: "二曲上面的周中酒。安大略和魁北克都有货单。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/touqu.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [
       {
         country: "Canada",
@@ -1155,7 +1160,7 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "Daily Luzhou. The Ontario listing is marked 51.4% vol, a hair under the usual 52.",
     roleZh: "天天喝的泸州。安大略货单写着51.4度，比常见的52度低一点。",
-    caption: "No pack photograph in this archive.",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [
       {
         country: "Canada",
@@ -1250,7 +1255,8 @@ export const skus: Sku[] = [
     chinaNote: "Street average, 23 Nov 2026.",
     role: "The Jiannanchun on current tables. Strong aroma from Mianzhu.",
     roleZh: "现在桌上的剑南春。绵竹的浓香。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/crystal.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1265,7 +1271,8 @@ export const skus: Sku[] = [
     chinaNote: "Street average, 23 Nov 2026.",
     role: "Langjiu’s sauce-aroma flagship, from Erlang on the Chishui.",
     roleZh: "郎酒的酱香旗舰，赤水河二郎镇。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/qinghualang.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1278,7 +1285,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "The red-flower line under Qinghualang. Same river, a lower seat.",
     roleZh: "青花郎下面的红花线。同一条河，低一个位子。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/honghualang.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1293,6 +1301,7 @@ export const skus: Sku[] = [
     chinaNote: "Street average for the 52% bottle, 23 Nov 2026. The distillery also sells M6+ at 38%, 40.8% and 45% vol.",
     role: "Yanghe’s soft strong-aroma flagship. The 1979 medal was Yanghe Daqu, an earlier bottle.",
     roleZh: "洋河绵柔浓香的旗舰。1979年的奖牌是更早的洋河大曲。",
+    image: "/images/bottles/mengzhilan-m6.png",
     caption: "No pack photograph in this archive. Strengths are from the distillery’s own M6+ page.",
     specUrl: "https://www.chinayanghe.com/product/yanghe/lsjdxl/2.html",
     shops: [],
@@ -1307,7 +1316,8 @@ export const skus: Sku[] = [
     volume: "480 ml",
     role: "The blue bottle that actually sells. Dream Blue is the gift. Sea Blue is the week.",
     roleZh: "真正在卖的蓝瓶。梦之蓝是礼，海之蓝是一周。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/haizhilan.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1322,7 +1332,8 @@ export const skus: Sku[] = [
     chinaNote: "Street average, 23 Nov 2026.",
     role: "The Xijiu people name. Sauce aroma from Xishui, not a national-medal liquor.",
     roleZh: "会被点名的习酒。习水的酱香，不是国家奖牌酒。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/junpin.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1335,7 +1346,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "The other Xijiu people ask for by the year on the label.",
     roleZh: "另一瓶习酒，大家用瓶子上的年份来点。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/xijiu-1988.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1348,7 +1360,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "The Chengdu flagship. Abroad the same line is often labelled Wellbay, in a 750 ml bottle.",
     roleZh: "成都的旗舰。海外这条线常标成 Wellbay，750毫升。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/jingtai.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [
       {
         country: "United States",
@@ -1378,7 +1391,8 @@ export const skus: Sku[] = [
     volume: "750 ml",
     role: "The export No. 8. A strong-aroma Swellfun under Jingtai.",
     roleZh: "出口的八号。井台下面的一瓶水井坊浓香。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/swellfun-8.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [
       {
         country: "United States",
@@ -1400,7 +1414,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "The bottle that carries the Shede name. Tuopai, beside it, is the 1989 medal.",
     roleZh: "扛着舍得名字的瓶。旁边的沱牌，才是1989年的奖牌。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/pinwei.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1413,7 +1428,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "The 1989 famous liquor from Shehong. The medal strengths were 54% and 38% vol.",
     roleZh: "射洪1989年的名酒。奖牌度数是54度和38度。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/tuopai.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1428,6 +1444,7 @@ export const skus: Sku[] = [
     chinaNote: "Street average, 23 Nov 2026.",
     role: "The vintage-slurry flagship. The white porcelain Gujing is a cheaper bottle.",
     roleZh: "年份原浆旗舰。白瓷古井贡是更便宜的另一瓶。",
+    image: "/images/bottles/gu20.png",
     caption: "No photograph of Gu 20 in this archive. The porcelain photograph is the 42% bottle.",
     shops: [],
   },
@@ -1467,7 +1484,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "The prestige line of a wedding-banquet brand from Lianshui. Not one of the seventeen.",
     roleZh: "涟水婚宴品牌的面子线。不是十七大名酒。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/guoyuan.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1534,7 +1552,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "The dressed bottle of te aroma, from Zhangshu.",
     roleZh: "特香的正装瓶，樟树。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/dongfangyun.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1547,7 +1566,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "Mixed-aroma reference from Huaibei. The line is sold by stated cellar age.",
     roleZh: "淮北的兼香标准。这条线按标出的窖龄来卖。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/kouzi-cellar.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1560,7 +1580,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "The high bottle that gave laobaigan aroma its name.",
     roleZh: "给老白干香取了名字的那瓶高度。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/laobaigan-67.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1675,7 +1696,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "Mixed-aroma reference from Songzi, stacked by stated age.",
     roleZh: "松滋的兼香标准，按标出的年头来叠。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/baiyunbian-cellar.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1688,7 +1710,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "The dressed bottle of sesame aroma.",
     roleZh: "芝麻香的正装瓶。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/jingzhi-yipin.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1701,7 +1724,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "Huoshan strong aroma, sold on its cave ageing.",
     roleZh: "霍山浓香，卖点是洞藏。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/yingjia-cave.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1714,7 +1738,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "The leading bottle of the 1975 Zunyi experiment in sauce aroma.",
     roleZh: "1975年遵义酱香试验现在领头的瓶。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/zhen-15.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1727,7 +1752,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "Hunan sauce aroma. Promoted to the seventeen in 1989.",
     roleZh: "湖南酱香。1989年升进十七大名酒。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/wuling-medal.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1740,7 +1766,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "Henan light aroma. The 1989 proofs are history. Current bottles are lower.",
     roleZh: "河南清香。1989年的度数是历史。现在的瓶更低。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/baofeng-medal.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1769,7 +1796,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "Wuhan light aroma. Called Han Fen before the 1984 list. Not the cigarette.",
     roleZh: "武汉清香。1984年定名之前叫汉汾。不是卷烟。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/huanghelou-tezhi.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1782,7 +1810,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "Chengdu strong aroma. On the national list in 1963, 1984 and 1989.",
     roleZh: "成都浓香。1963、1984、1989年上国家名酒榜。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/quanxing-daqu.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1795,7 +1824,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "Jiangsu strong aroma from Sihong. National famous liquor from 1984.",
     roleZh: "泗洪的江苏浓香。1984年起的国家名酒。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/shuanggou-daqu.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1864,7 +1894,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "The yearly animal on a Moutai bottle. The price-band sheet does not name which animal. It is not Flying Fairy.",
     roleZh: "茅台上的生肖。价格带那张图没有写是哪一年的生肖。不是飞天。",
-    caption: "No photograph of a specific zodiac year is in this archive.",
+    image: "/images/bottles/zodiac.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1877,7 +1908,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "The Fenjiu step above Qinghua 20. Light aroma. The sheet seats it with the bottles near one thousand yuan.",
     roleZh: "青花20上面的汾酒。清香。价格带把它放在接近一千元的那一排。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/qinghua-30.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1890,7 +1922,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "The Dream Blue above M6+. The 23 November 2026 street figure in this archive is for M6+ at 52% vol, not for M9.",
     roleZh: "M6+上面的梦之蓝。本档案2026年11月23日的街价是52度的M6+，不是M9。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/mengzhilan-m9.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1903,6 +1936,7 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "Jiannanchun’s red round bottle. Strong aroma, priced on the sheet above Crystal.",
     roleZh: "剑南春的红圆瓶。浓香。价格带上写在水晶剑上面。",
+    image: "/images/bottles/dongfanghong.png",
     caption: "No pack photograph in this archive. The sheet shows the red round bottle and does not print a strength.",
     shops: [],
   },
@@ -1916,7 +1950,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "The red Xifeng. Feng aroma. A different bottle from the green one photographed here.",
     roleZh: "红瓶西凤。凤香。和本档案里的绿瓶不是同一瓶。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/hongxifeng.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1929,7 +1964,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "Jiugui’s Neican. The sack photograph in this archive is the regular Jiugui, not this bottle.",
     roleZh: "酒鬼的内参。本档案里的麻袋照片是普通酒鬼，不是这瓶。",
-    caption: "No pack photograph of Neican in this archive.",
+    image: "/images/bottles/neican.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1942,7 +1978,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "The domestic No. 8 named on the price-band sheet. The 750 ml Master Distiller No. 8 listed in the United States is a different bottling.",
     roleZh: "价格带上的国产八号。美国货单上750毫升的臻酿八号是另一种装法。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/swellfun-no8.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1955,6 +1992,7 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "Gujing under Gu 20. The 23 November 2026 street figure in this archive is for Gu 20.",
     roleZh: "古20下面的古井贡。本档案2026年11月23日的街价是古20的。",
+    image: "/images/bottles/gu8.png",
     caption: "No pack photograph of Gu 8 in this archive. The porcelain photograph is another everyday Gujing.",
     shops: [],
   },
@@ -1968,7 +2006,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "A Wuliangye-group bottle under Puwu. Not the eighth-generation Wuliangye.",
     roleZh: "五粮液集团里、普五下面的一瓶。不是第八代五粮液。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/wuliangchun.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1981,7 +2020,8 @@ export const skus: Sku[] = [
     volume: "475 ml",
     role: "The yellow-cap glass Fenjiu. The Beijing shelf photograph is the red-label glass bottle, not this cap.",
     roleZh: "黄盖的玻汾。北京货架那张照片是红标玻汾，不是这个盖。",
-    caption: "No photograph of the yellow cap is in this archive.",
+    image: "/images/bottles/huanggai.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -1994,7 +2034,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "Gujing in milk glass, an everyday bottle. The porcelain photograph is a different Gujing.",
     roleZh: "乳白玻璃的古井贡，日常的一瓶。白瓷那张照片是另一瓶古井贡。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/rubogong.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -2008,7 +2049,8 @@ export const skus: Sku[] = [
     volume: "500 ml class",
     role: "Langjiu’s cheap red label. The price-band sheet marks it mixed aroma. Qinghualang is sauce aroma.",
     roleZh: "郎酒的便宜红标。价格带给它标的是兼香。青花郎是酱香。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/shunpin.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -2021,7 +2063,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "Kweichow Moutai’s entry sauce-aroma bottle, blended with later-turn fermented grains rather than the Flying Fairy heart cuts. Widely poured at family dinners and budget banquets.",
     roleZh: "茅台系列酒入门级酱香，多用于家宴与预算型宴席。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/moutai-yingbin.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -2034,7 +2077,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "Produced by Moutai’s Laimao subsidiary (founded as a joint venture with Sinopec). A dependable mid-high sauce-aroma pour favored for gifting and graduation or business banquets.",
     roleZh: "茅台子公司赖茅的核心中高端酱香单品，商务与升学宴常见用酒。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/laimao-blue.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -2047,7 +2091,8 @@ export const skus: Sku[] = [
     volume: "475 ml",
     role: "The classic brown-jar light-aroma workhorse sitting between glass-bottle Bofen and the Qinghua porcelain series. A staple across northern Chinese family banquets.",
     roleZh: "介于玻汾与青花系列之间的经典清香坛装酒，北方家宴与升学宴常客。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/laobaifen.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -2060,7 +2105,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "Shaanxi’s dominant banquet bottle in its signature red-and-gold gift box — clean, slightly honeyed feng aroma aged in traditional woven-willow jiuhai vats (酒海).",
     roleZh: "陕西宴席市场主力单品，酒海陈酿风味柔和，红金盒装喜庆大气。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/xifeng-6.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -2073,7 +2119,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "Named for Gujing’s fourth consecutive National Famous Liquor gold medal in 1989. Retro label, accessible strong aroma, popular for casual hosting.",
     roleZh: "以1989年第四次蝉联国家名酒命名，复古标浓香口粮与聚会用酒。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/gujing-1989.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -2086,7 +2133,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "Positioned between Gu 8 and Gu 20 in Gujing’s red-and-black Year Puree line; a mainstream mid-tier banquet choice across Anhui and East China.",
     roleZh: "年份原浆系列承上启下的中高端主力，安徽及华东喜宴升学宴常见。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/gu16.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -2099,7 +2147,8 @@ export const skus: Sku[] = [
     volume: "520 ml",
     role: "The middle rung of Yanghe’s iconic Blue Classic ladder — above Ocean Blue (海之蓝) and below Dream Blue (梦之蓝). Soft strong aroma (绵柔浓香) tuned for smooth banquet drinking.",
     roleZh: "洋河蓝色经典中坚单品，介于海之蓝与梦之蓝之间，绵柔顺口适合宴席。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/tianzhilan.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -2112,7 +2161,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "Distilled from continuously active mud fermentation pits at least 60 years old. Sits directly above Tequ as a gold-boxed strong-aroma banquet staple.",
     roleZh: "以连续使用60年以上老窖池酿造，金色包装定位特曲之上的宴席中坚。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/jiaoling-60.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -2125,7 +2175,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "Huang Yongyu’s iconic tied-sack bottle glazed in celebratory vermilion red. Layered fuyu aroma (馥郁香) prized for weddings, graduation feasts, and gifting.",
     roleZh: "黄永玉设计麻袋陶瓶的喜庆红釉版，馥郁香代表，婚宴升学宴热门。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/jiugui-hongtan.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -2138,7 +2189,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "A step above Taste Shede (品味舍得), blended with eight-year aged base spirit and fifteen-year seasoning liquor in a stark black-and-gold square bottle.",
     roleZh: "定位高于品味舍得，以8年基酒搭配15年调味酒勾调，主打陈香老酒风格。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/zhihui-shede.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
   {
@@ -2151,7 +2203,8 @@ export const skus: Sku[] = [
     volume: "500 ml",
     role: "Guotai’s flagship Maotai-town sauce-aroma bottle, stamped with its vintage year on crimson glass. A frequent ¥300–500 banquet alternative to pricier Chishui River flagships.",
     roleZh: "国台核心大曲酱香单品，真实年份标注，红瓶喜庆，300–500元酱香宴席常选。",
-    caption: "No pack photograph in this archive.",
+    image: "/images/bottles/guotai-guobiao.png",
+    caption: "Studio bottle cutout from the archive reference chart.",
     shops: [],
   },
 ];

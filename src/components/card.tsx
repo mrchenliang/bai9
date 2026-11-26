@@ -15,12 +15,13 @@ export function Face({ sku, brand }: { sku: Sku; brand: Brand }) {
       </div>
     );
   }
+  const isCutout = sku.image.startsWith("/images/bottles/");
   return (
-    <div className="face">
+    <div className={isCutout ? "face is-cutout" : "face"}>
       <img
         src={sku.image}
         alt={`${sku.nameEn} (${sku.nameZh})`}
-        style={{ objectPosition: sku.imagePosition ?? "50% 40%" }}
+        style={isCutout ? undefined : { objectPosition: sku.imagePosition ?? "50% 40%" }}
       />
       <span className="tier-tag">{tier?.zh}</span>
     </div>
