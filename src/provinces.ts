@@ -63,7 +63,7 @@ export const provincesAtlas: ProvinceEntry[] = [
     regionZh: "西南",
     houses: [
       { nameZh: "茅台", nameEn: "Moutai", aromaZh: "酱香型", aromaEn: "Sauce", aromaGroup: "jiang", cityZh: "仁怀", cityEn: "Renhuai", brandId: "moutai" },
-      { nameZh: "国台", nameEn: "Guotai", aromaZh: "酱香型", aromaEn: "Sauce", aromaGroup: "jiang", cityZh: "仁怀", cityEn: "Renhuai" },
+      { nameZh: "国台", nameEn: "Guotai", aromaZh: "酱香型", aromaEn: "Sauce", aromaGroup: "jiang", cityZh: "仁怀", cityEn: "Renhuai", brandId: "guotai" },
       { nameZh: "珍酒", nameEn: "Zhenjiu", aromaZh: "酱香型", aromaEn: "Sauce", aromaGroup: "jiang", cityZh: "遵义", cityEn: "Zunyi", brandId: "zhenjiu" },
       { nameZh: "董酒", nameEn: "Dongjiu", aromaZh: "董香型", aromaEn: "Dong / Herbal", aromaGroup: "other", cityZh: "遵义", cityEn: "Zunyi", brandId: "dongjiu" },
       { nameZh: "赖茅", nameEn: "Laimao", aromaZh: "酱香型", aromaEn: "Sauce", aromaGroup: "jiang", cityZh: "仁怀", cityEn: "Renhuai", brandId: "moutai" },
