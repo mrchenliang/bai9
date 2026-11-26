@@ -38,11 +38,14 @@ function loadList(key: string, max?: number): string[] {
   }
 }
 
-const NAV = [
+const PRIMARY_NAV = [
   { href: "/", label: "Gallery" },
-  { href: "/tiers", label: "Tier System", featured: true },
-  { href: "/table", label: "Table Guide" },
+  { href: "/tiers", label: "Tiers", featured: true },
+  { href: "/table", label: "Table" },
   { href: "/passport", label: "Passport", isPassport: true },
+];
+
+const MORE_NAV = [
   { href: "/sheet", label: "Price Bands" },
   { href: "/banquets", label: "Banquets" },
   { href: "/medals", label: "Medals" },
@@ -59,11 +62,27 @@ export function Shell({ children }: { children: ReactNode }) {
   const [query, setQueryState] = useState("");
   const [compare, setCompare] = useState<string[]>([]);
   const [tasted, setTasted] = useState<string[]>([]);
+  const [moreOpen, setMoreOpen] = useState(false);
 
   useEffect(() => {
     setCompare(loadList(COMPARE_KEY, 3));
     setTasted(loadList(TASTED_KEY));
   }, []);
+
+  useEffect(() => {
+    setMoreOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!moreOpen) return;
+    function onPointerDown(event: MouseEvent) {
+      const target = event.target as HTMLElement | null;
+      if (target?.closest(".nav-more")) return;
+      setMoreOpen(false);
+    }
+    window.addEventListener("mousedown", onPointerDown);
+    return () => window.removeEventListener("mousedown", onPointerDown);
+  }, [moreOpen]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -72,6 +91,7 @@ export function Shell({ children }: { children: ReactNode }) {
         event.preventDefault();
         document.getElementById("q")?.focus();
       }
+      if (event.key === "Escape") setMoreOpen(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -103,6 +123,8 @@ export function Shell({ children }: { children: ReactNode }) {
     setTasted([]);
   }
 
+  const moreActive = MORE_NAV.some((item) => pathname === item.href || pathname.startsWith(`${item.href}/`));
+
   return (
     <MuseumContext.Provider
       value={{ query, setQuery, compare, toggleCompare, tasted, toggleTasted, clearTasted }}
@@ -121,7 +143,7 @@ export function Shell({ children }: { children: ReactNode }) {
           </span>
         </Link>
         <nav className="nav" aria-label="Museum exhibitions">
-          {NAV.map((item) => (
+          {PRIMARY_NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -135,6 +157,31 @@ export function Shell({ children }: { children: ReactNode }) {
               ) : null}
             </Link>
           ))}
+          <div className="nav-more">
+            <button
+              type="button"
+              className={moreActive || moreOpen ? "nav-more-btn is-active" : "nav-more-btn"}
+              aria-expanded={moreOpen}
+              aria-controls="nav-more-menu"
+              onClick={() => setMoreOpen((open) => !open)}
+            >
+              More
+            </button>
+            {moreOpen ? (
+              <div id="nav-more-menu" className="nav-more-menu" role="menu">
+                {MORE_NAV.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    role="menuitem"
+                    aria-current={pathname === item.href ? "page" : undefined}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </nav>
         <label className="search">
           <span className="visually-hidden">Search archive</span>

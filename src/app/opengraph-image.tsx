@@ -1,98 +1,157 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { ImageResponse } from "next/og";
-import { brands, skus } from "@/catalog";
+import { skus } from "@/catalog";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "Chinese Baijiu Museum · 中国白酒博物馆";
 
-export default function OpenGraphImage() {
+const HERO_BOTTLES = ["feitian", "guojiao", "puwu", "bofen", "honghualang"] as const;
+
+async function readStudioBase64(imagePath?: string): Promise<string | null> {
+  if (!imagePath || !imagePath.startsWith("/")) return null;
+  try {
+    const file = path.join(process.cwd(), "public", imagePath);
+    const buf = await readFile(file);
+    const ext = path.extname(file).toLowerCase() === ".png" ? "png" : "jpeg";
+    return `data:image/${ext};base64,${buf.toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
+
+export default async function OpenGraphImage() {
+  const featured = HERO_BOTTLES.map((id) => skus.find((sku) => sku.id === id)).filter(
+    (sku): sku is NonNullable<typeof sku> => Boolean(sku?.image),
+  );
+  const images = await Promise.all(featured.map((sku) => readStudioBase64(sku.image)));
+  const bottles = featured
+    .map((sku, index) => ({ sku, src: images[index] }))
+    .filter((item): item is { sku: (typeof featured)[number]; src: string } => Boolean(item.src));
+
   return new ImageResponse(
     (
       <div
         style={{
           width: "100%",
           height: "100%",
-          background: "#faf8f5",
+          background: "#0b0b0d",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: "56px 64px",
-          border: "16px solid #ffffff",
+          position: "relative",
+          overflow: "hidden",
           fontFamily: "system-ui, -apple-system, sans-serif",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-            <div
-              style={{
-                width: 60,
-                height: 60,
-                background: "#c81e1e",
-                color: "#ffffff",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 34,
-                fontWeight: 700,
-              }}
-            >
-              酒
-            </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ fontSize: 22, fontWeight: 700, color: "#111111", letterSpacing: "0.04em" }}>
-                CHINESE BAIJIU MUSEUM
-              </span>
-              <span style={{ fontSize: 15, color: "#767676", letterSpacing: "0.1em" }}>
-                PERMANENT EDITORIAL ARCHIVE · 中国白酒博物馆
-              </span>
-            </div>
-          </div>
-          <span style={{ fontSize: 16, color: "#c81e1e", fontWeight: 700, letterSpacing: "0.1em" }}>
-            TIER I–IV · GB/T VERIFIED
-          </span>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div style={{ fontSize: 64, fontWeight: 700, color: "#111111", lineHeight: 1.08 }}>
-            The grain spirits China actually argues about.
-          </div>
-          <div style={{ fontSize: 26, color: "#525252", lineHeight: 1.4 }}>
-            Table signals, GB/T pure-grain standards, 27-province atlas, banquet survival guide, and drinking passport.
-          </div>
-        </div>
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "radial-gradient(circle at 18% 20%, rgba(200,30,30,0.22), transparent 42%), radial-gradient(circle at 82% 78%, rgba(255,255,255,0.08), transparent 36%)",
+            display: "flex",
+          }}
+        />
 
         <div
           style={{
+            position: "relative",
+            zIndex: 1,
+            width: "100%",
+            height: "100%",
             display: "flex",
+            padding: "48px 56px",
             justifyContent: "space-between",
-            alignItems: "flex-end",
-            borderTop: "1px solid rgba(0,0,0,0.12)",
-            paddingTop: 22,
+            alignItems: "stretch",
+            gap: 40,
           }}
         >
-          <div style={{ display: "flex", gap: 36 }}>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ fontSize: 32, fontWeight: 700, color: "#111111" }}>{skus.length}</span>
-              <span style={{ fontSize: 14, color: "#767676", letterSpacing: "0.08em" }}>SPECIMENS</span>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              width: 520,
+              paddingTop: 8,
+              paddingBottom: 8,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+              <div
+                style={{
+                  width: 56,
+                  height: 56,
+                  border: "2px solid #c81e1e",
+                  color: "#c81e1e",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 30,
+                  fontWeight: 700,
+                  background: "rgba(255,255,255,0.04)",
+                }}
+              >
+                酒
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <span style={{ fontSize: 18, fontWeight: 700, color: "#ffffff", letterSpacing: "0.08em" }}>
+                  CHINESE BAIJIU MUSEUM
+                </span>
+                <span style={{ fontSize: 14, color: "rgba(255,255,255,0.55)", letterSpacing: "0.08em" }}>
+                  中国白酒博物馆
+                </span>
+              </div>
             </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ fontSize: 32, fontWeight: 700, color: "#111111" }}>{brands.length}</span>
-              <span style={{ fontSize: 14, color: "#767676", letterSpacing: "0.08em" }}>HOUSES</span>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+              <div style={{ fontSize: 58, fontWeight: 700, color: "#ffffff", lineHeight: 1.05 }}>
+                The grain spirits China actually argues about.
+              </div>
+              <div style={{ fontSize: 24, color: "rgba(255,255,255,0.68)", lineHeight: 1.35 }}>
+                Permanent editorial archive — tiers, table signals, and tasting provenance.
+              </div>
             </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ fontSize: 32, fontWeight: 700, color: "#111111" }}>12</span>
-              <span style={{ fontSize: 14, color: "#767676", letterSpacing: "0.08em" }}>AROMAS</span>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ fontSize: 32, fontWeight: 700, color: "#111111" }}>27</span>
-              <span style={{ fontSize: 14, color: "#767676", letterSpacing: "0.08em" }}>PROVINCES</span>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 18, color: "rgba(255,255,255,0.55)", fontSize: 18 }}>
+              <span>{skus.length} specimens</span>
+              <span style={{ color: "rgba(255,255,255,0.28)" }}>·</span>
+              <span>by @mr_chenliang</span>
             </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 18, color: "#767676" }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="#767676">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-            </svg>
-            <span>by @mr_chenliang</span>
+
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "flex-end",
+              gap: 14,
+              paddingBottom: 4,
+            }}
+          >
+            {bottles.slice(0, 4).map(({ sku, src }, index) => (
+              <div
+                key={sku.id}
+                style={{
+                  width: index === 1 || index === 2 ? 168 : 148,
+                  height: index === 1 || index === 2 ? 420 : 360,
+                  borderRadius: 18,
+                  overflow: "hidden",
+                  background: "#f6f6f8",
+                  border: "1px solid rgba(255,255,255,0.14)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: index % 2 === 0 ? 28 : 0,
+                }}
+              >
+                <img
+                  src={src}
+                  alt={sku.nameEn}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>

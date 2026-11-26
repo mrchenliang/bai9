@@ -305,59 +305,30 @@ h1 {
   text-transform: uppercase;
 }
 .museum-hero {
-  padding-bottom: 24px;
+  padding-bottom: 22px;
   border-bottom: 1px solid var(--line);
 }
-.museum-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  margin-top: 22px;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-.museum-stats .stat {
-  padding: 14px 16px 14px 0;
-  border-right: 1px solid var(--line);
-}
-.museum-stats .stat:not(:first-child) {
-  padding-left: 18px;
-}
-.museum-stats .stat:last-child {
-  border-right: 0;
-}
-.museum-stats b {
-  display: block;
-  font-family: var(--serif);
-  font-size: 26px;
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-.museum-stats span {
-  display: block;
-  margin-top: 4px;
-  font-family: var(--mono);
-  font-size: 10.5px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.tier-banner {
-  margin-top: 18px;
+.hero-cta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 18px 20px;
-  border: 1px solid rgba(11, 11, 13, 0.14);
-  border-left: 3px solid #c81e1e;
-  border-radius: 12px;
-  background: var(--paper);
-  text-decoration: none;
+  gap: 10px;
+  margin: 16px 0 0;
+  font-size: 14px;
 }
-.tier-banner:hover {
-  border-color: var(--ash);
-  border-left-color: #c81e1e;
+.hero-cta a {
+  color: var(--ash);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(11, 11, 13, 0.28);
+  padding-bottom: 1px;
+}
+.hero-cta a:hover {
+  color: #c81e1e;
+  border-bottom-color: #c81e1e;
+}
+.hero-cta span {
+  color: var(--muted);
 }
 .banner-kicker {
   display: block;
@@ -367,29 +338,48 @@ h1 {
   text-transform: uppercase;
   color: #c81e1e;
 }
-.tier-banner strong {
-  display: block;
-  margin-top: 4px;
-  font-family: var(--serif);
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--ash);
+.nav-more {
+  position: relative;
 }
-.tier-banner p {
-  margin: 4px 0 0;
-  font-size: 13.5px;
-  color: var(--muted);
-  max-width: 64ch;
-}
-.banner-cta {
-  flex: none;
-  padding: 9px 16px;
-  border-radius: 999px;
-  background: var(--ash);
-  color: white;
+.nav-more-btn {
+  border: 0;
+  background: transparent;
   font-size: 13px;
-  font-weight: 500;
+  padding: 6px 9px;
+  border-radius: 999px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.nav-more-btn:hover,
+.nav-more-btn.is-active {
+  color: var(--ash);
+  background: var(--paper);
+}
+.nav-more-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 168px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(11, 11, 13, 0.1);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+}
+.nav-more-menu a {
+  text-decoration: none;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--ash);
   white-space: nowrap;
+}
+.nav-more-menu a:hover,
+.nav-more-menu a[aria-current="page"] {
+  background: var(--paper);
 }
 
 .tier-tag {
@@ -1275,7 +1265,6 @@ h1 {
   color: var(--muted);
 }
 
-/* ── VIRAL MUSEUM ENHANCEMENTS ── */
 .nav-count {
   display: inline-flex;
   align-items: center;
@@ -1316,47 +1305,6 @@ h1 {
   color: #fff;
 }
 
-.feature-duo {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-top: 14px;
-}
-.feature-card {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 18px 20px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--paper);
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 140ms ease, background 140ms ease;
-}
-.feature-card:hover {
-  border-color: rgba(0, 0, 0, 0.28);
-  background: #fff;
-}
-.feature-card strong {
-  font-size: 17px;
-  letter-spacing: -0.01em;
-}
-.feature-card p {
-  margin: 0;
-  font-size: 13.5px;
-  color: var(--muted);
-  line-height: 1.5;
-}
-.feature-cta {
-  margin-top: auto;
-  padding-top: 8px;
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 500;
-  color: #c81e1e;
-}
-
 /* Specimen Table Signal & Back-Label Truth */
 .signal-box {
   margin: 18px 0 16px;
@@ -1382,23 +1330,20 @@ h1 {
   color: var(--ash);
 }
 
-.truth-strip {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin: 0 0 20px;
-}
-.gb-card, .shock-card {
+.gb-card {
   padding: 14px 16px;
   border: 1px solid var(--line);
   border-radius: 10px;
   background: #fff;
 }
+.gb-card.gb-inline {
+  margin: 0 0 18px;
+}
 .gb-card.is-blended {
   border-color: rgba(180, 83, 9, 0.35);
   background: #fffbeb;
 }
-.gb-head, .shock-head {
+.gb-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1429,16 +1374,23 @@ h1 {
   color: var(--muted);
   line-height: 1.48;
 }
-.shock-score {
-  font-weight: 700;
-  color: var(--ash);
-}
-.shock-dots {
+.shock-inline {
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-top: 8px;
+  gap: 8px;
+  margin-top: 12px;
   flex-wrap: wrap;
+}
+.shock-score {
+  font-family: var(--mono);
+  font-weight: 700;
+  color: var(--ash);
+  font-size: 12px;
+}
+.shock-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 .shock-dots .dot {
   width: 9px;
@@ -1452,9 +1404,26 @@ h1 {
   border-color: #c81e1e;
 }
 .shock-title {
-  margin-left: 6px;
   font-size: 13px;
   color: var(--ash);
+}
+.sku-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.sku-links a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(11, 11, 13, 0.18);
+}
+.sku-links a:hover {
+  color: #c81e1e;
+  border-bottom-color: #c81e1e;
 }
 
 /* Drinking Passport (/passport) */
@@ -1942,15 +1911,11 @@ h1 {
 
 @media (max-width: 800px) {
   .split, .sku-layout, .aroma-grid, .shop-index, .tier-wing, .brand-row, .tasting-row, .prov-row, .banquet-rules,
-  .feature-duo, .truth-strip, .prescription-main, .prescription-warnings, .ranker-row {
+  .prescription-main, .prescription-warnings, .ranker-row {
     grid-template-columns: 1fr;
   }
   .passport-metrics { grid-template-columns: repeat(2, 1fr); }
   .ranker-stele { border-right: 0; border-bottom: 1px solid var(--line); }
-  .museum-stats { grid-template-columns: repeat(2, 1fr); }
-  .museum-stats .stat { padding: 12px 10px; border-right: 0; border-bottom: 1px solid var(--line); }
-  .museum-stats .stat:not(:first-child) { padding-left: 10px; }
-  .tier-banner { flex-direction: column; align-items: flex-start; }
   .tier-overview { grid-template-columns: 1fr 1fr; }
   .tier-stele { border-right: 0; border-bottom: 1px solid var(--line); }
   .tier-gallery-grid { padding: 18px 0 22px; }
