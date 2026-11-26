@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { brandById, creditById, creditUrl, skuAroma, skus, tierById } from "@/catalog";
+import { TastedStamp } from "@/components/shell";
 import type { Brand, Sku, TierId } from "@/types";
 
 const TIER_NUMERAL: Record<TierId, string> = {
@@ -51,6 +52,7 @@ export function Face({ sku, brand }: { sku: Sku; brand: Brand }) {
         <i>{num}</i> {tier?.zh}
       </span>
       <span className="cat-tag">{catNo}</span>
+      <TastedStamp id={sku.id} />
     </div>
   );
 }

@@ -6,12 +6,16 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import { skuById } from "@/catalog";
 
 const COMPARE_KEY = "baijiu-museum-compare";
+const TASTED_KEY = "baijiu-museum-tasted";
 
 interface MuseumState {
   query: string;
   setQuery: (value: string) => void;
   compare: string[];
   toggleCompare: (id: string) => void;
+  tasted: string[];
+  toggleTasted: (id: string) => void;
+  clearTasted: () => void;
 }
 
 const MuseumContext = createContext<MuseumState | null>(null);
@@ -22,12 +26,13 @@ export function useMuseum(): MuseumState {
   return value;
 }
 
-function loadCompare(): string[] {
+function loadList(key: string, max?: number): string[] {
   try {
-    const raw = localStorage.getItem(COMPARE_KEY);
+    const raw = localStorage.getItem(key);
     const parsed: unknown = raw ? JSON.parse(raw) : [];
     if (!Array.isArray(parsed)) return [];
-    return parsed.filter((item): item is string => typeof item === "string").slice(0, 3);
+    const clean = parsed.filter((item): item is string => typeof item === "string");
+    return max ? clean.slice(0, max) : clean;
   } catch {
     return [];
   }
@@ -36,6 +41,8 @@ function loadCompare(): string[] {
 const NAV = [
   { href: "/", label: "Gallery" },
   { href: "/tiers", label: "Tier System", featured: true },
+  { href: "/table", label: "Table Guide" },
+  { href: "/passport", label: "Passport", isPassport: true },
   { href: "/sheet", label: "Price Bands" },
   { href: "/banquets", label: "Banquets" },
   { href: "/medals", label: "Medals" },
@@ -44,16 +51,18 @@ const NAV = [
   { href: "/aromas", label: "Aromas" },
 ];
 
-const SEARCHABLE_PATHS = new Set(["/", "/tiers", "/brands", "/provinces"]);
+const SEARCHABLE_PATHS = new Set(["/", "/tiers", "/brands", "/provinces", "/passport"]);
 
 export function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [query, setQueryState] = useState("");
   const [compare, setCompare] = useState<string[]>([]);
+  const [tasted, setTasted] = useState<string[]>([]);
 
   useEffect(() => {
-    setCompare(loadCompare());
+    setCompare(loadList(COMPARE_KEY, 3));
+    setTasted(loadList(TASTED_KEY));
   }, []);
 
   useEffect(() => {
@@ -81,8 +90,23 @@ export function Shell({ children }: { children: ReactNode }) {
     });
   }
 
+  function toggleTasted(id: string) {
+    setTasted((current) => {
+      const next = current.includes(id) ? current.filter((item) => item !== id) : [...current, id];
+      localStorage.setItem(TASTED_KEY, JSON.stringify(next));
+      return next;
+    });
+  }
+
+  function clearTasted() {
+    localStorage.removeItem(TASTED_KEY);
+    setTasted([]);
+  }
+
   return (
-    <MuseumContext.Provider value={{ query, setQuery, compare, toggleCompare }}>
+    <MuseumContext.Provider
+      value={{ query, setQuery, compare, toggleCompare, tasted, toggleTasted, clearTasted }}
+    >
       <a className="skip" href="#main">
         Skip to gallery
       </a>
@@ -106,6 +130,9 @@ export function Shell({ children }: { children: ReactNode }) {
             >
               {item.label}
               {item.featured ? <span className="nav-badge">I–IV</span> : null}
+              {item.isPassport && tasted.length > 0 ? (
+                <span className="nav-count">{tasted.length}</span>
+              ) : null}
             </Link>
           ))}
         </nav>
@@ -181,8 +208,32 @@ export function Shell({ children }: { children: ReactNode }) {
 export function CompareButton({ id }: { id: string }) {
   const { compare, toggleCompare } = useMuseum();
   return (
-    <button type="button" className="btn solid" onClick={() => toggleCompare(id)}>
+    <button type="button" className="btn" onClick={() => toggleCompare(id)}>
       {compare.includes(id) ? "Remove from compare" : "Add to compare"}
     </button>
+  );
+}
+
+export function TastedButton({ id }: { id: string }) {
+  const { tasted, toggleTasted } = useMuseum();
+  const isTasted = tasted.includes(id);
+  return (
+    <button
+      type="button"
+      className={isTasted ? "btn stamp-active" : "btn solid"}
+      onClick={() => toggleTasted(id)}
+    >
+      {isTasted ? "已饮 · Stamped in Passport" : "喝过 · Stamp as Tasted"}
+    </button>
+  );
+}
+
+export function TastedStamp({ id }: { id: string }) {
+  const { tasted } = useMuseum();
+  if (!tasted.includes(id)) return null;
+  return (
+    <span className="tasted-chop" title="Stamped in your Drinking Passport">
+      已饮
+    </span>
   );
 }

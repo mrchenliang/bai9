@@ -80,14 +80,34 @@ export function Collection() {
         <Link href="/tiers" className="tier-banner">
           <div>
             <span className="banner-kicker">Featured Hall · 四档梯队展厅</span>
-            <strong>Explore the Baijiu Tier System</strong>
+            <strong>Explore the Baijiu Tier System &amp; Rank Your Own</strong>
             <p>
-              Inspect all {skus.length} bottles ranked across Tier I State Table (国宴), Tier II Famous Liquor (名酒),
-              Tier III Fine Grain (佳酿), Tier IV Daily Grain (口粮), and Export (出口).
+              Inspect all {skus.length} bottles ranked across Tier I State Table (国宴) to Tier IV Daily Grain (口粮),
+              or build and export your own PNG tier list.
             </p>
           </div>
           <span className="banner-cta">Enter Tier System →</span>
         </Link>
+        <div className="feature-duo">
+          <Link href="/table" className="feature-card">
+            <span className="banner-kicker">Interactive Desk · 局酒指南</span>
+            <strong>What Bottle Do I Bring?</strong>
+            <p>
+              Meeting your girlfriend’s father, closing a client, or 2am skewers — get the culturally truthful bottle
+              and unspoken regional table rule.
+            </p>
+            <span className="feature-cta">Open Table Guide →</span>
+          </Link>
+          <Link href="/passport" className="feature-card">
+            <span className="banner-kicker">Visitor Record · 喝过酒证</span>
+            <strong>Stamp Your Drinking Passport</strong>
+            <p>
+              Mark every bottle you’ve survived, unlock your curatorial rank, and print a verified museum receipt PNG
+              card for X.
+            </p>
+            <span className="feature-cta">Open Passport →</span>
+          </Link>
+        </div>
       </section>
 
       <div className="filters">

@@ -4,14 +4,33 @@ import { Analytics } from "@vercel/analytics/next";
 import { Shell } from "@/components/shell";
 import "./globals.css";
 
+const siteOrigin = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteOrigin),
   title: {
     default: "Chinese Baijiu Museum · 酒",
     template: "%s · 酒",
   },
   description:
-    "酒 is a fixed editorial archive of Chinese baijiu: English dossiers with authentic Chinese names, tasting history, banquet guide, and provincial atlas.",
+    "酒 is a permanent editorial archive of Chinese baijiu: table signals, GB/T pure-grain truth, drinking passport, banquet survival guide, and provincial atlas.",
   icons: { icon: "/favicon.svg" },
+  openGraph: {
+    title: "Chinese Baijiu Museum · 酒",
+    description:
+      "The grain spirits China actually argues about — table signals, GB/T pure-grain standards, drinking passport, and banquet survival guide.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Chinese Baijiu Museum · 酒",
+    description:
+      "The grain spirits China actually argues about — table signals, GB/T pure-grain standards, drinking passport, and banquet survival guide.",
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
