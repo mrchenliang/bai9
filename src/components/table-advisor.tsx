@@ -2,615 +2,418 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { brandById, skuAroma, skuById, tierById } from "@/catalog";
-import { tierNumeral } from "@/components/card";
-import { fieldNoteFor, GB_KIND_META, SHOCK_LABELS } from "@/field-notes";
-import { downloadTablePrescriptionCard } from "@/lib/export-cards";
+import { aromaById, brandById, skuAroma, skuById } from "@/catalog";
+import { TastedStamp } from "@/components/shell";
+import { fieldNoteFor, GB_KIND_META } from "@/field-notes";
+import { banquetBands, giftPersonas, giftTraps, type GiftPersona } from "@/banquets";
 import { REGIONS, type RegionId } from "@/provinces";
 
-type OccasionId = "father" | "business" | "wedding" | "skewers" | "uncle" | "foreigner";
-type BudgetId = "street" | "mid" | "serious" | "nuclear";
+const STREET_SKEWERS_MOMENT: GiftPersona = {
+  id: "skewers",
+  label: "2am Street Skewers",
+  zh: "宵夜撸串",
+  tagline: "Plastic stools, charcoal lamb, and zero patience for ¥800 gift boxes.",
+  wrapTip:
+    "Skip the tote bag entirely — grab a naked glass bottle from the corner store and pour neat into tiny paper or glass cups.",
+  sayThis: "“Skip the fancy box tonight — pure-grain glass bottle and extra cumin.”",
+  toastZh: "深夜小酌，不醉不归",
+  picks: [
+    {
+      skuId: "huanggai",
+      roleLabel: "Cult Hero",
+      roleZh: "口粮之神",
+      pitch: "Yellow-Cap Fenjiu at ¥52 — pure-grain 53% light aroma that earns instant respect from every seasoned drinker.",
+      defaultQty: 1,
+    },
+    {
+      skuId: "hongxing-56",
+      roleLabel: "Beijing Original",
+      roleZh: "京味正统",
+      pitch: "1949 green-bottle Erguotou. 100% solid-state pure grain with crisp northern fire built for greasy late-night skewers.",
+      defaultQty: 1,
+    },
+    {
+      skuId: "erqu",
+      roleLabel: "Sichuan Workhorse",
+      roleZh: "川酒口粮",
+      pitch: "Luzhou Laojiao’s honest everyday strong aroma — sweet cellar grain under ¥30 with zero packaging markup.",
+      defaultQty: 1,
+    },
+  ],
+};
 
-const OCCASIONS: { id: OccasionId; label: string; zh: string }[] = [
-  { id: "father", label: "Meeting partner's father", zh: "第一次见岳父" },
-  { id: "business", label: "Closing a client dinner", zh: "商务宴请谈单" },
-  { id: "wedding", label: "Wedding banquet", zh: "婚宴摆席" },
-  { id: "skewers", label: "2am street skewers", zh: "宵夜撸串" },
-  { id: "uncle", label: "Uncle who says 'bring nothing'", zh: "嘴上说别带东西" },
-  { id: "foreigner", label: "First baijiu for foreign friends", zh: "带老外入坑" },
+// Curated 6-moment discovery lineup (unified from /table + /banquets)
+const GUIDE_MOMENTS: GiftPersona[] = [
+  giftPersonas[0], // Future Father-in-Law
+  giftPersonas[3], // Boss, Mentor & Head Table
+  giftPersonas[1], // Wedding & Graduation
+  giftPersonas[2], // "Bring Nothing" Uncle
+  STREET_SKEWERS_MOMENT, // 2am Street Skewers
+  giftPersonas[5], // Curious First-Timer
 ];
 
-const BUDGETS: { id: BudgetId; label: string; short: string; range: string }[] = [
-  { id: "street", label: "Honest Street", short: "<¥100", range: "Under ¥100" },
-  { id: "mid", label: "Respectable", short: "¥150–450", range: "¥150–¥450" },
-  { id: "serious", label: "Serious Face", short: "¥500–1k", range: "¥500–¥1,000" },
-  { id: "nuclear", label: "Apex Table", short: "¥1.5k+", range: "¥1,500+" },
-];
-
-const CURATED_MOMENTS: {
-  title: string;
-  zh: string;
-  meta: string;
-  occasion: OccasionId;
-  region: RegionId;
-  budget: BudgetId;
-}[] = [
-  {
-    title: "Meet the Father-in-Law",
-    zh: "初次见岳父",
-    meta: "Southwest · ¥500–1k",
-    occasion: "father",
-    region: "southwest",
-    budget: "serious",
-  },
-  {
-    title: "East China Client Table",
-    zh: "华东商务宴",
-    meta: "East · ¥1.5k+",
-    occasion: "business",
-    region: "east",
-    budget: "nuclear",
-  },
-  {
-    title: "Wedding Lazy Susan",
-    zh: "喜宴红桌",
-    meta: "Southwest · ¥150–450",
-    occasion: "wedding",
-    region: "southwest",
-    budget: "mid",
-  },
-  {
-    title: "“Bring Nothing” Uncle",
-    zh: "客气长辈",
-    meta: "North · ¥150–450",
-    occasion: "uncle",
-    region: "north",
-    budget: "mid",
-  },
-  {
-    title: "2am Northern Skewers",
-    zh: "胡同撸串",
-    meta: "North · <¥100",
-    occasion: "skewers",
-    region: "north",
-    budget: "street",
-  },
-];
-
-interface Recommendation {
-  primaryId: string;
-  insiderId: string;
-  whatGoesWrong: string;
-}
-
-function prescribe(occasion: OccasionId, region: RegionId, budget: BudgetId): Recommendation {
-  if (occasion === "skewers") {
-    if (region === "north" || region === "northeast") {
-      return {
-        primaryId: "huanggai",
-        insiderId: "hongxing-56",
-        whatGoesWrong:
-          "Bringing a ¥800 gift box to a plastic-stool skewer stall looks completely unhinged. Everyone will worry you are about to ask them for a loan.",
-      };
-    }
-    if (region === "south") {
-      return {
-        primaryId: "yukbing-classic",
-        insiderId: "sanhua-52",
-        whatGoesWrong:
-          "Dropping heavy 53% sauce aroma onto midnight Cantonese claypot rice overwhelms every dish on the table.",
-      };
-    }
-    if (region === "northwest") {
-      return {
-        primaryId: "xifeng-green",
-        insiderId: "yili-tequ",
-        whatGoesWrong:
-          "Over-dressing a charcoal lamb-skewer night kills the vibe — crisp Green Xifeng or Xinjiang Yilite earns immediate respect.",
-      };
-    }
-    return {
-      primaryId: "huanggai",
-      insiderId: "niulan-chen",
-      whatGoesWrong:
-        "Over-dressing a 2am skewer table kills the mood instantly. Pure-grain Yellow-Cap Fenjiu at ¥55 earns instant nods from real drinkers.",
-    };
-  }
-
-  if (occasion === "foreigner") {
-    if (budget === "street") {
-      return {
-        primaryId: "sanhua-52",
-        insiderId: "huanggai",
-        whatGoesWrong:
-          "Handing a first-timer warm 56% Red Star or medicinal Dongjiu on sip one guarantees they tell every friend for the next decade that baijiu tastes like jet fuel.",
-      };
-    }
-    return {
-      primaryId: "ming-river",
-      insiderId: "qinghua-20",
-      whatGoesWrong:
-        "Starting with intense aged sauce aroma without food or tiny cups shocks Western palates. Begin with crisp Qinghua 20 or bright pineapple-forward Ming River.",
-    };
-  }
-
-  if (budget === "nuclear") {
-    if (region === "east" && occasion === "business") {
-      return {
-        primaryId: "feitian",
-        insiderId: "mengzhilan-m9",
-        whatGoesWrong:
-          "Only two things can go wrong at ¥1,700+: bringing a counterfeit bottle from an unverified shop, or forgetting that two bottles is the polite minimum for an elder.",
-      };
-    }
-    return {
-      primaryId: "feitian",
-      insiderId: "jingpin",
-      whatGoesWrong:
-        "Bringing only a single bottle to a serious elder gift feels incomplete — Chinese gifting favors pairs ('chengshuang'). Also never open it before confirming the host isn't saving it.",
-    };
-  }
-
-  if (budget === "street") {
-    if (occasion === "father" || occasion === "business") {
-      return {
-        primaryId: "bofen",
-        insiderId: "xifeng-green",
-        whatGoesWrong:
-          "Truthful warning: showing up under ¥100 to meet your future father-in-law or close a business deal only works if you frame it as a nostalgic tasting side-pour alongside a serious bottle.",
-      };
-    }
-    if (region === "northwest") {
-      return {
-        primaryId: "xifeng-green",
-        insiderId: "yili-tequ",
-        whatGoesWrong:
-          "Buying a flashy supermarket gold box under ¥100 usually means blended GB/T 20822 spirit — stick to honest Green Xifeng or Yilite.",
-      };
-    }
-    return {
-      primaryId: "huanggai",
-      insiderId: "erqu",
-      whatGoesWrong:
-        "Grabbing a flashy no-name gold-foil bottle from a supermarket endcap for ¥69 is the worst trap — it is almost always GB/T 20822 blended spirit dressed like a king.",
-    };
-  }
-
-  if (budget === "serious") {
-    if (region === "east") {
-      return {
-        primaryId: "mengzhilan-m6",
-        insiderId: "gu20",
-        whatGoesWrong:
-          "Bringing entry-level Sea Blue or an unfamiliar out-of-region bottle to a serious East China table quietly signals you did not take the meeting seriously.",
-      };
-    }
-    if (region === "central") {
-      return {
-        primaryId: "neican",
-        insiderId: "guojiao",
-        whatGoesWrong:
-          "Ignoring Central China's local heavyweights like Jiugui Neican for a generic billboard sub-brand misses instant regional prestige.",
-      };
-    }
-    if (region === "northwest") {
-      return {
-        primaryId: "hongxifeng",
-        insiderId: "qinghua-30",
-        whatGoesWrong:
-          "In Xi'an and the Northwest, skipping royal Red Xifeng for a generic ¥600 label leaves hometown prestige on the table.",
-      };
-    }
-    if (region === "northeast") {
-      return {
-        primaryId: "puwu",
-        insiderId: "qinghua-30",
-        whatGoesWrong:
-          "Bringing a weak low-proof bottle to a serious Northeast banquet gets polite nods and quiet jokes after you leave.",
-      };
-    }
-    if (region === "south") {
-      return {
-        primaryId: "qinghua-30",
-        insiderId: "junpin",
-        whatGoesWrong:
-          "Heavy, harsh fire clashes with delicate southern banquets — silky Qinghua 30 or polished celadon Junpin lands far better.",
-      };
-    }
-    return {
-      primaryId: occasion === "wedding" ? "puwu" : "guojiao",
-      insiderId: "qinghua-30",
-      whatGoesWrong:
-        "Buying an obscure 'Moutai Town custom reserve' instead of a recognized Tier I/II flagship like 8th-Gen Wuliangye or National Cellar 1573 screams tourist markup.",
-    };
-  }
-
-  // Budget === "mid" (¥150–¥450)
-  if (occasion === "wedding") {
-    return {
-      primaryId: "crystal",
-      insiderId: region === "central" ? "jiugui-hongtan" : "honghualang",
-      whatGoesWrong:
-        "Choosing a white/plain bottle over festive red or crystal packaging for a wedding table gets quietly judged by every auntie before the cold dishes arrive.",
-    };
-  }
-  if (region === "east") {
-    return {
-      primaryId: "guoyuan",
-      insiderId: "gu16",
-      whatGoesWrong:
-        "Bringing entry-level Sea Blue when East China tables expect Guoyuan Sikou or Gujing Gu 16 is a classic rookie mistake.",
-    };
-  }
-  if (region === "central") {
-    return {
-      primaryId: "jiugui-hongtan",
-      insiderId: "baiyunbian-cellar",
-      whatGoesWrong:
-        "Skipping Hunan's Jiugui or Hubei's Baiyunbian for a random generic label misses instant hometown warmth across Central China.",
-    };
-  }
-  if (region === "northwest") {
-    return {
-      primaryId: "xifeng-6",
-      insiderId: "yili-tequ",
-      whatGoesWrong:
-        "Bringing an unfamiliar coastal label to a Shaanxi or Xinjiang table when Xifeng 6-Year and Yilite are beloved local anchors.",
-    };
-  }
-  if (region === "northeast") {
-    return {
-      primaryId: "qinghua-20",
-      insiderId: "laobaigan-67",
-      whatGoesWrong:
-        "Paying ¥400 for fancy cardboard instead of clean high-proof pure grain is spotted immediately at a Northeast table.",
-    };
-  }
-  if (region === "south") {
-    return {
-      primaryId: "qinghua-20",
-      insiderId: "tianzhilan",
-      whatGoesWrong:
-        "Forcing harsh, aggressive liquor on a Cantonese or Guangxi dinner table ruins food pairing — clean porcelain Qinghua 20 wins everyone over.",
-    };
-  }
-  if (occasion === "uncle") {
-    return {
-      primaryId: "qinghua-20",
-      insiderId: "pinwei",
-      whatGoesWrong:
-        "Believing him when he says 'don't bring anything' is fatal. 'Bring nothing' translates literally to: bring a genuinely tasteful ¥350–¥450 pure-grain bottle.",
-    };
-  }
-  return {
-    primaryId: "crystal",
-    insiderId: "xijiu-1988",
-    whatGoesWrong:
-      "Never buy a fancy-box “special commemorative” sub-brand at ¥300 — every seasoned drinker immediately googles the wholesale price and knows it costs ¥68.",
-  };
-}
+const REGION_SAFE_BETS: Record<RegionId, string[]> = {
+  southwest: ["feitian", "puwu", "guojiao"],
+  central: ["jiugui-sack", "baiyunbian-cellar", "huanghelou-tezhi"],
+  east: ["mengzhilan-m6", "gu20", "jingzhi-yipin"],
+  north: ["qinghua-20", "huanggai", "hongxing-56"],
+  northwest: ["hongxifeng", "xifeng-green", "yili-tequ"],
+  northeast: ["laobaigan-67", "qinghua-20", "huanggai"],
+  south: ["yukbing-classic", "sanhua-52", "qinghua-20"],
+};
 
 export function TableAdvisor() {
-  const [occasion, setOccasion] = useState<OccasionId>("father");
-  const [region, setRegion] = useState<RegionId>("southwest");
-  const [budget, setBudget] = useState<BudgetId>("serious");
-  const [copied, setCopied] = useState(false);
-  const [busy, setBusy] = useState(false);
+  const [activeMomentId, setActiveMomentId] = useState<string>(GUIDE_MOMENTS[0].id);
+  const [activeRegionId, setActiveRegionId] = useState<RegionId>("southwest");
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
-  const result = useMemo(() => {
-    const rec = prescribe(occasion, region, budget);
-    const primary = skuById(rec.primaryId)!;
-    const insider = skuById(rec.insiderId)!;
-    const primaryBrand = brandById(primary.brandId)!;
-    const primaryAroma = skuAroma(primary);
-    const primaryTier = tierById(primary.tier);
-    const primaryNote = fieldNoteFor(primary, primaryAroma?.id);
-    const insiderNote = fieldNoteFor(insider, skuAroma(insider)?.id);
-    const regionObj = REGIONS.find((r) => r.id === region) ?? REGIONS[0];
-    const occasionObj = OCCASIONS.find((o) => o.id === occasion)!;
-    const budgetObj = BUDGETS.find((b) => b.id === budget)!;
-    return {
-      rec,
-      primary,
-      insider,
-      primaryBrand,
-      primaryAroma,
-      primaryTier,
-      primaryNote,
-      insiderNote,
-      regionObj,
-      occasionObj,
-      budgetObj,
-    };
-  }, [occasion, region, budget]);
+  const randomPool = useMemo(() => banquetBands.flatMap((band) => band.picks), []);
+  const [spinIndex, setSpinIndex] = useState<number>(0);
+  const [isSpinning, setIsSpinning] = useState<boolean>(false);
 
-  const primaryPrice = result.primary.chinaPrice ?? `~¥${result.primaryNote.estYuan.toLocaleString("en-US")}`;
-  const insiderPrice = result.insider.chinaPrice ?? `~¥${result.insiderNote.estYuan.toLocaleString("en-US")}`;
-  const shockMeta = SHOCK_LABELS[result.primaryNote.shock];
+  const activeMoment = useMemo(
+    () => GUIDE_MOMENTS.find((m) => m.id === activeMomentId) ?? GUIDE_MOMENTS[0],
+    [activeMomentId],
+  );
 
-  async function handleExport() {
-    setBusy(true);
-    try {
-      await downloadTablePrescriptionCard({
-        occasion: result.occasionObj.label,
-        region: `${result.regionObj.en} (${result.regionObj.provincesSummary})`,
-        budget: result.budgetObj.range,
-        primarySku: result.primary,
-        primaryPrice,
-        primaryNote: result.primaryNote,
-        insiderName: `${result.insider.nameEn} (${result.insider.nameZh}) — ${result.insiderNote.tableSignal}`,
-        whatGoesWrong: result.rec.whatGoesWrong,
-        unspokenRule: result.regionObj.tableRule,
-      });
-    } finally {
-      setBusy(false);
-    }
+  const activeRegion = useMemo(
+    () => REGIONS.find((r) => r.id === activeRegionId) ?? REGIONS[0],
+    [activeRegionId],
+  );
+
+  const currentPick = randomPool[spinIndex % randomPool.length];
+  const currentSku = currentPick ? skuById(currentPick.skuId) : undefined;
+  const currentBrand = currentSku ? brandById(currentSku.brandId) : undefined;
+  const currentAroma = currentSku ? skuAroma(currentSku) : undefined;
+  const currentNote = currentSku ? fieldNoteFor(currentSku, currentAroma?.id) : undefined;
+
+  function handleSpin() {
+    if (randomPool.length <= 1) return;
+    setIsSpinning(true);
+    let next = Math.floor(Math.random() * randomPool.length);
+    if (next === spinIndex) next = (spinIndex + 1) % randomPool.length;
+    window.setTimeout(() => {
+      setSpinIndex(next);
+      setIsSpinning(false);
+    }, 150);
   }
 
-  async function handleCopy() {
-    const text = [
-      `Chinese Baijiu Guide · 选酒指南`,
-      `Table: ${result.occasionObj.label} · ${result.regionObj.en} (${result.budgetObj.range})`,
-      `Pour: ${result.primary.nameEn} (${result.primary.nameZh}) — ${primaryPrice} · ${result.primaryNote.gbCode}`,
-      `Palate: ${result.primaryNote.flavorTruth}`,
-      `Insider Backup: ${result.insider.nameEn} (${result.insider.nameZh})`,
-    ].join("\n");
+  async function copyText(key: string, text: string) {
     try {
       await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
+      setCopiedKey(key);
+      window.setTimeout(() => {
+        setCopiedKey((curr) => (curr === key ? null : curr));
+      }, 1800);
     } catch {
-      // ignore
+      // ignore clipboard errors
     }
-  }
-
-  function handleRandomize() {
-    const nextOcc = OCCASIONS[Math.floor(Math.random() * OCCASIONS.length)].id;
-    const nextReg = REGIONS[Math.floor(Math.random() * REGIONS.length)].id;
-    const nextBud = BUDGETS[Math.floor(Math.random() * BUDGETS.length)].id;
-    setOccasion(nextOcc);
-    setRegion(nextReg);
-    setBudget(nextBud);
   }
 
   return (
     <>
-      <p className="kicker">Curatorial Guide · 选酒指南</p>
-      <h1>
-        Find Your Bottle <span className="zh-inline">选酒指南</span>
-      </h1>
-      <p className="sub">
-        Every Chinese table speaks through the bottle set on it. Choose a moment below — or compose your own table — to
-        discover the right pour, how it actually tastes, and what locals quietly notice.
-      </p>
-
-      {/* Curated Discovery Moments */}
-      <section className="guide-moments-wrap" aria-label="Curated drinking moments">
-        <div className="guide-moments-head">
-          <span className="guide-eyebrow">Explore by Moment · 场景选酒</span>
-          <button type="button" className="guide-surprise" onClick={handleRandomize}>
-            Surprise me ↻
-          </button>
+      {/* 1. Editorial Hero + Bottle Randomizer */}
+      <section className="u-guide-hero">
+        <div className="u-guide-hero-copy">
+          <p className="kicker">Curatorial Guide · 选酒指南</p>
+          <h1>
+            The Baijiu Guide <span className="zh-inline">选酒指南</span>
+          </h1>
+          <p className="sub">
+            One concise guide to choosing, gifting, and pouring Chinese baijiu — pick a moment below, spin for an
+            instant bottle discovery, or dodge the three classic traps.
+          </p>
+          <div className="u-guide-jumps">
+            <a href="#moments">By moment</a>
+            <span aria-hidden="true">·</span>
+            <a href="#regions">Regional rules</a>
+            <span aria-hidden="true">·</span>
+            <a href="#traps">3 traps to dodge</a>
+            <span aria-hidden="true">·</span>
+            <Link href="/sheet">Price bands →</Link>
+          </div>
         </div>
-        <div className="guide-moments">
-          {CURATED_MOMENTS.map((moment) => {
-            const active =
-              occasion === moment.occasion && region === moment.region && budget === moment.budget;
-            const previewRec = prescribe(moment.occasion, moment.region, moment.budget);
-            const previewSku = skuById(previewRec.primaryId);
+
+        {/* Always-Ready Bottle Randomizer */}
+        {currentPick && currentSku && currentNote ? (
+          <aside
+            className={isSpinning ? "u-roulette is-spinning" : "u-roulette"}
+            aria-label="Bottle discovery randomizer"
+          >
+            <div className="u-roulette-head">
+              <span className="signal-kicker">Discover a Bottle · 盲选一瓶</span>
+              <button type="button" className="u-roulette-spin" onClick={handleSpin}>
+                Spin another ↻
+              </button>
+            </div>
+
+            <div className="u-roulette-main">
+              <Link href={`/sku/${currentSku.id}`} className="u-roulette-photo">
+                {currentSku.image ? (
+                  <img
+                    src={currentSku.image}
+                    alt={`${currentSku.nameEn} (${currentSku.nameZh})`}
+                    style={
+                      currentSku.imagePosition
+                        ? { objectPosition: currentSku.imagePosition }
+                        : undefined
+                    }
+                  />
+                ) : null}
+              </Link>
+              <div className="u-roulette-info">
+                <span className="u-roulette-arch">
+                  {currentPick.archetype} · {currentPick.bestFor}
+                </span>
+                <Link href={`/sku/${currentSku.id}`} className="u-roulette-name">
+                  {currentSku.nameEn} <span className="zh-inline-sm">{currentSku.nameZh}</span>
+                </Link>
+                <div className="u-roulette-specs">
+                  <strong>{currentSku.chinaPrice ?? `~¥${currentNote.estYuan}`}</strong> · {currentSku.abv}
+                  {currentBrand ? ` · ${currentBrand.provinceEn}` : ""}
+                  {currentAroma ? ` · ${currentAroma.en.replace(" aroma", "")}` : ""}
+                </div>
+                <p className="u-roulette-palate">{currentNote.flavorTruth}</p>
+              </div>
+            </div>
+
+            <div className="u-roulette-foot">
+              <p className="u-roulette-say">
+                <span>At the door:</span> “{currentPick.handoffLine}”
+              </p>
+              <Link href={`/sku/${currentSku.id}`} className="u-roulette-link">
+                Dossier →
+              </Link>
+            </div>
+          </aside>
+        ) : null}
+      </section>
+
+      {/* 2. Browse by Moment (6 tabs, zero sub-filters) */}
+      <section id="moments" className="u-guide-section">
+        <div className="u-section-head">
+          <div>
+            <p className="kicker">01 · By Moment · 按场景选酒</p>
+            <h2 className="u-h2">
+              Who are you pouring for? <span className="zh-inline">什么局</span>
+            </h2>
+          </div>
+          <span className="u-hint">Three curated bottles for every table</span>
+        </div>
+
+        <div className="u-moment-tabs" role="tablist" aria-label="Table and gifting moments">
+          {GUIDE_MOMENTS.map((moment) => {
+            const isSelected = moment.id === activeMoment.id;
             return (
               <button
-                key={moment.title}
+                key={moment.id}
                 type="button"
-                className={active ? "guide-moment is-active" : "guide-moment"}
-                aria-pressed={active}
-                onClick={() => {
-                  setOccasion(moment.occasion);
-                  setRegion(moment.region);
-                  setBudget(moment.budget);
-                }}
+                role="tab"
+                aria-selected={isSelected}
+                className={isSelected ? "u-moment-tab is-on" : "u-moment-tab"}
+                onClick={() => setActiveMomentId(moment.id)}
               >
-                <span className="guide-moment-thumb" aria-hidden="true">
-                  {previewSku?.image ? <img src={previewSku.image} alt="" /> : null}
-                </span>
-                <span className="guide-moment-copy">
-                  <strong>{moment.title}</strong>
-                  <span className="guide-moment-zh">{moment.zh}</span>
-                  <span className="guide-moment-meta">{moment.meta}</span>
-                </span>
+                <b>{moment.label}</b>
+                <span>{moment.zh}</span>
               </button>
             );
           })}
         </div>
-      </section>
 
-      {/* Editorial Inline Table Composer */}
-      <section className="guide-composer" aria-label="Customize occasion, region, and budget">
-        <div className="guide-sentence">
-          <span className="guide-phrase">Pouring for</span>
-          <label className="guide-inline-select">
-            <span className="visually-hidden">Occasion</span>
-            <select
-              value={occasion}
-              onChange={(e) => setOccasion(e.target.value as OccasionId)}
-            >
-              {OCCASIONS.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.label}
-                </option>
-              ))}
-            </select>
-            <svg viewBox="0 0 16 16" aria-hidden="true">
-              <path
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6l4 4 4-4"
-              />
-            </svg>
-          </label>
-
-          <span className="guide-phrase">in</span>
-
-          <label className="guide-inline-select">
-            <span className="visually-hidden">Region</span>
-            <select
-              id="advisor-region"
-              value={region}
-              onChange={(e) => setRegion(e.target.value as RegionId)}
-            >
-              {REGIONS.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.en} ({item.provincesSummary})
-                </option>
-              ))}
-            </select>
-            <svg viewBox="0 0 16 16" aria-hidden="true">
-              <path
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6l4 4 4-4"
-              />
-            </svg>
-          </label>
-        </div>
-
-        <div className="guide-spend-row">
-          <span className="guide-eyebrow">
-            Spend · <em>{result.budgetObj.label}</em>
-          </span>
-          <div className="guide-spend-pills" role="radiogroup" aria-label="Budget">
-            {BUDGETS.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                role="radio"
-                aria-checked={budget === item.id}
-                className={budget === item.id ? "guide-spend-pill is-on" : "guide-spend-pill"}
-                onClick={() => setBudget(item.id)}
-              >
-                {item.short}
-              </button>
-            ))}
+        <div className="u-moment-stage" role="tabpanel">
+          <div className="u-moment-stage-head">
+            <div>
+              <h3>
+                {activeMoment.label} <span className="zh-inline">{activeMoment.zh}</span>
+              </h3>
+              <p className="u-moment-tagline">{activeMoment.tagline}</p>
+            </div>
+            <span className="persona-toast-stamp" title="Traditional table phrase">
+              {activeMoment.toastZh}
+            </span>
           </div>
-        </div>
-      </section>
 
-      {/* Gallery Bottle Showcase */}
-      <section className="guide-showcase" aria-live="polite">
-        <div className="guide-spread">
-          <div className="guide-pedestal-col">
-            <Link className="guide-pedestal" href={`/sku/${result.primary.id}`}>
-              {result.primary.image ? (
-                <img
-                  src={result.primary.image}
-                  alt={`${result.primary.nameEn} (${result.primary.nameZh})`}
-                  style={
-                    result.primary.imagePosition
-                      ? { objectPosition: result.primary.imagePosition }
-                      : undefined
-                  }
-                />
-              ) : null}
-              <span className={`tier-tag ${result.primary.tier}`}>
-                <i>{tierNumeral(result.primary.tier)}</i> {result.primaryTier?.zh}
-              </span>
-              <span className="guide-price-tag">{primaryPrice}</span>
-            </Link>
+          <div className="u-trio">
+            {activeMoment.picks.map((pick, idx) => {
+              const sku = skuById(pick.skuId);
+              if (!sku) return null;
+              const brand = brandById(sku.brandId);
+              const aroma = skuAroma(sku) ?? (brand ? aromaById(brand.aroma) : undefined);
+              const note = fieldNoteFor(sku, aroma?.id);
+              const priceText = sku.chinaPrice ?? `~¥${note.estYuan.toLocaleString("en-US")}`;
 
-            <div className="guide-placard">
-              <div className="guide-placard-row">
-                <span className="guide-placard-k">Standard</span>
-                <span className="guide-placard-v">
-                  {result.primaryNote.gbCode} · {GB_KIND_META[result.primaryNote.gbKind].zh}
-                </span>
-              </div>
-              <div className="guide-placard-row">
-                <span className="guide-placard-k">First-Timer Shock</span>
-                <span className="guide-placard-v">
-                  <span className="shock-dots" aria-hidden="true">
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <span
-                        key={n}
-                        className={n <= result.primaryNote.shock ? "dot is-on" : "dot"}
+              return (
+                <Link
+                  key={pick.skuId}
+                  href={`/sku/${sku.id}`}
+                  className={idx === 0 ? "u-bottle-card is-hero" : "u-bottle-card"}
+                >
+                  <div className="u-bottle-photo">
+                    {sku.image ? (
+                      <img
+                        src={sku.image}
+                        alt={`${sku.nameEn} (${sku.nameZh})`}
+                        style={sku.imagePosition ? { objectPosition: sku.imagePosition } : undefined}
                       />
-                    ))}
-                  </span>{" "}
-                  {shockMeta.title}
-                </span>
-              </div>
-            </div>
+                    ) : null}
+                    <span className={idx === 0 ? "spotlight-badge is-red" : "spotlight-badge"}>
+                      {pick.roleLabel} · {pick.roleZh}
+                    </span>
+                    <TastedStamp id={sku.id} />
+                  </div>
+
+                  <div className="u-bottle-body">
+                    <div className="u-bottle-top">
+                      <span className="u-bottle-title">{sku.nameEn}</span>
+                      <span className="u-bottle-price">{priceText}</span>
+                    </div>
+                    <div className="u-bottle-sub">
+                      {sku.nameZh}
+                      {brand ? ` · ${brand.provinceEn}` : ""}
+                      {aroma ? ` · ${aroma.en.replace(" aroma", "")}` : ""}
+                    </div>
+                    <p className="u-bottle-pitch">{pick.pitch}</p>
+                    <p className="u-bottle-palate">
+                      <span>Palate:</span> {note.flavorTruth}
+                    </p>
+                    <div className="u-bottle-foot">
+                      <span>
+                        {note.gbCode} · {GB_KIND_META[note.gbKind].zh}
+                      </span>
+                      <span className="u-bottle-arrow">Dossier →</span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
 
-          <div className="guide-dossier">
-            <span className="signal-kicker">
-              The Pour · 正选 · {result.primaryBrand.provinceEn} ·{" "}
-              {result.primaryAroma?.en.replace(" aroma", "")}
-            </span>
-            <h2 className="guide-bottle-title">
-              <Link href={`/sku/${result.primary.id}`}>
-                {result.primary.nameEn} <span className="zh-inline">{result.primary.nameZh}</span>
-              </Link>
-            </h2>
-            <p className="guide-specs">
-              <strong>{primaryPrice}</strong> · {result.primary.abv} · {result.primary.volume} ·{" "}
-              {result.primaryBrand.nameEn}
-            </p>
-
-            <blockquote className="guide-signal">“{result.primaryNote.tableSignal}”</blockquote>
-
-            <div className="guide-palate">
-              <span className="guide-eyebrow">On the Palate · 入口风味</span>
-              <p>{result.primaryNote.flavorTruth}</p>
+          <div className="u-etiquette-row">
+            <div className="u-etiquette-col">
+              <span className="guide-eyebrow">Handoff &amp; Pouring · 递酒细节</span>
+              <p>{activeMoment.wrapTip}</p>
             </div>
-
-            <Link className="guide-insider" href={`/sku/${result.insider.id}`}>
-              <span className="guide-insider-thumb" aria-hidden="true">
-                {result.insider.image ? <img src={result.insider.image} alt="" /> : null}
-              </span>
-              <span className="guide-insider-copy">
-                <span className="guide-eyebrow">Insider Backup · 懂行备选 · {insiderPrice}</span>
-                <strong>
-                  {result.insider.nameEn}{" "}
-                  <span className="zh-inline-sm">{result.insider.nameZh}</span>
-                </strong>
-                <span className="guide-insider-note">{result.insiderNote.tableSignal}</span>
-              </span>
-              <span className="guide-insider-arrow" aria-hidden="true">
-                →
-              </span>
-            </Link>
-
-            <div className="actions">
-              <Link className="btn solid" href={`/sku/${result.primary.id}`}>
-                Open full dossier →
-              </Link>
-              <button type="button" className="btn" onClick={handleExport} disabled={busy}>
-                {busy ? "Rendering PNG..." : "Save Card (PNG)"}
-              </button>
-              <button type="button" className="btn" onClick={handleCopy}>
-                {copied ? "Copied for X" : "Copy Verdict"}
-              </button>
+            <div className="u-etiquette-col is-say">
+              <div className="u-say-head">
+                <span className="guide-eyebrow">What to Say at the Door · 递酒台词</span>
+                <button
+                  type="button"
+                  className="copy-micro"
+                  onClick={() =>
+                    copyText(
+                      `say-${activeMoment.id}`,
+                      `${activeMoment.toastZh}\n${activeMoment.sayThis}`,
+                    )
+                  }
+                >
+                  {copiedKey === `say-${activeMoment.id}` ? "Copied ✓" : "Copy line"}
+                </button>
+              </div>
+              <p className="u-say-quote">{activeMoment.sayThis}</p>
             </div>
           </div>
         </div>
+      </section>
 
-        <div className="guide-notes">
-          <div className="guide-note is-danger">
-            <span className="warn-kicker">If You Miss the Mark · 踩雷后果</span>
-            <p>{result.rec.whatGoesWrong}</p>
+      {/* 3. Lightweight Regional Etiquette Strip (7 canonical regions) */}
+      <section id="regions" className="u-guide-section">
+        <div className="u-section-head">
+          <div>
+            <p className="kicker">02 · Regional Table Rules · 各地酒桌潜规则</p>
+            <h2 className="u-h2">
+              Dining in a specific region? <span className="zh-inline">地域礼数</span>
+            </h2>
           </div>
-          <div className="guide-note is-rule">
+          <Link className="u-hint-link" href="/provinces">
+            Explore full 27-province atlas →
+          </Link>
+        </div>
+
+        <div className="u-region-strip" role="tablist" aria-label="Chinese drinking regions">
+          {REGIONS.map((reg) => {
+            const isSelected = reg.id === activeRegion.id;
+            return (
+              <button
+                key={reg.id}
+                type="button"
+                role="tab"
+                aria-selected={isSelected}
+                className="pill"
+                aria-pressed={isSelected}
+                onClick={() => setActiveRegionId(reg.id)}
+              >
+                {reg.en} <span className="zh-chip">{reg.zh}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="u-region-card" role="tabpanel">
+          <div className="u-region-rule">
             <span className="warn-kicker">
-              Regional Table Rule · {result.regionObj.en} ({result.regionObj.zh})
+              {activeRegion.en} · {activeRegion.zh} ({activeRegion.provincesSummary})
             </span>
-            <p>{result.regionObj.tableRule}</p>
+            <p>{activeRegion.tableRule}</p>
           </div>
+          <div className="u-region-bottles">
+            <span className="guide-eyebrow">Local Safe Bets</span>
+            <div className="u-region-chips">
+              {REGION_SAFE_BETS[activeRegion.id].map((id) => {
+                const sku = skuById(id);
+                if (!sku) return null;
+                return (
+                  <Link key={id} href={`/sku/${sku.id}`} className="u-region-bottle">
+                    {sku.image ? <img src={sku.image} alt="" /> : null}
+                    <span>
+                      <strong>{sku.nameEn}</strong>
+                      <small>{sku.nameZh}</small>
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Three Classic Traps to Dodge */}
+      <section id="traps" className="u-guide-section">
+        <div className="u-section-head">
+          <div>
+            <p className="kicker">03 · Avoid the Endcap · 避坑对照</p>
+            <h2 className="u-h2">
+              Three Classic Traps — and What to Bring Instead <span className="zh-inline">避雷</span>
+            </h2>
+          </div>
+        </div>
+
+        <div className="traps-grid">
+          {giftTraps.map((trap) => {
+            const instead = skuById(trap.buyInsteadId);
+            if (!instead) return null;
+            const note = fieldNoteFor(instead, skuAroma(instead)?.id);
+            return (
+              <div key={trap.skip} className="trap-card">
+                <div className="trap-skip">
+                  <span className="trap-label is-no">SKIP · 避雷</span>
+                  <strong>{trap.skip}</strong>
+                  <p>{trap.why}</p>
+                </div>
+                <Link href={`/sku/${instead.id}`} className="trap-swap">
+                  {instead.image ? <img src={instead.image} alt={instead.nameEn} /> : null}
+                  <div>
+                    <span className="trap-label is-yes">BRING INSTEAD · 正选</span>
+                    <strong>
+                      {instead.nameEn} <span className="zh-inline-sm">{instead.nameZh}</span>
+                    </strong>
+                    <p>
+                      {instead.chinaPrice ?? `~¥${note.estYuan.toLocaleString("en-US")}`} — {trap.buyReason}
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            );
+          })}
         </div>
       </section>
     </>

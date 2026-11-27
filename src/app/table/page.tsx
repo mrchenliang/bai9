@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { TableAdvisor } from "@/components/table-advisor";
 
 export const metadata: Metadata = {
-  title: "Baijiu Guide — Find Your Bottle (选酒指南)",
+  title: "The Baijiu Guide (选酒指南)",
   description:
-    "Discover the right Chinese baijiu for any table: explore tasting moments, set occasion, region, and spend, and uncover flavor notes and regional etiquette.",
+    "One concise guide to choosing, gifting, and pouring Chinese baijiu — spin for a bottle discovery, browse six table moments, learn regional etiquette, and dodge classic traps.",
   alternates: { canonical: "/table" },
   openGraph: {
-    title: "Baijiu Guide · 选酒指南",
-    description: "Discover the culturally right bottle — flavor notes, insider backups, and unspoken table rules.",
+    title: "The Baijiu Guide · 选酒指南",
+    description:
+      "Spin for a bottle discovery, browse six table moments, learn regional rules, and dodge classic gifting traps.",
     url: "/table",
   },
 };
