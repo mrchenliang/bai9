@@ -4,7 +4,7 @@ import { BrandIndex } from "@/components/brand-index";
 export const metadata: Metadata = {
   title: "Distillery Houses (酒厂)",
   description:
-    "Browse the archived Chinese baijiu houses in the museum — Moutai, Wuliangye, Luzhou Laojiao, Fenjiu, and more.",
+    "Field guide to 36 Chinese baijiu distillery houses — national table powers, single-house aroma standards, regional kings, and everyday Erguotou.",
   alternates: { canonical: "/brands" },
 };
 

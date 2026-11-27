@@ -658,19 +658,190 @@ h1 {
   font-size: 13.5px;
 }
 
-.brand-list { margin-top: 18px; }
+.house-chapter-row {
+  grid-template-columns: 230px 1fr;
+}
+.brand-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 12px;
+  align-content: start;
+}
+.brand-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  text-decoration: none;
+  min-width: 0;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+.brand-card:hover {
+  border-color: rgba(11, 11, 13, 0.34);
+  background: #fdfdfd;
+}
+.brand-card:hover .name-en-main {
+  color: #c81e1e;
+}
+.brand-card-thumb {
+  width: 68px;
+  height: 68px;
+  flex: none;
+  border-radius: 10px;
+  background: #f6f6f8;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+.brand-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.brand-thumb-fallback {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ash);
+}
+.brand-card-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.brand-card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.brand-card-name {
+  min-width: 0;
+}
+.brand-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.brand-takeaway {
+  margin: 5px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.brand-card-meta {
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+.brand-flagship strong {
+  color: var(--ash);
+  font-weight: 600;
+}
+.brand-origin {
+  color: var(--muted);
+}
+
+.brand-list {
+  margin-top: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.brand-table-head,
 .brand-row {
   display: grid;
-  grid-template-columns: 1.4fr 0.8fr 0.6fr auto;
-  gap: 12px;
-  align-items: baseline;
-  padding: 14px 0;
+  grid-template-columns: 40px minmax(220px, 1.8fr) minmax(130px, 0.9fr) minmax(110px, 0.7fr) 115px 132px;
+  gap: 14px;
+  align-items: center;
+}
+.brand-table-head {
+  padding: 0 8px 10px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.brand-table-head .align-right {
+  text-align: right;
+}
+.brand-row {
+  padding: 12px 8px;
   border-top: 1px solid var(--line);
   text-decoration: none;
+  transition: background 120ms ease;
+}
+.brand-row:hover {
+  background: var(--paper);
 }
 .brand-row:hover .name-zh,
-.brand-row:hover .name-en-main { color: var(--red); }
-.brand-row .place { color: var(--muted); font-size: 13px; }
+.brand-row:hover .name-en-main {
+  color: #c81e1e;
+}
+.brand-mini-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #f6f6f8;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 600;
+}
+.brand-mini-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.brand-row-main {
+  min-width: 0;
+}
+.brand-row-sub {
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.brand-row .place {
+  color: var(--muted);
+  font-size: 13px;
+}
+.brand-price-col {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ash);
+  text-align: right;
+  white-space: nowrap;
+}
+.brand-standing-col {
+  display: flex;
+  justify-content: flex-end;
+}
 .medals { font-family: var(--mono); font-size: 11px; color: var(--muted); }
 
 .split {
@@ -2982,10 +3153,15 @@ h1 {
   .passport-metrics { grid-template-columns: repeat(3, 1fr); }
   .gift-hero { grid-template-columns: 1fr; }
   .persona-grid, .traps-grid { grid-template-columns: 1fr 1fr; }
+  .brand-table-head,
+  .brand-row {
+    grid-template-columns: 36px minmax(190px, 1.6fr) minmax(115px, 0.85fr) minmax(95px, 0.65fr) 100px 118px;
+    gap: 10px;
+  }
 }
 
 @media (max-width: 800px) {
-  .split, .sku-layout, .aroma-grid, .shop-index, .tier-wing, .brand-row, .prov-row, .banquet-rules,
+  .split, .sku-layout, .aroma-grid, .shop-index, .tier-wing, .prov-row, .house-chapter-row, .banquet-rules,
   .prescription-main, .prescription-warnings, .ranker-row,
   .persona-grid, .persona-etiquette, .gift-shelf, .playbook-grid, .traps-grid {
     grid-template-columns: 1fr;
@@ -2994,12 +3170,30 @@ h1 {
   .gift-hero { padding: 18px; }
   .persona-stage { padding: 16px; }
   .giftbag-dock { right: 12px; bottom: 12px; }
+  .brand-guide-grid { grid-template-columns: 1fr; }
+  .brand-card { padding: 12px; gap: 11px; }
+  .brand-card-thumb { width: 56px; height: 56px; }
+  .brand-table-head { display: none; }
+  .brand-row {
+    grid-template-columns: 44px 1fr;
+    gap: 4px 12px;
+    align-items: start;
+    padding: 14px 4px;
+  }
+  .brand-mini-thumb { grid-row: 1 / span 3; width: 44px; height: 44px; }
+  .brand-row-main,
+  .brand-row .place,
+  .brand-price-col,
+  .brand-standing-col {
+    grid-column: 2;
+  }
+  .brand-price-col { text-align: left; }
+  .brand-standing-col { justify-content: flex-start; margin-top: 2px; }
   .passport-metrics { grid-template-columns: repeat(2, 1fr); }
   .ranker-stele { border-right: 0; border-bottom: 1px solid var(--line); }
   .tier-overview { grid-template-columns: 1fr 1fr; }
   .tier-stele { border-right: 0; border-bottom: 1px solid var(--line); }
   .tier-gallery-grid { padding: 18px 0 22px; }
-  .brand-row { gap: 2px; }
   .shop { grid-template-columns: 1fr auto; }
   .shop small { grid-column: 1 / -1; }
 }
