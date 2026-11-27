@@ -48,7 +48,6 @@ const PRIMARY_NAV = [
 const MORE_NAV = [
   { href: "/sheet", label: "Price Bands" },
   { href: "/banquets", label: "Banquets" },
-  { href: "/medals", label: "Medals" },
   { href: "/provinces", label: "Provinces" },
   { href: "/brands", label: "Houses" },
   { href: "/aromas", label: "Aromas" },
