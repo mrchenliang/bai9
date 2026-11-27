@@ -25,12 +25,6 @@ export const tiers: Tier[] = [
     en: "Daily grain",
     line: "What people actually finish at home: erguotou, glass Fenjiu, second-grade Luzhou, the square Jiangxiaobai.",
   },
-  {
-    id: "export",
-    zh: "出口",
-    en: "Export",
-    line: "Bottles produced or formatted for overseas tables. A distribution record rather than a rank against State Table.",
-  },
 ];
 
 export const aromas: Aroma[] = [
@@ -1055,7 +1049,7 @@ export const skus: Sku[] = [
     brandId: "wuliangye",
     nameZh: "五粮头曲",
     nameEn: "Wuliang Touqu",
-    tier: "export",
+    tier: "kouliang",
     abv: "52% vol",
     volume: "500 ml",
     role: "The bottle SAQ lists as Wu Liang Tou Qu. It is a Wuliangye-group liquor. It is not Puwu.",
@@ -1830,7 +1824,7 @@ export const skus: Sku[] = [
     brandId: "mingriver",
     nameZh: "明河",
     nameEn: "Ming River",
-    tier: "export",
+    tier: "jianiang",
     abv: "45% vol",
     volume: "750 ml",
     role: "Luzhou strong aroma bottled for export, at a strength and size made for a bar outside China.",
@@ -2296,5 +2290,4 @@ export const tierRank: Record<string, number> = {
   mingjiu: 1,
   jianiang: 2,
   kouliang: 3,
-  export: 4,
 };

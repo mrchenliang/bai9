@@ -19,9 +19,8 @@ export default function AboutPage() {
       <div className="prose">
         <p>
           The tier board uses four Chinese table ranks — State Banquet (国宴), Famous Liquor (名酒), Fine Bottle (佳酿),
-          and Everyday Pour (口粮) — followed by Export (出口). Export is a distribution fact, indicating a bottle made
-          or listed for Canada or the United States, not a fifth quality rank. Nothing on this site is a vote, a crowd
-          rating, or a user comment. The comparison tray stays strictly in your browser.
+          and Everyday Pour (口粮). Nothing on this site is a vote, a crowd rating, or a user comment. The comparison
+          tray stays strictly in your browser.
         </p>
         <p>
           China street prices dated 23 November 2026 come from{" "}

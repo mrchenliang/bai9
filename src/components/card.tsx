@@ -8,7 +8,6 @@ const TIER_NUMERAL: Record<TierId, string> = {
   mingjiu: "II",
   jianiang: "III",
   kouliang: "IV",
-  export: "EX",
 };
 
 const ACCESSION_MAP = new Map<string, string>(

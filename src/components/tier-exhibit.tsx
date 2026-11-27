@@ -12,7 +12,6 @@ const TIER_META: Record<TierId, { code: string; numeral: string; short: string }
   mingjiu: { code: "TIER II", numeral: "II", short: "National flagships & gold-medal icons" },
   jianiang: { code: "TIER III", numeral: "III", short: "Regional benchmarks & aged cellar blends" },
   kouliang: { code: "TIER IV", numeral: "IV", short: "Everyday pours & table workhorses" },
-  export: { code: "EXPORT", numeral: "EX", short: "Bottled & formatted for overseas tables" },
 };
 
 type CustomRowId = "S" | "A" | "B" | "C" | "TAX";
@@ -70,7 +69,6 @@ export function TierExhibit() {
       mingjiu: 0,
       jianiang: 0,
       kouliang: 0,
-      export: 0,
     };
     for (const sku of filteredSkus) counts[sku.tier]++;
     return counts;
@@ -136,7 +134,7 @@ export function TierExhibit() {
       </h1>
       <p className="sub">
         A fixed curatorial hierarchy reflecting each bottle’s standing on a Chinese table — from ceremonial State Table
-        apexes (国宴) down to Everyday Daily Grain (口粮), followed by Export bottlings (出口). Switch to{" "}
+        apexes (国宴) down to Everyday Daily Grain (口粮). Switch to{" "}
         <strong>Rank Your Own</strong> to build and export a custom PNG tier list for X.
       </p>
 

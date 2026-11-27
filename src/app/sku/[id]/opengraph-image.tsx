@@ -19,7 +19,6 @@ const TIER_NUMERAL: Record<TierId, string> = {
   mingjiu: "II",
   jianiang: "III",
   kouliang: "IV",
-  export: "EX",
 };
 
 const ACCESSION_MAP = new Map<string, string>(
@@ -159,8 +158,8 @@ export default async function SkuOpenGraphImage({
   const imgData = await readStudioBase64(sku.image);
   const accession = ACCESSION_MAP.get(sku.id) ?? "NO. 00";
   const numeral = TIER_NUMERAL[sku.tier];
-  const tierEnBadge = sku.tier === "export" ? "EXPORT" : `TIER ${numeral}`;
-  const tierZhBadge = tier?.zh ?? (sku.tier === "export" ? "出口" : "");
+  const tierEnBadge = `TIER ${numeral}`;
+  const tierZhBadge = tier?.zh ?? "";
   const originLine = [brand.provinceEn, aroma?.en, tier?.en].filter(Boolean).join(" · ");
   const specLabel = [compactAbv(sku.abv, note.maxAbv), compactVolume(sku.volume)]
     .filter(Boolean)

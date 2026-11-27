@@ -13,7 +13,7 @@ export type AromaId =
   | "fuyu"
   | "prepared";
 
-export type TierId = "guoyan" | "mingjiu" | "jianiang" | "kouliang" | "export";
+export type TierId = "guoyan" | "mingjiu" | "jianiang" | "kouliang";
 
 export interface Aroma {
   id: AromaId;

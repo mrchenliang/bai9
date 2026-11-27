@@ -493,7 +493,7 @@ h1 {
 
 .tier-overview {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   margin-top: 22px;
 }
@@ -638,11 +638,6 @@ h1 {
 }
 .tier-wing.mingjiu .stele-code { color: #c81e1e; }
 .tier-wing.jianiang .tier-stele { background: var(--paper); }
-.tier-wing.export .tier-stele {
-  background:
-    radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.06) 1px, transparent 0) 0 0 / 12px 12px,
-    var(--paper);
-}
 .tier-gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
@@ -1834,7 +1829,7 @@ h1 {
   .word span, .search kbd { display: none; }
   .search { min-width: 0; flex: 1; }
   .nav a { padding: 6px 10px; font-size: 13.5px; }
-  .tier-overview { grid-template-columns: repeat(3, 1fr); }
+  .tier-overview { grid-template-columns: repeat(2, 1fr); }
   .passport-metrics { grid-template-columns: repeat(3, 1fr); }
 }
 
