@@ -226,16 +226,11 @@ export function AromaExplorer() {
       const profile = AROMA_PROFILES[item.id];
       const brand = brandById(item.referenceBrandId);
       const matchingSkus = skus.filter((s) => skuAroma(s)?.id === item.id);
-      const heroSku =
-        matchingSkus.find((s) => s.brandId === item.referenceBrandId && s.image) ??
-        matchingSkus.find((s) => s.image) ??
-        matchingSkus[0];
       return {
         item,
         profile,
         brand,
         matchingSkus,
-        heroSku,
       };
     });
   }, []);
@@ -408,12 +403,11 @@ export function AromaExplorer() {
       {visible.length === 0 ? <p className="empty">No aromas match that filter.</p> : null}
 
       <div className="aroma-deck">
-        {visible.map(({ item, profile, brand, heroSku, matchingSkus }) => {
+        {visible.map(({ item, profile, brand, matchingSkus }) => {
           const isMatch = drinkVibe ? profile.drinkVibes.includes(drinkVibe) : false;
           const isDimmed = Boolean(drinkVibe && !isMatch);
           const isSpinning = spinningId === item.id;
           const isSpun = spunId === item.id;
-          const isBonusWide = item.id === "prepared" && visible.length === 13 && !drinkVibe;
           const displayTitle = item.en.replace(/\s+aroma$/i, "");
 
           return (
@@ -423,7 +417,6 @@ export function AromaExplorer() {
               id={`aroma-${item.id}`}
               className={[
                 "aroma-card",
-                isBonusWide ? "is-bonus-wide" : "",
                 isMatch ? "is-match" : "",
                 isDimmed ? "is-dimmed" : "",
                 isSpinning ? "is-spinning" : "",
@@ -444,7 +437,6 @@ export function AromaExplorer() {
                   <div className="aroma-title-row">
                     <span className="aroma-en">{displayTitle}</span>
                     <span className="aroma-zh">{item.zh}</span>
-                    {isBonusWide ? <span className="bonus-tag">+1 Botanical</span> : null}
                   </div>
                   <div className="aroma-grain-line">
                     <span>{profile.grainLabel}</span>
@@ -469,11 +461,6 @@ export function AromaExplorer() {
                     <PunchDots level={profile.bars.punch} />
                   </div>
                 </div>
-                {heroSku?.image ? (
-                  <span className="aroma-bottle">
-                    <img src={heroSku.image} alt="" style={{ objectPosition: heroSku.imagePosition }} />
-                  </span>
-                ) : null}
               </div>
 
               <div className="aroma-card-foot">
@@ -584,33 +571,24 @@ export function AromaExplorer() {
               <p className="aroma-modal-note-zh">{activeEntry.item.tasteZh}</p>
             </div>
 
-            {activeEntry.matchingSkus.length > 0 ? (
+            {activeEntry.brand ? (
               <div className="aroma-modal-bottles">
                 <div className="modal-sec-head">
-                  <span>Bottles in this aroma ({activeEntry.matchingSkus.length})</span>
-                  {activeEntry.brand ? (
-                    <Link href={`/brand/${activeEntry.item.referenceBrandId}`} className="modal-brand-link">
-                      {activeEntry.brand.nameEn} dossier →
-                    </Link>
-                  ) : null}
+                  <span>Reference style · {activeEntry.brand.nameEn} ({activeEntry.brand.nameZh})</span>
+                  <Link href={`/brand/${activeEntry.item.referenceBrandId}`} className="modal-brand-link">
+                    Explore house →
+                  </Link>
                 </div>
-                <div className="modal-bottle-strip">
-                  {activeEntry.matchingSkus.slice(0, 6).map((sku) => (
-                    <Link key={sku.id} href={`/sku/${sku.id}`} className="modal-bottle-chip">
-                      {sku.image ? (
-                        <img src={sku.image} alt="" style={{ objectPosition: sku.imagePosition }} />
-                      ) : (
-                        <span className="modal-bottle-fallback">{sku.nameZh.slice(0, 1)}</span>
-                      )}
-                      <span>
+                {activeEntry.matchingSkus.length > 0 ? (
+                  <div className="modal-text-links">
+                    {activeEntry.matchingSkus.slice(0, 6).map((sku) => (
+                      <Link key={sku.id} href={`/sku/${sku.id}`} className="modal-text-chip">
                         <b>{sku.nameEn}</b>
-                        <small>
-                          {sku.nameZh} · {sku.abv}
-                        </small>
-                      </span>
-                    </Link>
-                  ))}
-                </div>
+                        <span>{sku.nameZh}</span>
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             ) : null}
           </div>

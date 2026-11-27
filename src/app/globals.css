@@ -3753,25 +3753,6 @@ h1 {
   background: #c81e1e;
 }
 
-.aroma-bottle {
-  width: 68px;
-  height: 68px;
-  flex: none;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #f6f6f8;
-  border: 1px solid rgba(11, 11, 13, 0.06);
-}
-.aroma-bottle img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-.aroma-card:hover .aroma-bottle img {
-  transform: scale(1.07);
-}
-
 .aroma-card-foot {
   display: flex;
   align-items: baseline;
@@ -3790,37 +3771,6 @@ h1 {
   font-size: 10.5px;
   color: var(--muted);
   white-space: nowrap;
-}
-.bonus-tag {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: #ebf6ee;
-  color: #24663a;
-}
-.aroma-card.is-bonus-wide {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: minmax(220px, 1.1fr) minmax(240px, 1.3fr) auto;
-  align-items: center;
-  gap: 18px;
-  background: #fafcfa;
-}
-.aroma-card.is-bonus-wide .aroma-card-mid {
-  gap: 16px;
-}
-.aroma-card.is-bonus-wide .aroma-card-foot {
-  border-top: 0;
-  padding-top: 0;
-  padding-left: 18px;
-  border-left: 1px solid var(--line);
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 3px;
 }
 
 /* Aroma Tasting Card Modal */
@@ -4018,58 +3968,34 @@ h1 {
   text-decoration: none;
 }
 .modal-brand-link:hover { text-decoration: underline; }
-.modal-bottle-strip {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-.modal-bottle-chip {
+.modal-text-links {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 9px 7px 7px;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.modal-text-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 6px 11px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 999px;
   text-decoration: none;
   background: #fff;
-  min-width: 0;
-  transition: border-color 140ms ease;
+  font-size: 12.5px;
+  transition: border-color 140ms ease, color 140ms ease;
 }
-.modal-bottle-chip:hover {
+.modal-text-chip:hover {
   border-color: #c81e1e;
+  color: #c81e1e;
 }
-.modal-bottle-chip img,
-.modal-bottle-fallback {
-  width: 42px;
-  height: 42px;
-  flex: none;
-  border-radius: 7px;
-  object-fit: cover;
-  background: #f6f6f8;
-}
-.modal-bottle-fallback {
-  display: grid;
-  place-items: center;
-  font-family: var(--serif);
+.modal-text-chip b {
   font-weight: 600;
 }
-.modal-bottle-chip span:last-child {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-.modal-bottle-chip b {
-  font-size: 13px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.modal-bottle-chip small {
-  font-size: 11px;
+.modal-text-chip span {
+  font-family: var(--serif);
+  font-size: 12px;
   color: var(--muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 /* Provincial Atlas SVG Map & Local Culture (/provinces) */
@@ -4697,21 +4623,7 @@ h1 {
   .tier-gallery-grid { padding: 18px 0 22px; }
   .shop { grid-template-columns: 1fr auto; }
   .shop small { grid-column: 1 / -1; }
-  .flavor-bars, .modal-bottle-strip { grid-template-columns: 1fr; }
-  .aroma-card.is-bonus-wide {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 13px;
-  }
-  .aroma-card.is-bonus-wide .aroma-card-foot {
-    border-left: 0;
-    padding-left: 0;
-    border-top: 1px solid var(--line);
-    padding-top: 9px;
-    flex-direction: row;
-    align-items: baseline;
-  }
+  .flavor-bars { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 620px) {
