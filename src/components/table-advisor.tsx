@@ -348,26 +348,70 @@ export function TableAdvisor() {
           })}
         </div>
 
-        <div className="u-region-card" role="tabpanel">
-          <div className="u-region-rule">
-            <span className="warn-kicker">
-              {activeRegion.en} · {activeRegion.zh} ({activeRegion.provincesSummary})
-            </span>
-            <p>{activeRegion.tableRule}</p>
+        <div className="u-region-panel" role="tabpanel">
+          <div className="u-region-card">
+            <div className="u-region-rule">
+              <span className="warn-kicker">
+                {activeRegion.en} · {activeRegion.zh} ({activeRegion.provincesSummary})
+              </span>
+              <p>{activeRegion.tableRule}</p>
+            </div>
           </div>
+
           <div className="u-region-bottles">
-            <span className="guide-eyebrow">Local Safe Bets</span>
-            <div className="u-region-chips">
-              {REGION_SAFE_BETS[activeRegion.id].map((id) => {
+            <span className="guide-eyebrow">Local Safe Bets · 当地稳选</span>
+            <div className="u-trio">
+              {REGION_SAFE_BETS[activeRegion.id].map((id, idx) => {
                 const sku = skuById(id);
                 if (!sku) return null;
+                const brand = brandById(sku.brandId);
+                const aroma = skuAroma(sku) ?? (brand ? aromaById(brand.aroma) : undefined);
+                const note = fieldNoteFor(sku, aroma?.id);
+                const priceText = sku.chinaPrice ?? `~¥${note.estYuan.toLocaleString("en-US")}`;
+
                 return (
-                  <Link key={id} href={`/sku/${sku.id}`} className="u-region-bottle">
-                    {sku.image ? <img src={sku.image} alt="" /> : null}
-                    <span>
-                      <strong>{sku.nameEn}</strong>
-                      <small>{sku.nameZh}</small>
-                    </span>
+                  <Link
+                    key={id}
+                    href={`/sku/${sku.id}`}
+                    className={idx === 0 ? "u-bottle-card is-hero" : "u-bottle-card"}
+                  >
+                    <div className="u-bottle-photo">
+                      {sku.image ? (
+                        <img
+                          src={sku.image}
+                          alt={`${sku.nameEn} (${sku.nameZh})`}
+                          style={sku.imagePosition ? { objectPosition: sku.imagePosition } : undefined}
+                        />
+                      ) : null}
+                      {brand ? (
+                        <span className={idx === 0 ? "spotlight-badge is-red" : "spotlight-badge"}>
+                          {brand.provinceEn} · {brand.provinceZh}
+                        </span>
+                      ) : null}
+                      <TastedStamp id={sku.id} />
+                    </div>
+
+                    <div className="u-bottle-body">
+                      <div className="u-bottle-top">
+                        <span className="u-bottle-title">{sku.nameEn}</span>
+                        <span className="u-bottle-price">{priceText}</span>
+                      </div>
+                      <div className="u-bottle-sub">
+                        {sku.nameZh}
+                        {brand ? ` · ${brand.provinceEn}` : ""}
+                        {aroma ? ` · ${aroma.en.replace(" aroma", "")}` : ""}
+                      </div>
+                      <p className="u-bottle-pitch">{note.tableSignal}</p>
+                      <p className="u-bottle-palate">
+                        <span>Palate:</span> {note.flavorTruth}
+                      </p>
+                      <div className="u-bottle-foot">
+                        <span>
+                          {note.gbCode} · {GB_KIND_META[note.gbKind].zh}
+                        </span>
+                        <span className="u-bottle-arrow">Dossier →</span>
+                      </div>
+                    </div>
                   </Link>
                 );
               })}

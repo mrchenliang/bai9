@@ -2363,11 +2363,12 @@ h1 {
   gap: 8px;
   margin-bottom: 14px;
 }
+.u-region-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
 .u-region-card {
-  display: grid;
-  grid-template-columns: 1.25fr 1fr;
-  gap: 24px;
-  align-items: center;
   padding: 18px 20px;
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -2385,52 +2386,12 @@ h1 {
   font-size: 14px;
   line-height: 1.58;
   color: var(--ash);
+  max-width: 78ch;
 }
 .u-region-bottles {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-}
-.u-region-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.u-region-bottle {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 10px 5px 5px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: #fff;
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 120ms ease;
-}
-.u-region-bottle:hover {
-  border-color: var(--ash);
-}
-.u-region-bottle img {
-  width: 34px;
-  height: 34px;
-  border-radius: 6px;
-  object-fit: cover;
-  background: #f5f4f0;
-}
-.u-region-bottle span {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-.u-region-bottle strong {
-  font-size: 12.5px;
-  font-weight: 600;
-}
-.u-region-bottle small {
-  font-family: var(--serif);
-  font-size: 11px;
-  color: var(--muted);
+  gap: 10px;
 }
 
 /* Rank Your Own Tier Builder (/tiers) */
@@ -5065,7 +5026,7 @@ h1 {
 
 @media (max-width: 800px) {
   .split, .sku-layout, .aroma-grid, .shop-index, .tier-wing, .prov-row, .atlas-list-row, .house-chapter-row, .banquet-rules,
-  .u-trio, .u-etiquette-row, .u-region-card, .ranker-row,
+  .u-trio, .u-etiquette-row, .ranker-row,
   .persona-grid, .persona-etiquette, .gift-shelf, .traps-grid {
     grid-template-columns: 1fr;
   }
