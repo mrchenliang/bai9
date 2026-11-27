@@ -45,7 +45,7 @@ export default async function BrandPage({ params }: PageProps) {
   return (
     <>
       <p className="crumb">
-        <Link href="/brands">Houses</Link> · {brand.provinceEn} ({brand.provinceZh})
+        <Link href="/houses">Houses</Link> · {brand.provinceEn} ({brand.provinceZh})
       </p>
       <h1>
         {brand.nameEn} <span className="zh-inline">{brand.nameZh}</span>

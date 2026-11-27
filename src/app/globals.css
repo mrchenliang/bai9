@@ -1942,7 +1942,7 @@ h1 {
   background: rgba(0, 0, 0, 0.02);
 }
 
-/* Unified Curatorial Baijiu Guide (/table) */
+/* Unified Curatorial Baijiu Guide (/guide) */
 .guide-eyebrow {
   display: inline-block;
   font-family: var(--mono);
@@ -4254,7 +4254,7 @@ h1 {
   color: var(--muted);
 }
 
-/* Provincial Atlas SVG Map & Local Culture (/maps) */
+/* Provincial Atlas SVG Map & Local Culture (/map) */
 .atlas-top {
   display: flex;
   align-items: flex-end;

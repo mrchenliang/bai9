@@ -42,19 +42,19 @@ function loadList(key: string, max?: number): string[] {
 const PRIMARY_NAV = [
   { href: "/", label: "Gallery" },
   { href: "/tiers", label: "Tiers", featured: true },
-  { href: "/table", label: "Guide" },
+  { href: "/guide", label: "Guide" },
   { href: "/passport", label: "Passport", isPassport: true },
 ];
 
 const MORE_NAV = [
-  { href: "/sheet", label: "Price Bands" },
-  { href: "/maps", label: "Map" },
-  { href: "/brands", label: "Houses" },
+  { href: "/price-bands", label: "Price Bands" },
+  { href: "/map", label: "Map" },
+  { href: "/houses", label: "Houses" },
   { href: "/aromas", label: "Aromas" },
   { href: "/about", label: "About Baijiu" },
 ];
 
-const SEARCHABLE_PATHS = new Set(["/", "/tiers", "/brands", "/maps", "/passport", "/aromas"]);
+const SEARCHABLE_PATHS = new Set(["/", "/tiers", "/houses", "/map", "/passport", "/aromas"]);
 
 export function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname();

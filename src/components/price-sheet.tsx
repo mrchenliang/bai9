@@ -66,7 +66,7 @@ function Bottle({
             ? "sheet-bottle is-match"
             : "sheet-bottle"
       }
-      href={sku ? `/sku/${sku.id}` : "/sheet"}
+      href={sku ? `/sku/${sku.id}` : "/price-bands"}
     >
       <div className="sheet-photo">
         <b className="sheet-yuan">¥{spot.yuan.toLocaleString("en-US")}</b>

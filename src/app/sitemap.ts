@@ -5,11 +5,11 @@ import { siteOrigin } from "@/lib/site";
 const STATIC_PATHS = [
   "/",
   "/tiers",
-  "/table",
+  "/guide",
   "/passport",
-  "/sheet",
-  "/maps",
-  "/brands",
+  "/price-bands",
+  "/map",
+  "/houses",
   "/aromas",
   "/about",
 ];
@@ -22,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${origin}${path}`,
       lastModified: now,
       changeFrequency: path === "/" ? ("daily" as const) : ("weekly" as const),
-      priority: path === "/" ? 1 : path === "/tiers" || path === "/table" ? 0.9 : 0.7,
+      priority: path === "/" ? 1 : path === "/tiers" || path === "/guide" ? 0.9 : 0.7,
     })),
     ...brands.map((brand) => ({
       url: `${origin}/brand/${brand.id}`,

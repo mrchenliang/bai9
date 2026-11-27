@@ -130,7 +130,7 @@ export function TableAdvisor() {
             <span aria-hidden="true">·</span>
             <a href="#traps">3 traps to dodge</a>
             <span aria-hidden="true">·</span>
-            <Link href="/sheet">Price bands →</Link>
+            <Link href="/price-bands">Price bands →</Link>
           </div>
         </div>
 
@@ -324,7 +324,7 @@ export function TableAdvisor() {
               Dining in a specific region? <span className="zh-inline">地域礼数</span>
             </h2>
           </div>
-          <Link className="u-hint-link" href="/maps">
+          <Link className="u-hint-link" href="/map">
             Explore the China Baijiu Map →
           </Link>
         </div>

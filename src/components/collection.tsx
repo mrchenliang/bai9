@@ -68,7 +68,7 @@ export function Collection() {
           <span aria-hidden="true">·</span>
           <Link href="/tiers">Explore the Tier System</Link>
           <span aria-hidden="true">·</span>
-          <Link href="/table">Bottle Guide</Link>
+          <Link href="/guide">Bottle Guide</Link>
           <span aria-hidden="true">·</span>
           <Link href="/passport">Drinking Passport</Link>
         </p>
