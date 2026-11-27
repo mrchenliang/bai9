@@ -41,7 +41,7 @@ function loadList(key: string, max?: number): string[] {
 const PRIMARY_NAV = [
   { href: "/", label: "Gallery" },
   { href: "/tiers", label: "Tiers", featured: true },
-  { href: "/table", label: "Table" },
+  { href: "/table", label: "Guide" },
   { href: "/passport", label: "Passport", isPassport: true },
 ];
 

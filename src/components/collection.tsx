@@ -65,7 +65,7 @@ export function Collection() {
         <p className="hero-cta">
           <Link href="/tiers">Explore the Tier System</Link>
           <span aria-hidden="true">·</span>
-          <Link href="/table">Table Guide</Link>
+          <Link href="/table">Bottle Guide</Link>
           <span aria-hidden="true">·</span>
           <Link href="/passport">Drinking Passport</Link>
         </p>
