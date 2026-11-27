@@ -3071,6 +3071,656 @@ h1 {
   color: #c81e1e;
 }
 
+/* Interactive Twelve Aromas (/aromas) */
+.aroma-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.spin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 16px 9px 10px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ash);
+  background: var(--ash);
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1), background 160ms ease, border-color 160ms ease;
+}
+.spin-btn:hover:not(:disabled) {
+  background: #c81e1e;
+  border-color: #c81e1e;
+  transform: translateY(-1px);
+}
+.spin-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+.spin-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.spin-die {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.16);
+  font-family: var(--serif);
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1;
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.spin-btn:hover .spin-die {
+  transform: rotate(14deg) scale(1.06);
+}
+.spin-btn.is-spinning .spin-die {
+  animation: aroma-die-spin 360ms linear infinite;
+}
+@keyframes aroma-die-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.aroma-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 22px 0 20px;
+}
+.aroma-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.grain-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
+}
+.grain-pill:hover {
+  border-color: rgba(11, 11, 13, 0.32);
+}
+.grain-pill .pill-num {
+  font-style: normal;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  opacity: 0.62;
+}
+.vibe-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 13px;
+  border-radius: 12px;
+  background: #faf8f5;
+  border: 1px solid var(--line);
+}
+.vibe-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-right: 4px;
+}
+.vibe-chip {
+  border: 1px solid rgba(11, 11, 13, 0.12);
+  background: #fff;
+  color: var(--ash);
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease, color 140ms ease;
+}
+.vibe-chip:hover {
+  border-color: #c81e1e;
+  color: #c81e1e;
+}
+.vibe-chip[aria-pressed="true"] {
+  background: #c81e1e;
+  border-color: #c81e1e;
+  color: #fff;
+}
+.vibe-clear {
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 2px 6px;
+}
+.vibe-clear:hover { color: var(--ash); }
+
+.aroma-deck {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.aroma-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 13px;
+  padding: 15px 15px 13px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  transition:
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 160ms ease,
+    box-shadow 180ms ease,
+    opacity 180ms ease;
+}
+.aroma-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(11, 11, 13, 0.28);
+  box-shadow: 0 10px 26px rgba(11, 11, 13, 0.06);
+}
+.aroma-card:focus-visible {
+  outline: 2px solid #c81e1e;
+  outline-offset: 2px;
+}
+.aroma-card.is-match {
+  border-color: #c81e1e;
+  background: #fffdfb;
+  box-shadow: 0 6px 20px rgba(200, 30, 30, 0.08);
+}
+.aroma-card.is-dimmed {
+  opacity: 0.44;
+}
+.aroma-card.is-dimmed:hover {
+  opacity: 0.92;
+}
+.aroma-card.is-spinning {
+  border-color: #c81e1e;
+  transform: scale(1.025);
+  box-shadow: 0 0 0 2px rgba(200, 30, 30, 0.25), 0 12px 28px rgba(200, 30, 30, 0.14);
+}
+.aroma-card.is-spun {
+  border-color: #c81e1e;
+  box-shadow: 0 0 0 1px #c81e1e;
+}
+
+.aroma-card-top {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+.grain-badge {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 11px;
+  border: 1px solid rgba(11, 11, 13, 0.07);
+  display: grid;
+  place-items: center;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.aroma-card:hover .grain-badge {
+  transform: rotate(-6deg) scale(1.06);
+}
+.grain-badge-lg {
+  width: 64px;
+  height: 64px;
+  border-radius: 15px;
+}
+.aroma-title-wrap {
+  min-width: 0;
+  flex: 1;
+}
+.aroma-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.aroma-en {
+  font-size: 16.5px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+.aroma-card:hover .aroma-en {
+  color: #c81e1e;
+}
+.aroma-zh {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.aroma-grain-line {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+.aroma-grain-line i {
+  font-style: normal;
+  opacity: 0.5;
+}
+.match-chop {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(200, 30, 30, 0.1);
+  color: #c81e1e;
+}
+
+.aroma-card-mid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.aroma-notes-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+.note-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.note-chip {
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--paper);
+  border: 1px solid rgba(11, 11, 13, 0.06);
+  color: var(--ash);
+  white-space: nowrap;
+}
+.note-chip-solid {
+  background: var(--ash);
+  color: #fff;
+  border-color: var(--ash);
+}
+.punch-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.punch-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.punch-meter {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.punch-meter i {
+  display: block;
+  width: 12px;
+  height: 5px;
+  border-radius: 2px;
+  background: rgba(11, 11, 13, 0.1);
+}
+.punch-meter i.is-on {
+  background: var(--ash);
+}
+.aroma-card.is-match .punch-meter i.is-on,
+.aroma-card:hover .punch-meter i.is-on {
+  background: #c81e1e;
+}
+
+.aroma-bottle {
+  width: 68px;
+  height: 68px;
+  flex: none;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f6f6f8;
+  border: 1px solid rgba(11, 11, 13, 0.06);
+}
+.aroma-bottle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.aroma-card:hover .aroma-bottle img {
+  transform: scale(1.07);
+}
+
+.aroma-card-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 9px;
+  border-top: 1px solid var(--line);
+}
+.aroma-hook {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ash);
+}
+.aroma-ref {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.bonus-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #ebf6ee;
+  color: #24663a;
+}
+.aroma-card.is-bonus-wide {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(220px, 1.1fr) minmax(240px, 1.3fr) auto;
+  align-items: center;
+  gap: 18px;
+  background: #fafcfa;
+}
+.aroma-card.is-bonus-wide .aroma-card-mid {
+  gap: 16px;
+}
+.aroma-card.is-bonus-wide .aroma-card-foot {
+  border-top: 0;
+  padding-top: 0;
+  padding-left: 18px;
+  border-left: 1px solid var(--line);
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+/* Aroma Tasting Card Modal */
+.aroma-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(11, 11, 13, 0.44);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  animation: aroma-fade-in 150ms ease;
+}
+@keyframes aroma-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.aroma-modal {
+  width: min(560px, 100%);
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid rgba(11, 11, 13, 0.14);
+  border-radius: 18px;
+  padding: 18px 22px 22px;
+  box-shadow: 0 24px 64px rgba(11, 11, 13, 0.22);
+  animation: aroma-pop-in 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes aroma-pop-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.aroma-modal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.aroma-modal-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.modal-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--ash);
+}
+.modal-icon-btn:hover {
+  border-color: var(--ash);
+  background: var(--paper);
+}
+.modal-spin-btn {
+  height: 32px;
+  padding: 0 11px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ash);
+  cursor: pointer;
+}
+.modal-spin-btn:hover {
+  border-color: #c81e1e;
+  color: #c81e1e;
+  background: #fff;
+}
+.spun-pill {
+  margin-left: 4px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(200, 30, 30, 0.1);
+  color: #c81e1e;
+}
+.aroma-modal-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.aroma-modal-head h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.aroma-modal-grain {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.aroma-modal-grain strong {
+  color: var(--ash);
+}
+.aroma-modal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+}
+.twin-pill {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #faf8f5;
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+.flavor-bars {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 18px;
+  margin-top: 16px;
+  padding: 13px 15px;
+  border-radius: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+.flavor-bar-row {
+  display: grid;
+  grid-template-columns: 44px 1fr 26px;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+.flavor-bar-row b {
+  color: var(--ash);
+  text-align: right;
+  font-weight: 600;
+}
+.flavor-track {
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(11, 11, 13, 0.09);
+  overflow: hidden;
+}
+.flavor-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: #c81e1e;
+  transition: width 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.aroma-modal-note {
+  margin-top: 15px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.aroma-modal-note p { margin: 0; }
+.aroma-modal-note-zh {
+  margin-top: 5px !important;
+  font-family: var(--serif);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.aroma-modal-bottles {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.modal-sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.modal-brand-link {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #c81e1e;
+  text-decoration: none;
+}
+.modal-brand-link:hover { text-decoration: underline; }
+.modal-bottle-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.modal-bottle-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 9px 7px 7px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  text-decoration: none;
+  background: #fff;
+  min-width: 0;
+  transition: border-color 140ms ease;
+}
+.modal-bottle-chip:hover {
+  border-color: #c81e1e;
+}
+.modal-bottle-chip img,
+.modal-bottle-fallback {
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border-radius: 7px;
+  object-fit: cover;
+  background: #f6f6f8;
+}
+.modal-bottle-fallback {
+  display: grid;
+  place-items: center;
+  font-family: var(--serif);
+  font-weight: 600;
+}
+.modal-bottle-chip span:last-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.modal-bottle-chip b {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.modal-bottle-chip small {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media (max-width: 1120px) {
   .top {
     flex-wrap: wrap;
@@ -3092,6 +3742,7 @@ h1 {
   .passport-metrics { grid-template-columns: repeat(3, 1fr); }
   .gift-hero { grid-template-columns: 1fr; }
   .persona-grid, .traps-grid { grid-template-columns: 1fr 1fr; }
+  .aroma-deck { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .brand-table-head,
   .brand-row {
     grid-template-columns: 36px minmax(190px, 1.6fr) minmax(115px, 0.85fr) minmax(95px, 0.65fr) 100px 118px;
@@ -3135,4 +3786,23 @@ h1 {
   .tier-gallery-grid { padding: 18px 0 22px; }
   .shop { grid-template-columns: 1fr auto; }
   .shop small { grid-column: 1 / -1; }
+  .flavor-bars, .modal-bottle-strip { grid-template-columns: 1fr; }
+  .aroma-card.is-bonus-wide {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 13px;
+  }
+  .aroma-card.is-bonus-wide .aroma-card-foot {
+    border-left: 0;
+    padding-left: 0;
+    border-top: 1px solid var(--line);
+    padding-top: 9px;
+    flex-direction: row;
+    align-items: baseline;
+  }
+}
+
+@media (max-width: 620px) {
+  .aroma-deck { grid-template-columns: 1fr; }
 }

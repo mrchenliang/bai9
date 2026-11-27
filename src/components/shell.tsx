@@ -53,7 +53,7 @@ const MORE_NAV = [
   { href: "/aromas", label: "Aromas" },
 ];
 
-const SEARCHABLE_PATHS = new Set(["/", "/tiers", "/brands", "/provinces", "/passport"]);
+const SEARCHABLE_PATHS = new Set(["/", "/tiers", "/brands", "/provinces", "/passport", "/aromas"]);
 
 export function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
