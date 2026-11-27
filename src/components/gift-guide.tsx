@@ -7,7 +7,6 @@ import { fieldNoteFor, GB_KIND_META } from "@/field-notes";
 import { TastedStamp } from "@/components/shell";
 import {
   banquetBands,
-  banquetRules,
   giftPersonas,
   giftTraps,
   type BanquetPick,
@@ -277,16 +276,16 @@ export function GiftGuide() {
             The Baijiu Gift Guide <span className="zh-inline">选酒送礼指南</span>
           </h1>
           <p className="sub">
-            In China, a bottle in a paper tote bag is a love letter, a status signal, and a peace offering all at once.
-            Shop by the person you’re trying to impress, browse four real-world budget shelves, and pack your own gift
-            list (pairs encouraged, traps avoided).
+            From family dinners, weddings (婚宴), and graduation feasts (升学宴) to formal gifting and head-table
+            flagships — shop by who you’re trying to impress, browse four table-budget shelves, and build a gift list
+            without the guesswork.
           </p>
           <div className="gift-hero-jump">
             <a href="#by-recipient">Shop by recipient</a>
             <span>·</span>
             <a href="#by-budget">Browse 4 price shelves</a>
             <span>·</span>
-            <a href="#playbook">6 unwritten rules</a>
+            <a href="#traps">3 traps to dodge</a>
             <span>·</span>
             <Link href="/table">Need province etiquette? Try Table Advisor →</Link>
           </div>
@@ -653,30 +652,8 @@ export function GiftGuide() {
         )}
       </section>
 
-      {/* Section 3: Unwritten Gifting Playbook + Traps to Dodge */}
-      <section id="playbook" className="gift-section">
-        <div className="gift-section-head">
-          <div>
-            <p className="kicker">03 · The Unwritten Playbook · 送礼潜规则</p>
-            <h2 className="gift-h2">
-              Six Rules That Save Your Face <span className="zh-inline">行规六条</span>
-            </h2>
-          </div>
-        </div>
-
-        <div className="playbook-grid">
-          {banquetRules.map((rule) => (
-            <article key={rule.titleEn} className="playbook-card">
-              <div className="playbook-top">
-                <span className="playbook-num">{rule.num}</span>
-                <span className="zh-inline-sm">{rule.titleZh}</span>
-              </div>
-              <h3>{rule.titleEn}</h3>
-              <p>{rule.body}</p>
-            </article>
-          ))}
-        </div>
-
+      {/* Section 3: Traps to Dodge + Table Advisor Bridge */}
+      <section id="traps" className="gift-section">
         <div className="traps-wrap">
           <div className="traps-head">
             <span className="signal-kicker">Avoid the Endcap · 避坑对照</span>

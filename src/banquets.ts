@@ -42,13 +42,6 @@ export interface GiftPersona {
   picks: GiftPersonaPick[];
 }
 
-export interface GiftRule {
-  num: string;
-  titleEn: string;
-  titleZh: string;
-  body: string;
-}
-
 export interface GiftTrap {
   skip: string;
   why: string;
@@ -363,10 +356,10 @@ export const banquetBands: BanquetBand[] = [
     id: "300-500",
     range: "¥300–500",
     badge: "Sweet Spot",
-    titleEn: "Graduation & Celebration Banquets",
-    titleZh: "升学宴·喜宴中坚 · 300–500元左右",
+    titleEn: "Weddings, Graduations & Celebrations",
+    titleZh: "婚宴·升学宴中坚 · 300–500元左右",
     occasion:
-      "The golden sweet spot of Chinese celebration tables (升学宴, 婚宴): iconic red, blue, or gold presentation with unmistakable national-brand credibility.",
+      "The golden sweet spot of Chinese weddings (婚宴) and graduation tables (升学宴): iconic red, blue, or gold presentation with unmistakable national-brand credibility.",
     picks: [
       {
         skuId: "crystal",
@@ -591,45 +584,6 @@ export const banquetBands: BanquetBand[] = [
         handoffLine: "Xijiu Junpin — understated celadon poise for a refined table.",
       },
     ],
-  },
-];
-
-export const banquetRules: GiftRule[] = [
-  {
-    num: "01",
-    titleEn: "Always Bring Pairs",
-    titleZh: "好事成双",
-    body: "Good fortune travels in twos. For elders, weddings, and Lunar New Year visits, two matching bottles in one bag feel complete — a single bottle only works for rare collectors or casual dinner drop-ins.",
-  },
-  {
-    num: "02",
-    titleEn: "Red & Gold for Joy",
-    titleZh: "红金喜庆",
-    body: "Weddings (婚宴) and university graduation banquets (升学宴) favor red, vermilion, and gold boxes — Crystal Jiannanchun (水晶剑), Honghualang (红花郎), Jiugui Red Altar (酒鬼红坛), and Guotai Guobiao (国台国标).",
-  },
-  {
-    num: "03",
-    titleEn: "The Regional Anchor",
-    titleZh: "地域主场",
-    body: "Hosts almost always pick a bottle elders recognize locally: Fenjiu in Shanxi, Xifeng in Shaanxi, Gujing in Anhui, Yanghe in Jiangsu, and Wuliangye or Jiannanchun in Sichuan.",
-  },
-  {
-    num: "04",
-    titleEn: "52%–53% Vol & 500 ml",
-    titleZh: "高度正装",
-    body: "Formal Chinese tables still default to high-proof 500 ml bottles (52% for strong aroma, 53% for sauce and light), even as lower-proof 40.8%–42% options grow for casual dinners.",
-  },
-  {
-    num: "05",
-    titleEn: "Check the GB/T Code",
-    titleZh: "认准纯粮国标",
-    body: "Flip the box before paying. Solid-state pure-grain codes like GB/T 10781 (strong/light), GB/T 26760 (sauce), or GB/T 18356 (Moutai) guarantee zero neutral-spirit shortcuts.",
-  },
-  {
-    num: "06",
-    titleEn: "Keep the Factory Tote",
-    titleZh: "留好原厂手提袋",
-    body: "Ask the shop for the matching official paper carrier bag and keep the bottle’s outer box crisp — seasoned hosts judge presentation before the ribbon is even untied.",
   },
 ];
 
