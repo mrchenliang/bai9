@@ -64,11 +64,19 @@ const REGIONS: { id: RegionId; label: string; zh: string; rule: string }[] = [
   },
 ];
 
-const BUDGETS: { id: BudgetId; label: string; range: string }[] = [
-  { id: "street", label: "Honest Street", range: "Under ¥100" },
-  { id: "mid", label: "Respectable", range: "¥150–¥450" },
-  { id: "serious", label: "Serious Face", range: "¥500–¥1,000" },
-  { id: "nuclear", label: "Nuclear Option", range: "¥1,500+" },
+const BUDGETS: { id: BudgetId; label: string; short: string; range: string }[] = [
+  { id: "street", label: "Honest Street", short: "<¥100", range: "Under ¥100" },
+  { id: "mid", label: "Respectable", short: "¥150–450", range: "¥150–¥450" },
+  { id: "serious", label: "Serious Face", short: "¥500–1k", range: "¥500–¥1,000" },
+  { id: "nuclear", label: "Nuclear Option", short: "¥1.5k+", range: "¥1,500+" },
+];
+
+const QUICK_PRESETS: { label: string; occasion: OccasionId; region: RegionId; budget: BudgetId }[] = [
+  { label: "Father-in-law · Sichuan", occasion: "father", region: "sichuan", budget: "serious" },
+  { label: "Client dinner · Shandong", occasion: "business", region: "shandong", budget: "nuclear" },
+  { label: "Wedding banquet", occasion: "wedding", region: "sichuan", budget: "mid" },
+  { label: "“Bring nothing” uncle", occasion: "uncle", region: "north", budget: "mid" },
+  { label: "2am Beijing skewers", occasion: "skewers", region: "north", budget: "street" },
 ];
 
 interface Recommendation {
@@ -304,6 +312,15 @@ export function TableAdvisor() {
     }
   }
 
+  function handleRandomize() {
+    const nextOcc = OCCASIONS[Math.floor(Math.random() * OCCASIONS.length)].id;
+    const nextReg = REGIONS[Math.floor(Math.random() * REGIONS.length)].id;
+    const nextBud = BUDGETS[Math.floor(Math.random() * BUDGETS.length)].id;
+    setOccasion(nextOcc);
+    setRegion(nextReg);
+    setBudget(nextBud);
+  }
+
   return (
     <>
       <p className="kicker">Interactive Curatorial Desk · Table Survival · 局酒指南</p>
@@ -311,63 +328,121 @@ export function TableAdvisor() {
         What Bottle Do I Bring? <span className="zh-inline">局酒指南</span>
       </h1>
       <p className="sub">
-        In China, the bottle you set on a lazy Susan speaks before you sit down. Pick the occasion, the region, and your
-        budget — get the culturally truthful recommendation, the insider backup, and what goes wrong if you miss.
+        In China, the bottle you set on a lazy Susan speaks before you sit down. Pick the occasion, region, and budget —
+        get the culturally truthful recommendation, insider backup, and what goes wrong if you miss.
       </p>
 
       <section className="advisor-controls" aria-label="Scenario selector">
-        <div className="advisor-group">
-          <span className="advisor-step">01 · The Occasion · 什么局</span>
-          <div className="advisor-pills">
-            {OCCASIONS.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className={occasion === item.id ? "advisor-pill is-on" : "advisor-pill"}
-                aria-pressed={occasion === item.id}
-                onClick={() => setOccasion(item.id)}
+        <div className="advisor-bar">
+          <div className="advisor-field">
+            <label htmlFor="advisor-occasion" className="advisor-field-head">
+              <span className="advisor-step">Occasion</span>
+              <span className="advisor-zh">{result.occasionObj.zh}</span>
+            </label>
+            <div className="advisor-select-wrap">
+              <select
+                id="advisor-occasion"
+                className="advisor-select"
+                value={occasion}
+                onChange={(e) => setOccasion(e.target.value as OccasionId)}
               >
-                <b>{item.label}</b>
-                <span>{item.zh}</span>
-              </button>
-            ))}
+                {OCCASIONS.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+              <svg className="advisor-chevron" viewBox="0 0 16 16" aria-hidden="true">
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6l4 4 4-4"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <div className="advisor-field">
+            <label htmlFor="advisor-region" className="advisor-field-head">
+              <span className="advisor-step">Region</span>
+              <span className="advisor-zh">{result.regionObj.zh}</span>
+            </label>
+            <div className="advisor-select-wrap">
+              <select
+                id="advisor-region"
+                className="advisor-select"
+                value={region}
+                onChange={(e) => setRegion(e.target.value as RegionId)}
+              >
+                {REGIONS.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+              <svg className="advisor-chevron" viewBox="0 0 16 16" aria-hidden="true">
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6l4 4 4-4"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <div className="advisor-field">
+            <div className="advisor-field-head">
+              <span className="advisor-step">Budget</span>
+              <span className="advisor-budget-tag">{result.budgetObj.label}</span>
+            </div>
+            <div className="advisor-segments" role="radiogroup" aria-label="Budget tier">
+              {BUDGETS.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={budget === item.id}
+                  className={budget === item.id ? "advisor-seg is-on" : "advisor-seg"}
+                  onClick={() => setBudget(item.id)}
+                >
+                  {item.short}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="advisor-group">
-          <span className="advisor-step">02 · The Region · 哪里的桌</span>
-          <div className="advisor-pills">
-            {REGIONS.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className={region === item.id ? "advisor-pill is-on" : "advisor-pill"}
-                aria-pressed={region === item.id}
-                onClick={() => setRegion(item.id)}
-              >
-                <b>{item.label}</b>
-                <span>{item.zh}</span>
-              </button>
-            ))}
+        <div className="advisor-presets">
+          <span className="advisor-preset-label">Presets</span>
+          <div className="advisor-preset-list">
+            {QUICK_PRESETS.map((preset) => {
+              const active =
+                occasion === preset.occasion && region === preset.region && budget === preset.budget;
+              return (
+                <button
+                  key={preset.label}
+                  type="button"
+                  className={active ? "advisor-preset is-on" : "advisor-preset"}
+                  onClick={() => {
+                    setOccasion(preset.occasion);
+                    setRegion(preset.region);
+                    setBudget(preset.budget);
+                  }}
+                >
+                  {preset.label}
+                </button>
+              );
+            })}
           </div>
-        </div>
-
-        <div className="advisor-group">
-          <span className="advisor-step">03 · Your Budget · 预算档位</span>
-          <div className="advisor-pills">
-            {BUDGETS.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className={budget === item.id ? "advisor-pill is-on" : "advisor-pill"}
-                aria-pressed={budget === item.id}
-                onClick={() => setBudget(item.id)}
-              >
-                <b>{item.label}</b>
-                <span>{item.range}</span>
-              </button>
-            ))}
-          </div>
+          <button type="button" className="advisor-shuffle" onClick={handleRandomize}>
+            Random ↻
+          </button>
         </div>
       </section>
 
