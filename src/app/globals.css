@@ -1083,8 +1083,124 @@ h1 {
   color: var(--muted);
 }
 
+.sheet-legend {
+  position: sticky;
+  top: 62px;
+  z-index: 15;
+  margin: 22px -12px 0;
+  padding: 11px 14px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px) saturate(1.2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(11, 11, 13, 0.05);
+}
+.sheet-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.sheet-legend-kicker {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.sheet-legend-items {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.sheet-legend-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px 4px 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 12.5px;
+  color: var(--ash);
+  white-space: nowrap;
+  transition: border-color 120ms ease, background 120ms ease, color 120ms ease;
+}
+.sheet-legend-pill:hover {
+  border-color: rgba(11, 11, 13, 0.32);
+}
+.sheet-legend-pill.is-active {
+  background: var(--ash);
+  border-color: var(--ash);
+  color: #fff;
+}
+.sheet-legend-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--red);
+  color: #fff;
+  font-family: var(--serif);
+  font-size: 11.5px;
+  line-height: 1;
+}
+.sheet-legend-en {
+  font-weight: 500;
+}
+.sheet-legend-count {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.sheet-legend-pill.is-active .sheet-legend-count {
+  color: rgba(255, 255, 255, 0.72);
+}
+.sheet-legend-clear {
+  border: 0;
+  background: transparent;
+  padding: 4px 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.sheet-legend-clear:hover {
+  color: var(--ash);
+}
+.sheet-legend-link {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.sheet-legend-link:hover {
+  color: #c81e1e;
+}
+.sheet-legend-note {
+  margin: 9px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.sheet-legend-note strong {
+  color: var(--ash);
+}
 .sheet {
-  margin-top: 28px;
+  margin-top: 20px;
   background: white;
 }
 .sheet-band {
@@ -1101,6 +1217,14 @@ h1 {
   text-align: center;
   text-decoration: none;
   color: inherit;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+.sheet-bottle.is-dimmed {
+  opacity: 0.22;
+}
+.sheet-bottle.is-match .sheet-photo img {
+  border-color: var(--red);
+  box-shadow: 0 0 0 1.5px var(--red);
 }
 .sheet-photo {
   position: relative;
@@ -3903,16 +4027,35 @@ h1 {
     grid-template-columns: 36px minmax(190px, 1.6fr) minmax(115px, 0.85fr) minmax(95px, 0.65fr) 100px 118px;
     gap: 10px;
   }
+  .sheet-legend {
+    top: 90px;
+    margin: 18px 0 0;
+  }
 }
 
 @media (max-width: 800px) {
-  .split, .sku-layout, .aroma-grid, .shop-index, .tier-wing, .prov-row, .house-chapter-row,
+  .split, .sku-layout, .aroma-grid, .shop-index, .tier-wing, .prov-row, .house-chapter-row, .banquet-rules,
   .advisor-bar, .prescription-main, .prescription-warnings, .ranker-row,
   .persona-grid, .persona-etiquette, .gift-shelf, .traps-grid {
     grid-template-columns: 1fr;
   }
   .advisor-controls { padding: 14px; }
   .advisor-preset-list { order: 3; flex: 1 0 100%; }
+  .sheet-legend {
+    top: 88px;
+    padding: 9px 10px;
+  }
+  .sheet-legend-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+  }
+  .sheet-legend-items {
+    flex-wrap: nowrap;
+  }
+  .sheet-legend-link {
+    display: none;
+  }
   .persona-tabs { grid-template-columns: 1fr 1fr; }
   .gift-hero { padding: 18px; }
   .persona-stage { padding: 16px; }
