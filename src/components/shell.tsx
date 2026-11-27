@@ -48,7 +48,7 @@ const PRIMARY_NAV = [
 
 const MORE_NAV = [
   { href: "/sheet", label: "Price Bands" },
-  { href: "/provinces", label: "Provinces" },
+  { href: "/provinces", label: "Map" },
   { href: "/brands", label: "Houses" },
   { href: "/aromas", label: "Aromas" },
   { href: "/about", label: "About Baijiu" },

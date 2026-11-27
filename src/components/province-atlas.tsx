@@ -142,9 +142,9 @@ export function ProvinceAtlas() {
     <>
       <div className="atlas-top">
         <div>
-          <p className="kicker">Provincial Atlas · 中国各省白酒图谱</p>
+          <p className="kicker">Baijiu Map · 中国白酒地图</p>
           <h1>
-            Provincial Atlas <span className="zh-inline">各省白酒</span>
+            China Baijiu Map <span className="zh-inline">白酒地图</span>
           </h1>
           <p className="sub">
             {REGIONS.length} regions, {provincesAtlas.length} provinces, {totalRegionalHouses} regional distilleries

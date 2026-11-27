@@ -325,7 +325,7 @@ export function TableAdvisor() {
             </h2>
           </div>
           <Link className="u-hint-link" href="/provinces">
-            Explore full 27-province atlas →
+            Explore the China Baijiu Map →
           </Link>
         </div>
 
