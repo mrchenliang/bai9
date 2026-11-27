@@ -93,7 +93,7 @@ export function BaijiuOrigins({ showHeading = true }: { showHeading?: boolean })
           <span className="origins-sep" aria-hidden="true">
             ·
           </span>
-          <Link className="u-hint-link" href="/provinces">
+          <Link className="u-hint-link" href="/maps">
             Explore the China Baijiu Map →
           </Link>
         </div>

@@ -324,7 +324,7 @@ export function TableAdvisor() {
               Dining in a specific region? <span className="zh-inline">地域礼数</span>
             </h2>
           </div>
-          <Link className="u-hint-link" href="/provinces">
+          <Link className="u-hint-link" href="/maps">
             Explore the China Baijiu Map →
           </Link>
         </div>

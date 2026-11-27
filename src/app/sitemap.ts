@@ -8,7 +8,7 @@ const STATIC_PATHS = [
   "/table",
   "/passport",
   "/sheet",
-  "/provinces",
+  "/maps",
   "/brands",
   "/aromas",
   "/about",

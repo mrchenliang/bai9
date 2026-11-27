@@ -1,13 +1,5 @@
-import type { Metadata } from "next";
-import { ProvinceAtlas } from "@/components/province-atlas";
+import { permanentRedirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "China Baijiu Map (白酒地图)",
-  description:
-    "Interactive SVG map and list view of 27 Chinese baijiu provinces — regional distilleries, house emblems, local drinking culture, and food pairings.",
-  alternates: { canonical: "/provinces" },
-};
-
-export default function ProvincesPage() {
-  return <ProvinceAtlas />;
+export default function ProvincesRedirectPage() {
+  permanentRedirect("/maps");
 }

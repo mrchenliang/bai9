@@ -48,13 +48,13 @@ const PRIMARY_NAV = [
 
 const MORE_NAV = [
   { href: "/sheet", label: "Price Bands" },
-  { href: "/provinces", label: "Map" },
+  { href: "/maps", label: "Map" },
   { href: "/brands", label: "Houses" },
   { href: "/aromas", label: "Aromas" },
   { href: "/about", label: "About Baijiu" },
 ];
 
-const SEARCHABLE_PATHS = new Set(["/", "/tiers", "/brands", "/provinces", "/passport", "/aromas"]);
+const SEARCHABLE_PATHS = new Set(["/", "/tiers", "/brands", "/maps", "/passport", "/aromas"]);
 
 export function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
