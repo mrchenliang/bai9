@@ -4675,6 +4675,146 @@ h1 {
   object-fit: cover;
 }
 
+/* About Baijiu & History Origins Section */
+.origins-section {
+  scroll-margin-top: 84px;
+  padding: 26px 0 28px;
+  border-bottom: 1px solid var(--line);
+}
+.origins-intro {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.92fr) 1.38fr;
+  gap: 18px 36px;
+  align-items: start;
+}
+.origins-heading {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(22px, 2.4vw, 27px);
+  line-height: 1.24;
+  letter-spacing: -0.015em;
+  margin: 0;
+  color: var(--ash);
+}
+.origins-lead p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ash);
+  max-width: 66ch;
+}
+.origins-lead strong {
+  font-family: var(--serif);
+  font-weight: 600;
+}
+.origins-lead em {
+  font-style: italic;
+}
+.origins-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px !important;
+  font-size: 13px !important;
+  color: var(--muted) !important;
+}
+.origins-links a {
+  color: var(--ash);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(11, 11, 13, 0.24);
+  padding-bottom: 1px;
+  transition: color 140ms ease, border-color 140ms ease;
+}
+.origins-links a:hover {
+  color: #c81e1e;
+  border-bottom-color: #c81e1e;
+}
+.origins-grid {
+  list-style: none;
+  padding: 0;
+  margin: 22px 0 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+.origin-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+.origin-card:hover {
+  border-color: rgba(11, 11, 13, 0.24);
+  transform: translateY(-2px);
+}
+.origin-plate {
+  position: relative;
+  aspect-ratio: 5 / 4;
+  background: #f5f2eb;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.origin-plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 240ms ease;
+}
+.origin-card:hover .origin-plate img {
+  transform: scale(1.045);
+}
+.origin-num {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #c81e1e;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(200, 30, 30, 0.22);
+  border-radius: 999px;
+  padding: 2px 7px;
+  line-height: 1.2;
+}
+.origin-body {
+  padding: 13px 14px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.origin-era {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.origin-title {
+  margin: 1px 0 2px;
+  font-family: var(--sans);
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--ash);
+}
+.origin-desc {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
 @media (max-width: 1120px) {
   .top {
     flex-wrap: wrap;
@@ -4709,6 +4849,16 @@ h1 {
   .sheet-legend {
     top: 90px;
     margin: 18px 0 0;
+  }
+}
+
+@media (max-width: 960px) {
+  .origins-intro {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .origins-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -4787,4 +4937,25 @@ h1 {
 
 @media (max-width: 620px) {
   .aroma-deck { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .origins-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .origin-card {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .origin-plate {
+    width: 104px;
+    flex: none;
+    aspect-ratio: 1;
+    border-bottom: 0;
+    border-right: 1px solid rgba(0, 0, 0, 0.06);
+  }
+  .origin-body {
+    padding: 10px 12px;
+  }
 }

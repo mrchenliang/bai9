@@ -51,6 +51,7 @@ const MORE_NAV = [
   { href: "/provinces", label: "Provinces" },
   { href: "/brands", label: "Houses" },
   { href: "/aromas", label: "Aromas" },
+  { href: "/about", label: "About Baijiu" },
 ];
 
 const SEARCHABLE_PATHS = new Set(["/", "/tiers", "/brands", "/provinces", "/passport", "/aromas"]);

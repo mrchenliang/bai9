@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { aromas, brandById, brands, skuAroma, skus, tierRank, tiers } from "@/catalog";
 import type { AromaId, TierId } from "@/types";
 import { Card } from "@/components/card";
+import { BaijiuOrigins } from "@/components/baijiu-origins";
 import { useMuseum } from "@/components/shell";
 
 type SortId = "tier" | "az";
@@ -63,6 +64,8 @@ export function Collection() {
           The grain spirits China actually argues about — curated without crowd votes, ratings, or submissions.
         </p>
         <p className="hero-cta">
+          <a href="#about-baijiu">About Baijiu</a>
+          <span aria-hidden="true">·</span>
           <Link href="/tiers">Explore the Tier System</Link>
           <span aria-hidden="true">·</span>
           <Link href="/table">Bottle Guide</Link>
@@ -70,6 +73,8 @@ export function Collection() {
           <Link href="/passport">Drinking Passport</Link>
         </p>
       </section>
+
+      {!query.trim() ? <BaijiuOrigins /> : null}
 
       <div className="filters">
         <button type="button" className="pill" aria-pressed={tier === "all"} onClick={() => setTier("all")}>
