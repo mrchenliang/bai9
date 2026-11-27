@@ -270,7 +270,7 @@ export function GiftGuide() {
             <span className="gift-chop" aria-hidden="true">
               礼
             </span>
-            <p className="kicker">Gift Issue · 升学宴 · 婚宴 · 请客送礼指南</p>
+            <p className="kicker">Gift Guide</p>
           </div>
           <h1>
             The Baijiu Gift Guide <span className="zh-inline">选酒送礼指南</span>
