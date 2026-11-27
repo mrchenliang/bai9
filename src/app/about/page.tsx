@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { creditById, creditUrl, moutaiNotice, priceBoard, skus } from "@/catalog";
+import { BaijiuOrigins } from "@/components/baijiu-origins";
 
 export const metadata: Metadata = {
-  title: "Archive Notes (档案说明)",
+  title: "About Baijiu & Archive Notes (白酒溯源与档案说明)",
   description:
-    "How the Chinese Baijiu Museum is curated: tier definitions, price sources, national tasting records, and photograph credits.",
+    "What baijiu is, a brief history of Chinese distilled grain spirits, and how the Chinese Baijiu Museum is curated.",
   alternates: { canonical: "/about" },
 };
 
@@ -12,10 +13,12 @@ export default function AboutPage() {
   const creditedSkus = skus.filter((sku) => sku.creditId);
   return (
     <>
-      <p className="kicker">酒 · Archive Notes · 档案说明</p>
+      <p className="kicker">酒 · About &amp; Archive Notes · 白酒与档案</p>
       <h1>
-        A Fixed Editorial Archive <span className="zh-inline">档案说明</span>
+        About Baijiu &amp; This Archive <span className="zh-inline">白酒溯源</span>
       </h1>
+      <BaijiuOrigins showHeading={false} />
+      <h2 className="section-label">Curatorial Method · 档案说明</h2>
       <div className="prose">
         <p>
           The tier board uses four Chinese table ranks — State Banquet (国宴), Famous Liquor (名酒), Fine Bottle (佳酿),
