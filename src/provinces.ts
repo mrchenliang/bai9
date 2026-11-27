@@ -451,3 +451,245 @@ export const provincesAtlas: ProvinceEntry[] = [
 ];
 
 export const totalRegionalHouses = provincesAtlas.reduce((sum, p) => sum + p.houses.length, 0);
+
+export interface ProvinceLocalLore {
+  /** Short local identity title */
+  localTitle: string;
+  /** Chinese local flavor tag */
+  localTitleZh: string;
+  /** How locals actually drink, pour, and show hometown loyalty */
+  localStory: string;
+  /** Signature local dish pairing (下酒菜) */
+  localPairing: string;
+  /** Short Chinese brand label plotted on the China SVG map */
+  mapBrandZh: string;
+  /** Index of the flagship house inside prov.houses (defaults to 0) */
+  flagshipIndex?: number;
+}
+
+export const provinceLocalLore: Record<string, ProvinceLocalLore> = {
+  sichuan: {
+    localTitle: "The Six Golden Flowers",
+    localTitleZh: "川酒六朵金花",
+    localStory:
+      "China’s strong-aroma powerhouse. Locals debate single-grain Luzhou vs. five-grain Yibin like football teams, pouring generously over long spicy meals.",
+    localPairing: "Sichuan hotpot, cold chili rabbit & braised pork",
+    mapBrandZh: "五粮液",
+  },
+  guizhou: {
+    localTitle: "Chishui River Sauce Turf",
+    localTitleZh: "赤水河酱香腹地",
+    localStory:
+      "Red sorghum, sandstone water, and 53% vol pure-grain solid-state sauce aroma as the unspoken law. Even casual tables expect empty-cup fragrance.",
+    localPairing: "Sour-soup fish, smoky cured pork & spicy dry-pot",
+    mapBrandZh: "茅台",
+  },
+  chongqing: {
+    localTitle: "Hotpot & Midnight Sorghum",
+    localTitleZh: "火锅配高粱小酒",
+    localStory:
+      "Where old-school Jiangjin sorghum meets Jiangxiaobai’s young urban bottles — chilled crisp light aroma cuts straight through tallow-broth numbing spice.",
+    localPairing: "Nine-grid beef-tallow hotpot & grilled brain flower",
+    mapBrandZh: "江小白",
+  },
+  yunnan: {
+    localTitle: "Plateau Small-Qu Clarity",
+    localTitleZh: "云贵高原小曲清香",
+    localStory:
+      "High-altitude Yuxi spring water and light small-qu grain spirit keep pours brisk and clean beside Yunnan’s wild mushrooms and cured ham.",
+    localPairing: "Xuanwei ham, wild porcini stir-fry & crossing-the-bridge noodles",
+    mapBrandZh: "玉林泉",
+  },
+  henan: {
+    localTitle: "Cradle of Central Plains Wine",
+    localTitleZh: "中原酒源·豫酒振兴",
+    localStory:
+      "From ancient Dukang lore to modern ceramic-jar Yangshao and 1989 gold medalist Baofeng — Henan hosts love big, hospitable toasts around hometown labels.",
+    localPairing: "Braised carp, spiced donkey meat & roasted peanuts",
+    mapBrandZh: "仰韶",
+  },
+  hunan: {
+    localTitle: "Xiangxi Art & Three-Aroma Bite",
+    localTitleZh: "湘西馥郁·辣配烈酒",
+    localStory:
+      "Hunan drinkers want flavor that stands up to fierce chilies: Jiugui’s layered fuyu stoneware in Xiangxi and gold-medal Wuling sauce aroma in Changde.",
+    localPairing: "Steamed chopped-chili fish head & smoky Xiangxi bacon",
+    mapBrandZh: "酒鬼酒",
+  },
+  hubei: {
+    localTitle: "Bridge of Sauce & Strong",
+    localTitleZh: "荆楚兼香·一饮江湖",
+    localStory:
+      "Sitting between Sichuan and Guizhou, Hubei perfected mixed-aroma Baiyunbian — a fixture at Wuhan reunions alongside historic light-aroma Huanghelou.",
+    localPairing: "Wuhan spicy crayfish, lotus-root pork rib soup & spiced duck necks",
+    mapBrandZh: "白云边",
+  },
+  shandong: {
+    localTitle: "Strictest Seating & Sesame Craft",
+    localTitleZh: "齐鲁酒桌·芝麻香故乡",
+    localStory:
+      "Home to China’s most formal table etiquette (主陪 faces the door; never sip before the host). Locals champion fermented sesame-aroma Jingzhi and hometown Taishan.",
+    localPairing: "Braised sea cucumber, Dezhou roast chicken & scallion pancakes",
+    mapBrandZh: "景芝",
+    flagshipIndex: 2,
+  },
+  anhui: {
+    localTitle: "Fierce Hometown Loyalty",
+    localTitleZh: "徽酒主场·古井口子",
+    localStory:
+      "Few provinces defend local distilleries harder than Anhui: Bozhou’s Gujing Gu 16/20, Huaibei’s mixed-aroma Kouzijiao, and Dabie Mountain Yingjia dominate every banquet.",
+    localPairing: "Stinky mandarin fish (臭鳜鱼) & Huizhou braised bamboo shoots",
+    mapBrandZh: "古井",
+  },
+  jiangsu: {
+    localTitle: "Cotton-Soft Ladder of Blues",
+    localTitleZh: "苏酒绵柔·蓝白梯队",
+    localStory:
+      "Jianghuai tables speak fluent bottle hierarchy — Sea Blue, Sky Blue, Dream Blue M6+, and Huai’an’s Guoyuan Sikou — prized for plush, smooth toasting.",
+    localPairing: "Yangzhou lion’s head meatballs, salted duck & hairy crab",
+    mapBrandZh: "洋河",
+    flagshipIndex: 1,
+  },
+  jiangxi: {
+    localTitle: "Whole-Rice Te Aroma",
+    localTitleZh: "赣鄱整粒大米特香",
+    localStory:
+      "In Zhangshu, Site distills whole-grain rice with flour qu into a style found nowhere else in China — deeply beloved across Jiangxi family tables.",
+    localPairing: "Nanchang claypot soup, chili-fried rice noodles & Poyang Lake fish",
+    mapBrandZh: "四特",
+  },
+  fujian: {
+    localTitle: "Wuyi Mountain Sauce Pocket",
+    localTitleZh: "闽北山水酱香",
+    localStory:
+      "While coastal Fujian leans toward tea, beer, and red wine, northern Jian’ou’s Fumao brings humid mountain-valley sauce aroma to festive hometown tables.",
+    localPairing: "Buddha Jumps Over the Wall, roast goose & razor clams",
+    mapBrandZh: "福矛",
+  },
+  taiwan: {
+    localTitle: "Island-Cellared Kaoliang",
+    localTitleZh: "离岛坑道高粱清香",
+    localStory:
+      "Granite military tunnels on Kinmen and Matsu age crisp 58% pure-sorghum kaoliang into a collector obsession — often served ice-cold straight from the freezer.",
+    localPairing: "Mullet roe (乌鱼子), three-cup chicken & oyster omelet",
+    mapBrandZh: "金门",
+  },
+  shanxi: {
+    localTitle: "Birthplace of Light Aroma",
+    localTitleZh: "杏花村清香祖庭",
+    localStory:
+      "Fifteen centuries of Xinghuacun heritage. Locals drink ¥55 Yellow-Cap Fenjiu on weeknights and pour porcelain Qinghua 20/30 when guests arrive.",
+    localPairing: "Aged-vinegar braised pork, Pingyao beef & knife-cut noodles",
+    mapBrandZh: "汾酒",
+  },
+  hebei: {
+    localTitle: "High-Proof Northern Grit",
+    localTitleZh: "燕赵烈酒·六十七度",
+    localStory:
+      "Hengshui Laobaigan’s dry, crystal-clear 67% fire is legendary across North China — respected for leaving a clean head despite its fearless proof.",
+    localPairing: "Baoding donkey burger, braised lamb & cold cucumber salad",
+    mapBrandZh: "衡水",
+    flagshipIndex: 3,
+  },
+  beijing: {
+    localTitle: "Hutong Erguotou Capital",
+    localTitleZh: "京味二锅头·烟火气",
+    localStory:
+      "No pretension allowed: green-bottle 56% Red Star and white-bottle Niulanshan anchor Beijing’s plastic-stool skewer stalls, copper hotpots, and neighborhood reunions.",
+    localPairing: "Copper-pot mutton hotpot, roast duck & charcoal lamb skewers",
+    mapBrandZh: "红星",
+  },
+  tianjin: {
+    localTitle: "Bohai Port Comfort Pours",
+    localTitleZh: "津门海河老味",
+    localStory:
+      "Ninghe’s Lutaichun and local Jinjiu pair effortlessly with Tianjin’s savory coastal snacks and famously quick-witted dinner-table banter.",
+    localPairing: "Braised Yellow River carp, spiced crab & crispy fried dough twists",
+    mapBrandZh: "芦台春",
+  },
+  neimenggu: {
+    localTitle: "Steppe Hospitality & Bowls",
+    localTitleZh: "草原豪饮·河套王",
+    localStory:
+      "Warm, generous northern pouring rooted in the Yellow River bend — Hetaowang and Mengguwang turn freezing steppe nights into boisterous feasts.",
+    localPairing: "Hand-pulled boiled mutton, roasted lamb ribs & salty milk tea",
+    mapBrandZh: "河套王",
+  },
+  shaanxi: {
+    localTitle: "Beeswax-Vat Feng Aroma",
+    localTitleZh: "秦地酒海凤香",
+    localStory:
+      "Aged in woven-rattan vats lined with beeswax and linen (酒海), Xifeng gives Xi’an tables an unmistakable honeyed almond snap no outsider can fake.",
+    localPairing: "Lamb paomo, cumin roujiamo & oil-splashed biangbiang noodles",
+    mapBrandZh: "西凤",
+  },
+  gansu: {
+    localTitle: "Hexi Corridor Oasis Spirit",
+    localTitleZh: "陇上丝路老窖",
+    localStory:
+      "From snowmelt-fed Jinhui in Longnan to nine-grain Binhe in Zhangye, Gansu drinkers prize sturdy, warming strong aroma built for dry plateau evenings.",
+    localPairing: "Hand-grabbed Lanzhou lamb, braised beef & fermented-grain dishes",
+    mapBrandZh: "金徽",
+    flagshipIndex: 2,
+  },
+  qinghai: {
+    localTitle: "Highland Barley Purity",
+    localTitleZh: "青藏高原青稞清香",
+    localStory:
+      "Distilled in Huzhu from Tibetan plateau highland barley (青稞) and glacier water — light, floral, and distinct from sorghum-based lowland baijiu.",
+    localPairing: "Yak-meat hotpot, roasted barley & Qinghai spiced lamb ribs",
+    mapBrandZh: "天佑德",
+    flagshipIndex: 1,
+  },
+  xinjiang: {
+    localTitle: "Moutai Beyond the Great Wall",
+    localTitleZh: "塞外茅台·伊力特",
+    localStory:
+      "Brewed with Tianshan snowmelt in the Ili River Valley, Yilite is the proud badge of Xinjiang hospitality — poured freely beside sizzling cumin skewers.",
+    localPairing: "Charcoal lamb skewers, big-plate chicken & fresh naan",
+    mapBrandZh: "伊力特",
+  },
+  heilongjiang: {
+    localTitle: "Black-Soil Northern Fire",
+    localTitleZh: "黑土烈酒·北国豪情",
+    localStory:
+      "Sub-zero winters built a fearless drinking culture: Qiqihar’s sauce-aroma Beidacang (“Northern Moutai”) and everyday favorite Laocunzhang rule Harbin tables.",
+    localPairing: "Iron-pot stewed pork with sauerkraut, guobaorou & red sausage",
+    mapBrandZh: "北大仓",
+    flagshipIndex: 1,
+  },
+  jilin: {
+    localTitle: "Songliao Grain Heritage",
+    localTitleZh: "关东粮仓老烧锅",
+    localStory:
+      "Fertile corn and sorghum country producing rich, sweet northeastern cellar pours like Yushuqian and Changbai-mountain sauce spirit Daquanyuan.",
+    localPairing: "Pickled-cabbage blood sausage stew & charcoal skewers",
+    mapBrandZh: "榆树钱",
+  },
+  liaoning: {
+    localTitle: "Shenyang’s Four-Century Kettle",
+    localTitleZh: "奉天老龙口·辽东酒脉",
+    localStory:
+      "Dating back to the early Qing era in Shenyang, Laolongkou and Dandong’s Fengcheng Laojiao anchor Liaoning family dinners and winter banquets.",
+    localPairing: "Braised pork trotters, grilled clams & Shenyang spiced skewers",
+    mapBrandZh: "老龙口",
+    flagshipIndex: 1,
+  },
+  guangdong: {
+    localTitle: "Zero-Ganbei Cantonese Silk",
+    localTitleZh: "岭南豉香·慢酌不劝酒",
+    localStory:
+      "No forced bottoms-up here. Foshan’s Shiwan Yuk Bing Siu rests rice spirit with pork fat in clay jars, dropping to a velvety 30% vol made for food.",
+    localPairing: "Cantonese roast goose, char siu & claypot rice",
+    mapBrandZh: "玉冰烧",
+  },
+  guangxi: {
+    localTitle: "Karst-Cave Rice Aroma",
+    localTitleZh: "桂林山水米香三花",
+    localStory:
+      "Guilin Sanhua ages pure rice spirit inside cool limestone karst caves for a jasmine-clean nose — while Hechi’s Danquan leads Guangxi’s sauce revival.",
+    localPairing: "Guilin rice noodles, beer-braised Li River fish & lemon duck",
+    mapBrandZh: "三花",
+  },
+};
+

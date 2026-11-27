@@ -4,7 +4,7 @@ import { ProvinceAtlas } from "@/components/province-atlas";
 export const metadata: Metadata = {
   title: "Provincial Atlas (省份图)",
   description:
-    "A 27-province atlas of Chinese baijiu distilleries — regional houses, aromas, and cross-links into the permanent collection.",
+    "Interactive SVG map and list view of 27 Chinese baijiu provinces — regional distilleries, house emblems, local drinking culture, and food pairings.",
   alternates: { canonical: "/provinces" },
 };
 

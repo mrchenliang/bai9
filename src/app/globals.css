@@ -4000,6 +4000,540 @@ h1 {
   text-overflow: ellipsis;
 }
 
+/* Provincial Atlas SVG Map & Local Culture (/provinces) */
+.atlas-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.atlas-view-switch {
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 12px;
+  background: var(--paper);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  gap: 4px;
+  flex: none;
+}
+.view-seg {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  background: transparent;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 140ms ease, color 140ms ease;
+}
+.view-seg svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+.view-seg:hover {
+  color: var(--ash);
+}
+.view-seg.is-on {
+  background: var(--ash);
+  color: #fff;
+  font-weight: 600;
+}
+
+.atlas-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 20px 0 18px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.atlas-select-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.atlas-filter-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 999px;
+  padding: 4px 12px 4px 11px;
+  font-size: 13px;
+}
+.atlas-filter-field span {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.atlas-filter-field select {
+  border: 0;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ash);
+  outline: none;
+  cursor: pointer;
+}
+.atlas-toggle {
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: #fff;
+  color: var(--ash);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.atlas-toggle.is-on {
+  background: var(--ash);
+  border-color: var(--ash);
+  color: #fff;
+}
+.atlas-reset {
+  border: 0;
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: #c81e1e;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+.atlas-counter {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.atlas-map-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(320px, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.china-map-card {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
+  background: #faf8f5;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.china-map-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+.china-map-status {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.china-map-status strong {
+  font-size: 14.5px;
+  line-height: 1.25;
+}
+.china-map-status span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.pin-density {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 4px 3px 9px;
+  border-radius: 999px;
+  background: var(--paper);
+}
+.pin-density > span {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-right: 4px;
+}
+.pin-btn {
+  border: 0;
+  background: transparent;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.pin-btn.is-on {
+  background: var(--ash);
+  color: #fff;
+}
+
+.china-svg-wrap {
+  padding: 14px 12px 10px;
+}
+.china-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  user-select: none;
+}
+.map-prov {
+  transition: fill 140ms ease, stroke 140ms ease;
+}
+.map-prov.is-interactive {
+  cursor: pointer;
+}
+.map-prov.is-interactive:focus {
+  outline: none;
+  stroke: #111111;
+  stroke-width: 1.8;
+}
+.map-pin {
+  cursor: pointer;
+  transition: opacity 140ms ease;
+}
+.map-pin rect {
+  filter: drop-shadow(0 1px 2px rgba(11, 11, 13, 0.16));
+  transition: fill 140ms ease, stroke 140ms ease;
+}
+.map-pin.is-hovered rect {
+  stroke: #111111;
+  stroke-width: 1.25;
+}
+
+.china-map-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  border-top: 1px solid var(--line);
+  background: #fff;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.map-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.map-legend i {
+  font-style: normal;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.map-legend em {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+.map-credit {
+  opacity: 0.8;
+}
+
+/* Selected Province Local Culture & Brand Inspector */
+.atlas-inspector {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
+  background: #fff;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 680px;
+  overflow-y: auto;
+}
+.inspector-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.inspector-head h2 {
+  margin: 4px 0 0;
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.inspector-count {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--muted);
+}
+.atlas-local-card {
+  padding: 14px 15px;
+  border-radius: 12px;
+  background: #faf8f5;
+  border-left: 3px solid #c81e1e;
+}
+.local-card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.local-zh-tag {
+  font-family: var(--serif);
+  font-size: 12px;
+  color: var(--muted);
+}
+.atlas-local-card h3 {
+  margin: 5px 0 5px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.atlas-local-card p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.local-pairing {
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.local-pairing span {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.local-pairing b {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ash);
+}
+
+.inspector-houses-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.inspector-houses-head span {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 600;
+  color: var(--muted);
+}
+.inspector-houses-head small {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.inspector-houses {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.inspector-house-card {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #fff;
+  text-decoration: none;
+  transition: border-color 120ms ease, background 120ms ease;
+}
+.inspector-house-card.is-archived {
+  background: var(--paper);
+  border-color: rgba(0, 0, 0, 0.14);
+}
+.inspector-house-card.is-archived:hover {
+  border-color: var(--ash);
+}
+.inspector-house-card.is-archived:hover .house-en {
+  color: #c81e1e;
+}
+.inspector-house-info {
+  min-width: 0;
+  flex: 1;
+}
+.inspector-bottle {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 7px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+}
+.inspector-bottle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.brand-mark {
+  flex: none;
+  display: block;
+}
+
+.atlas-prov-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+.prov-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 12.5px;
+  cursor: pointer;
+  color: var(--ash);
+  transition: border-color 120ms ease, background 120ms ease;
+}
+.prov-chip:hover {
+  border-color: rgba(11, 11, 13, 0.35);
+}
+.prov-chip b {
+  font-weight: 500;
+}
+.prov-chip span {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.prov-chip.is-on {
+  background: var(--ash);
+  border-color: var(--ash);
+  color: #fff;
+}
+.prov-chip.is-on span {
+  color: rgba(255, 255, 255, 0.72);
+}
+.prov-chip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  flex: none;
+}
+
+/* Enriched List View with Brand Logos & Local Notes */
+.atlas-list-row {
+  grid-template-columns: 248px 1fr;
+}
+.atlas-list-row .prov-grid {
+  grid-template-columns: repeat(auto-fill, minmax(242px, 1fr));
+}
+.list-local-note {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.list-local-note strong {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ash);
+}
+.list-local-note p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.48;
+  color: var(--muted);
+}
+.list-pairing {
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: #9a3412;
+  line-height: 1.35;
+}
+.prov-list-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+}
+.prov-list-meta .prov-count {
+  margin-top: 0;
+}
+.locate-map-btn {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: #c81e1e;
+  cursor: pointer;
+}
+.locate-map-btn:hover {
+  text-decoration: underline;
+}
+.house-card-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.house-card-body {
+  min-width: 0;
+  flex: 1;
+}
+.list-bottle-mini {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+.list-bottle-mini img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 @media (max-width: 1120px) {
   .top {
     flex-wrap: wrap;
@@ -4020,6 +4554,8 @@ h1 {
   .tier-overview { grid-template-columns: repeat(2, 1fr); }
   .passport-metrics { grid-template-columns: repeat(3, 1fr); }
   .gift-hero { grid-template-columns: 1fr; }
+  .atlas-map-layout { grid-template-columns: 1fr; }
+  .atlas-inspector { max-height: none; }
   .persona-grid, .traps-grid { grid-template-columns: 1fr 1fr; }
   .aroma-deck { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .brand-table-head,
@@ -4034,11 +4570,13 @@ h1 {
 }
 
 @media (max-width: 800px) {
-  .split, .sku-layout, .aroma-grid, .shop-index, .tier-wing, .prov-row, .house-chapter-row, .banquet-rules,
+  .split, .sku-layout, .aroma-grid, .shop-index, .tier-wing, .prov-row, .atlas-list-row, .house-chapter-row,
   .advisor-bar, .prescription-main, .prescription-warnings, .ranker-row,
   .persona-grid, .persona-etiquette, .gift-shelf, .traps-grid {
     grid-template-columns: 1fr;
   }
+  .atlas-view-switch { width: 100%; }
+  .view-seg { flex: 1; justify-content: center; }
   .advisor-controls { padding: 14px; }
   .advisor-preset-list { order: 3; flex: 1 0 100%; }
   .sheet-legend {
