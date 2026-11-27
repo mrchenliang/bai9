@@ -70,7 +70,7 @@ function drawFooter(ctx: CanvasRenderingContext2D, width: number, height: number
 
   ctx.fillStyle = "#767676";
   ctx.font = `500 20px "JetBrains Mono", monospace`;
-  ctx.fillText("CHINESE BAIJIU MUSEUM · 中国白酒博物馆", 64, y + 10);
+  ctx.fillText("CHINESE BAIJIU MUSEUM · bai9.app", 64, y + 10);
   ctx.textAlign = "right";
   ctx.fillText("X · by @mr_chenliang", width - 64, y + 10);
   ctx.textAlign = "left";
@@ -228,7 +228,7 @@ export async function downloadSpecimenCard(opts: {
   triggerDownload(canvas, `bai9-${sku.id}-specimen.png`);
 }
 
-export async function downloadPassportCard(opts: {
+export interface PassportCardOptions {
   rankZh: string;
   rankEn: string;
   diagnosis: string;
@@ -240,14 +240,16 @@ export async function downloadPassportCard(opts: {
   pureRatio: number;
   estBillYuan: number;
   topBottles: { nameEn: string; nameZh: string; image?: string }[];
-}) {
+}
+
+async function renderPassportCardCanvas(opts: PassportCardOptions): Promise<HTMLCanvasElement | null> {
   const W = 1200;
   const H = 1520;
   const canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d");
-  if (!ctx) return;
+  if (!ctx) return null;
 
   ctx.fillStyle = "#faf8f5";
   ctx.fillRect(0, 0, W, H);
@@ -376,6 +378,20 @@ export async function downloadPassportCard(opts: {
   }
 
   drawFooter(ctx, W, H);
+  return canvas;
+}
+
+export async function renderPassportCardBlob(opts: PassportCardOptions): Promise<Blob | null> {
+  const canvas = await renderPassportCardCanvas(opts);
+  if (!canvas) return null;
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => resolve(blob), "image/png");
+  });
+}
+
+export async function downloadPassportCard(opts: PassportCardOptions) {
+  const canvas = await renderPassportCardCanvas(opts);
+  if (!canvas) return;
   triggerDownload(canvas, `bai9-drinking-passport.png`);
 }
 
