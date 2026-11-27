@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { skuById } from "@/catalog";
 
 const COMPARE_KEY = "baijiu-museum-compare";
@@ -64,6 +64,9 @@ export function Shell({ children }: { children: ReactNode }) {
   const [tasted, setTasted] = useState<string[]>([]);
   const [tastedReady, setTastedReady] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [menuPos, setMenuPos] = useState<{ top: number; left: number } | null>(null);
+  const moreBtnRef = useRef<HTMLButtonElement | null>(null);
+  const moreMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setCompare(loadList(COMPARE_KEY, 3));
@@ -75,15 +78,40 @@ export function Shell({ children }: { children: ReactNode }) {
     setMoreOpen(false);
   }, [pathname]);
 
+  function computeMenuPos() {
+    const btn = moreBtnRef.current;
+    if (!btn) return null;
+    const rect = btn.getBoundingClientRect();
+    const menuWidth = moreMenuRef.current?.offsetWidth ?? 176;
+    const left = Math.max(12, Math.min(rect.left, window.innerWidth - menuWidth - 12));
+    return { top: rect.bottom + 6, left };
+  }
+
   useEffect(() => {
     if (!moreOpen) return;
-    function onPointerDown(event: MouseEvent) {
-      const target = event.target as HTMLElement | null;
-      if (target?.closest(".nav-more")) return;
+    const updatePosition = () => {
+      const next = computeMenuPos();
+      if (next) setMenuPos(next);
+    };
+    updatePosition();
+    function onPointerDown(event: PointerEvent) {
+      const target = event.target as Node | null;
+      if (!target) return;
+      if (moreBtnRef.current?.contains(target)) return;
+      if (moreMenuRef.current?.contains(target)) return;
       setMoreOpen(false);
     }
-    window.addEventListener("mousedown", onPointerDown);
-    return () => window.removeEventListener("mousedown", onPointerDown);
+    const navEl = moreBtnRef.current?.closest(".nav");
+    window.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, { passive: true });
+    navEl?.addEventListener("scroll", updatePosition, { passive: true });
+    return () => {
+      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition);
+      navEl?.removeEventListener("scroll", updatePosition);
+    };
   }, [moreOpen]);
 
   useEffect(() => {
@@ -98,6 +126,15 @@ export function Shell({ children }: { children: ReactNode }) {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  function toggleMore() {
+    if (moreOpen) {
+      setMoreOpen(false);
+      return;
+    }
+    setMenuPos(computeMenuPos());
+    setMoreOpen(true);
+  }
 
   function setQuery(value: string) {
     setQueryState(value);
@@ -161,28 +198,16 @@ export function Shell({ children }: { children: ReactNode }) {
           ))}
           <div className="nav-more">
             <button
+              ref={moreBtnRef}
               type="button"
               className={moreActive || moreOpen ? "nav-more-btn is-active" : "nav-more-btn"}
+              aria-haspopup="menu"
               aria-expanded={moreOpen}
               aria-controls="nav-more-menu"
-              onClick={() => setMoreOpen((open) => !open)}
+              onClick={toggleMore}
             >
               More
             </button>
-            {moreOpen ? (
-              <div id="nav-more-menu" className="nav-more-menu" role="menu">
-                {MORE_NAV.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    role="menuitem"
-                    aria-current={pathname === item.href ? "page" : undefined}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            ) : null}
           </div>
         </nav>
         <label className="search">
@@ -196,6 +221,27 @@ export function Shell({ children }: { children: ReactNode }) {
           <kbd>/</kbd>
         </label>
       </header>
+      {moreOpen && menuPos ? (
+        <div
+          ref={moreMenuRef}
+          id="nav-more-menu"
+          className="nav-more-menu"
+          role="menu"
+          style={{ top: menuPos.top, left: menuPos.left }}
+        >
+          {MORE_NAV.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              role="menuitem"
+              aria-current={pathname === item.href ? "page" : undefined}
+              onClick={() => setMoreOpen(false)}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      ) : null}
       <main id="main" className={compare.length ? "wrap has-compare" : "wrap"}>
         {children}
         <footer className="foot">
