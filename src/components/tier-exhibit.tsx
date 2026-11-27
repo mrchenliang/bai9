@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { type DragEvent, useMemo, useState } from "react";
 import { aromas, brandById, skuAroma, skuById, skus, tiers } from "@/catalog";
 import type { AromaId, Sku, TierId } from "@/types";
 import { Card } from "@/components/card";
+import { AromaGrainIcon } from "@/components/grain-icons";
 import { useMuseum } from "@/components/shell";
 import { downloadTierListCard } from "@/lib/export-cards";
 
@@ -34,6 +35,17 @@ const STARTER_RANKING: Record<CustomRowId, string[]> = {
 
 type ViewMode = "gallery" | "board" | "ranker";
 
+interface DragState {
+  skuId: string;
+  source: CustomRowId | "tray";
+}
+
+interface ChipDropTarget {
+  rowId: CustomRowId;
+  skuId: string;
+  position: "before" | "after";
+}
+
 export function TierExhibit() {
   const { query } = useMuseum();
   const [aroma, setAroma] = useState<AromaId | "all">("all");
@@ -43,6 +55,11 @@ export function TierExhibit() {
   const [customRows, setCustomRows] = useState<Record<CustomRowId, string[]>>(STARTER_RANKING);
   const [activeRow, setActiveRow] = useState<CustomRowId>("S");
   const [exporting, setExporting] = useState(false);
+
+  const [dragItem, setDragItem] = useState<DragState | null>(null);
+  const [dragOverRow, setDragOverRow] = useState<CustomRowId | null>(null);
+  const [dragOverChip, setDragOverChip] = useState<ChipDropTarget | null>(null);
+  const [dragOverTray, setDragOverTray] = useState(false);
 
   const filteredSkus = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -87,7 +104,12 @@ export function TierExhibit() {
     [filteredSkus, placedIds],
   );
 
-  function addToActiveRow(skuId: string) {
+  function moveBottleToRow(
+    skuId: string,
+    targetRow: CustomRowId,
+    targetChipId?: string,
+    position: "before" | "after" = "after",
+  ) {
     setCustomRows((prev) => {
       const next: Record<CustomRowId, string[]> = {
         S: prev.S.filter((id) => id !== skuId),
@@ -96,9 +118,34 @@ export function TierExhibit() {
         C: prev.C.filter((id) => id !== skuId),
         TAX: prev.TAX.filter((id) => id !== skuId),
       };
-      next[activeRow] = [...next[activeRow], skuId];
+      const targetList = [...next[targetRow]];
+      if (targetChipId && targetChipId !== skuId) {
+        const idx = targetList.indexOf(targetChipId);
+        if (idx !== -1) {
+          targetList.splice(position === "before" ? idx : idx + 1, 0, skuId);
+        } else {
+          targetList.push(skuId);
+        }
+      } else {
+        targetList.push(skuId);
+      }
+      next[targetRow] = targetList;
       return next;
     });
+  }
+
+  function addToActiveRow(skuId: string) {
+    moveBottleToRow(skuId, activeRow);
+  }
+
+  function removeFromAllRows(skuId: string) {
+    setCustomRows((prev) => ({
+      S: prev.S.filter((id) => id !== skuId),
+      A: prev.A.filter((id) => id !== skuId),
+      B: prev.B.filter((id) => id !== skuId),
+      C: prev.C.filter((id) => id !== skuId),
+      TAX: prev.TAX.filter((id) => id !== skuId),
+    }));
   }
 
   function removeFromRow(rowId: CustomRowId, skuId: string) {
@@ -106,6 +153,89 @@ export function TierExhibit() {
       ...prev,
       [rowId]: prev[rowId].filter((id) => id !== skuId),
     }));
+  }
+
+  function clearDragState() {
+    setDragItem(null);
+    setDragOverRow(null);
+    setDragOverChip(null);
+    setDragOverTray(false);
+  }
+
+  function handleDragStart(event: DragEvent<HTMLElement>, skuId: string, source: CustomRowId | "tray") {
+    setDragItem({ skuId, source });
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", skuId);
+  }
+
+  function handleRowDragOver(event: DragEvent<HTMLDivElement>, rowId: CustomRowId) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    if (dragOverRow !== rowId) setDragOverRow(rowId);
+    if (dragOverChip !== null) setDragOverChip(null);
+    if (dragOverTray) setDragOverTray(false);
+  }
+
+  function handleRowDragLeave(event: DragEvent<HTMLDivElement>, rowId: CustomRowId) {
+    if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+    if (dragOverRow === rowId) setDragOverRow(null);
+    if (dragOverChip?.rowId === rowId) setDragOverChip(null);
+  }
+
+  function handleChipDragOver(event: DragEvent<HTMLButtonElement>, rowId: CustomRowId, skuId: string) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.dataTransfer.dropEffect = "move";
+    if (dragOverRow !== rowId) setDragOverRow(rowId);
+    if (dragOverTray) setDragOverTray(false);
+    if (dragItem?.skuId === skuId) {
+      if (dragOverChip !== null) setDragOverChip(null);
+      return;
+    }
+    const rect = event.currentTarget.getBoundingClientRect();
+    const position: "before" | "after" = event.clientX < rect.left + rect.width / 2 ? "before" : "after";
+    if (
+      !dragOverChip ||
+      dragOverChip.rowId !== rowId ||
+      dragOverChip.skuId !== skuId ||
+      dragOverChip.position !== position
+    ) {
+      setDragOverChip({ rowId, skuId, position });
+    }
+  }
+
+  function handleRowDrop(event: DragEvent<HTMLElement>, rowId: CustomRowId) {
+    event.preventDefault();
+    event.stopPropagation();
+    const skuId = dragItem?.skuId || event.dataTransfer.getData("text/plain");
+    if (skuId) {
+      const targetChip = dragOverChip?.rowId === rowId ? dragOverChip : null;
+      moveBottleToRow(skuId, rowId, targetChip?.skuId, targetChip?.position);
+      setActiveRow(rowId);
+    }
+    clearDragState();
+  }
+
+  function handleTrayDragOver(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    if (!dragOverTray) setDragOverTray(true);
+    if (dragOverRow !== null) setDragOverRow(null);
+    if (dragOverChip !== null) setDragOverChip(null);
+  }
+
+  function handleTrayDragLeave(event: DragEvent<HTMLDivElement>) {
+    if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+    setDragOverTray(false);
+  }
+
+  function handleTrayDrop(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    const skuId = dragItem?.skuId || event.dataTransfer.getData("text/plain");
+    if (skuId) {
+      removeFromAllRows(skuId);
+    }
+    clearDragState();
   }
 
   async function handleExportTierList() {
@@ -174,11 +304,14 @@ export function TierExhibit() {
             <button
               key={item.id}
               type="button"
-              className="pill"
+              className="pill aroma-pill"
               aria-pressed={aroma === item.id}
               onClick={() => setAroma(aroma === item.id ? "all" : item.id)}
             >
-              {item.en.replace(" aroma", "")}
+              <span className="aroma-pill-icon" aria-hidden="true">
+                <AromaGrainIcon id={item.id} size={16} />
+              </span>
+              <span>{item.en.replace(" aroma", "")}</span>
             </button>
           ))}
         <span className="grow" />
@@ -207,9 +340,9 @@ export function TierExhibit() {
         <section className="ranker-wrap" aria-label="Custom tier list builder">
           <div className="ranker-toolbar">
             <div>
-              <strong>Click any tier row to select it, then tap bottles below to place them.</strong>
+              <strong>Drag bottles between tiers, reorder within a row, or drop below to unrank.</strong>
               <span className="ranker-hint">
-                Tap a placed bottle to remove it. Active row:{" "}
+                Or click a row and tap bottles to place/remove. Active row:{" "}
                 <b>
                   {CUSTOM_ROWS.find((r) => r.id === activeRow)?.code} ·{" "}
                   {CUSTOM_ROWS.find((r) => r.id === activeRow)?.zh}
@@ -239,11 +372,21 @@ export function TierExhibit() {
                 .map((id) => skuById(id))
                 .filter((s): s is Sku => Boolean(s));
               const isSelected = activeRow === row.id;
+              const isDropTarget = dragOverRow === row.id;
               return (
                 <div
                   key={row.id}
-                  className={isSelected ? "ranker-row is-active" : "ranker-row"}
+                  className={[
+                    "ranker-row",
+                    isSelected ? "is-active" : "",
+                    isDropTarget ? "is-drag-over" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
                   onClick={() => setActiveRow(row.id)}
+                  onDragOver={(event) => handleRowDragOver(event, row.id)}
+                  onDragLeave={(event) => handleRowDragLeave(event, row.id)}
+                  onDrop={(event) => handleRowDrop(event, row.id)}
                 >
                   <button
                     type="button"
@@ -261,24 +404,47 @@ export function TierExhibit() {
                   <div className="ranker-slots">
                     {items.length === 0 ? (
                       <span className="ranker-empty">
-                        {isSelected ? "Active — tap any bottle below to place here" : "Click row to add bottles"}
+                        {isDropTarget
+                          ? `Drop here to place into ${row.code} · ${row.zh}`
+                          : isSelected
+                            ? "Active — drag or tap any bottle below to place here"
+                            : "Drop bottles here or click row"}
                       </span>
                     ) : (
-                      items.map((sku) => (
-                        <button
-                          key={sku.id}
-                          type="button"
-                          className="ranker-chip"
-                          title="Click to remove from this tier"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            removeFromRow(row.id, sku.id);
-                          }}
-                        >
-                          {sku.image ? <img src={sku.image} alt="" /> : null}
-                          <span>{sku.nameEn}</span>
-                        </button>
-                      ))
+                      items.map((sku) => {
+                        const isDragging = dragItem?.skuId === sku.id;
+                        const dropSide =
+                          dragOverChip && dragOverChip.rowId === row.id && dragOverChip.skuId === sku.id
+                            ? dragOverChip.position
+                            : null;
+                        return (
+                          <button
+                            key={sku.id}
+                            type="button"
+                            draggable
+                            className={[
+                              "ranker-chip",
+                              isDragging ? "is-dragging" : "",
+                              dropSide === "before" ? "is-drop-before" : "",
+                              dropSide === "after" ? "is-drop-after" : "",
+                            ]
+                              .filter(Boolean)
+                              .join(" ")}
+                            title="Drag to move or reorder · Click to remove"
+                            onDragStart={(event) => handleDragStart(event, sku.id, row.id)}
+                            onDragEnd={clearDragState}
+                            onDragOver={(event) => handleChipDragOver(event, row.id, sku.id)}
+                            onDrop={(event) => handleRowDrop(event, row.id)}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              removeFromRow(row.id, sku.id);
+                            }}
+                          >
+                            {sku.image ? <img src={sku.image} alt="" draggable={false} /> : null}
+                            <span>{sku.nameEn}</span>
+                          </button>
+                        );
+                      })
                     )}
                   </div>
                 </div>
@@ -287,22 +453,40 @@ export function TierExhibit() {
           </div>
 
           <h2 className="section-label">
-            Unranked Specimens ({unplacedSkus.length}) — tap to place into{" "}
+            Unranked Specimens ({unplacedSkus.length}) — drag into a tier or tap to place into{" "}
             {CUSTOM_ROWS.find((r) => r.id === activeRow)?.code} ·{" "}
             {CUSTOM_ROWS.find((r) => r.id === activeRow)?.zh}
           </h2>
-          <div className="ranker-tray">
-            {unplacedSkus.map((sku) => (
-              <button
-                key={sku.id}
-                type="button"
-                className="ranker-chip tray"
-                onClick={() => addToActiveRow(sku.id)}
-              >
-                {sku.image ? <img src={sku.image} alt="" /> : null}
-                <span>{sku.nameEn}</span>
-              </button>
-            ))}
+          <div
+            className={dragOverTray ? "ranker-tray is-drag-over" : "ranker-tray"}
+            onDragOver={handleTrayDragOver}
+            onDragLeave={handleTrayDragLeave}
+            onDrop={handleTrayDrop}
+          >
+            {unplacedSkus.length === 0 ? (
+              <span className="ranker-empty">
+                {dragOverTray ? "Drop here to return bottle to unranked" : "All matching specimens are ranked above — drag any bottle here to unrank it."}
+              </span>
+            ) : (
+              unplacedSkus.map((sku) => {
+                const isDragging = dragItem?.skuId === sku.id;
+                return (
+                  <button
+                    key={sku.id}
+                    type="button"
+                    draggable
+                    className={isDragging ? "ranker-chip tray is-dragging" : "ranker-chip tray"}
+                    title="Drag into any tier row · Click to place in active row"
+                    onDragStart={(event) => handleDragStart(event, sku.id, "tray")}
+                    onDragEnd={clearDragState}
+                    onClick={() => addToActiveRow(sku.id)}
+                  >
+                    {sku.image ? <img src={sku.image} alt="" draggable={false} /> : null}
+                    <span>{sku.nameEn}</span>
+                  </button>
+                );
+              })
+            )}
           </div>
         </section>
       ) : (

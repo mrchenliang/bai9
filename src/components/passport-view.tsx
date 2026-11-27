@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { brandById, skuAroma, skus, tierRank, tiers } from "@/catalog";
 import { useMuseum } from "@/components/shell";
 import { fieldNoteFor } from "@/field-notes";
@@ -14,21 +13,40 @@ interface PassportViewProps {
   sharedIds?: string[];
 }
 
+function sameIdSet(a: string[], b: string[]): boolean {
+  if (a.length !== b.length) return false;
+  const setB = new Set(b);
+  return a.every((id) => setB.has(id));
+}
+
+function syncPassportUrl(ids: string[]) {
+  if (typeof window === "undefined") return;
+  const encoded = encodeStampedParam(ids);
+  const nextUrl = encoded ? `/passport?s=${encodeURIComponent(encoded)}` : "/passport";
+  if (`${window.location.pathname}${window.location.search}` !== nextUrl) {
+    window.history.replaceState(null, "", nextUrl);
+  }
+}
+
 export function PassportView({ sharedIds = [] }: PassportViewProps) {
-  const router = useRouter();
-  const { tasted, toggleTasted, clearTasted, query } = useMuseum();
+  const { tasted, tastedReady, toggleTasted, clearTasted, query } = useMuseum();
   const [tierFilter, setTierFilter] = useState<TierId | "all">("all");
   const [dismissedShared, setDismissedShared] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [busy, setBusy] = useState(false);
   const [shareStatus, setShareStatus] = useState<string | null>(null);
-  const [selectionPrompt, setSelectionPrompt] = useState<"share" | "download" | "copy" | null>(null);
+  const [selectionPrompt, setSelectionPrompt] = useState<"share" | "download" | null>(null);
   const [promptPulse, setPromptPulse] = useState(0);
   const stampSectionRef = useRef<HTMLDivElement | null>(null);
 
-  const viewingShared = sharedIds.length > 0 && !dismissedShared;
+  const isOwnShared = tastedReady && sharedIds.length > 0 && sameIdSet(sharedIds, tasted);
+  const viewingShared = sharedIds.length > 0 && !dismissedShared && !isOwnShared;
   const activeIds = viewingShared ? sharedIds : tasted;
   const showSelectionPrompt = selectionPrompt !== null && activeIds.length === 0;
+
+  useEffect(() => {
+    if (!tastedReady || viewingShared) return;
+    syncPassportUrl(tasted);
+  }, [tastedReady, viewingShared, tasted]);
 
   const summary = useMemo(() => computePassportSummary(activeIds), [activeIds]);
 
@@ -70,7 +88,7 @@ export function PassportView({ sharedIds = [] }: PassportViewProps) {
     return encoded ? `${origin}/passport?s=${encodeURIComponent(encoded)}` : `${origin}/passport`;
   }
 
-  function promptToSelect(action: "share" | "download" | "copy") {
+  function promptToSelect(action: "share" | "download") {
     setShareStatus(null);
     setSelectionPrompt(action);
     setPromptPulse((n) => n + 1);
@@ -137,40 +155,29 @@ export function PassportView({ sharedIds = [] }: PassportViewProps) {
     }
   }
 
-  async function handleCopy() {
-    if (activeIds.length === 0) {
-      promptToSelect("copy");
-      return;
-    }
-    setSelectionPrompt(null);
-    const shareUrl = buildShareUrl();
-    const text = `${buildPassportTweetText(summary)}\n\n${shareUrl}`;
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    } catch {
-      // ignore if clipboard blocked
-    }
-  }
-
   function handleSwitchToOwn() {
     setDismissedShared(true);
     setShareStatus(null);
     setSelectionPrompt(null);
-    router.replace("/passport", { scroll: false });
+    syncPassportUrl(tasted);
   }
 
   function handleClear() {
     setSelectionPrompt(null);
     setShareStatus(null);
     clearTasted();
+    syncPassportUrl([]);
   }
 
   function handleToggleBottle(id: string) {
     if (selectionPrompt !== null) setSelectionPrompt(null);
-    if (viewingShared) handleSwitchToOwn();
+    if (viewingShared) {
+      setDismissedShared(true);
+      setShareStatus(null);
+    }
+    const nextTasted = tasted.includes(id) ? tasted.filter((item) => item !== id) : [...tasted, id];
     toggleTasted(id);
+    syncPassportUrl(nextTasted);
   }
 
   return (
@@ -184,7 +191,7 @@ export function PassportView({ sharedIds = [] }: PassportViewProps) {
         your pure-grain ratio and estimated dinner bill, and generates a shareable Passport Card for X.
       </p>
 
-      {viewingShared ? (
+      {tastedReady && viewingShared ? (
         <div className="passport-shared-banner" role="status">
           <span>
             Viewing a shared Drinking Passport ({sharedIds.length}{" "}
@@ -257,20 +264,27 @@ export function PassportView({ sharedIds = [] }: PassportViewProps) {
           </button>
           <button
             type="button"
-            className="btn"
+            className="btn btn-icon"
             onClick={handleExport}
             disabled={busy}
+            aria-busy={busy}
+            aria-label={busy ? "Printing passport PNG..." : "Download Passport Card (PNG)"}
+            title={busy ? "Printing passport PNG..." : "Download Passport Card (PNG)"}
             aria-describedby={showSelectionPrompt ? "passport-select-prompt" : undefined}
           >
-            {busy ? "Printing passport PNG..." : "Download Card (PNG)"}
-          </button>
-          <button
-            type="button"
-            className="btn"
-            onClick={handleCopy}
-            aria-describedby={showSelectionPrompt ? "passport-select-prompt" : undefined}
-          >
-            {copied ? "Copied Tweet & Link" : "Copy Tweet & Link"}
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 3v12" />
+              <path d="m7 10 5 5 5-5" />
+              <path d="M5 19h14" />
+            </svg>
           </button>
           {!viewingShared && tasted.length > 0 ? (
             <button type="button" className="btn" onClick={handleClear}>
@@ -287,9 +301,7 @@ export function PassportView({ sharedIds = [] }: PassportViewProps) {
               <strong>Select at least one bottle first.</strong>{" "}
               {selectionPrompt === "download"
                 ? "Tap any bottle you’ve tried below to stamp 已饮 before downloading your Passport Card."
-                : selectionPrompt === "share"
-                  ? "Tap any bottle you’ve tried below to stamp 已饮 before sharing your Passport on X."
-                  : "Tap any bottle you’ve tried below to stamp 已饮 before copying your Passport link."}
+                : "Tap any bottle you’ve tried below to stamp 已饮 before sharing your Passport on X."}
             </p>
             <button type="button" className="passport-prompt-jump" onClick={scrollToBottles}>
               Select bottles ↓

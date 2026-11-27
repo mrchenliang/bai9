@@ -14,6 +14,7 @@ interface MuseumState {
   compare: string[];
   toggleCompare: (id: string) => void;
   tasted: string[];
+  tastedReady: boolean;
   toggleTasted: (id: string) => void;
   clearTasted: () => void;
 }
@@ -61,11 +62,13 @@ export function Shell({ children }: { children: ReactNode }) {
   const [query, setQueryState] = useState("");
   const [compare, setCompare] = useState<string[]>([]);
   const [tasted, setTasted] = useState<string[]>([]);
+  const [tastedReady, setTastedReady] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
 
   useEffect(() => {
     setCompare(loadList(COMPARE_KEY, 3));
     setTasted(loadList(TASTED_KEY));
+    setTastedReady(true);
   }, []);
 
   useEffect(() => {
@@ -126,7 +129,7 @@ export function Shell({ children }: { children: ReactNode }) {
 
   return (
     <MuseumContext.Provider
-      value={{ query, setQuery, compare, toggleCompare, tasted, toggleTasted, clearTasted }}
+      value={{ query, setQuery, compare, toggleCompare, tasted, tastedReady, toggleTasted, clearTasted }}
     >
       <a className="skip" href="#main">
         Skip to gallery
