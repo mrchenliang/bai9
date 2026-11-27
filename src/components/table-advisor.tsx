@@ -6,63 +6,18 @@ import { brandById, skuAroma, skuById, tierById } from "@/catalog";
 import { tierNumeral } from "@/components/card";
 import { fieldNoteFor, GB_KIND_META, SHOCK_LABELS } from "@/field-notes";
 import { downloadTablePrescriptionCard } from "@/lib/export-cards";
+import { REGIONS, type RegionId } from "@/provinces";
 
 type OccasionId = "father" | "business" | "wedding" | "skewers" | "uncle" | "foreigner";
-type RegionId = "north" | "guizhou" | "sichuan" | "jiangsu" | "anhui" | "guangdong" | "shandong";
 type BudgetId = "street" | "mid" | "serious" | "nuclear";
 
 const OCCASIONS: { id: OccasionId; label: string; zh: string }[] = [
-  { id: "father", label: "meeting a partner’s father", zh: "第一次见岳父" },
-  { id: "business", label: "closing a client dinner", zh: "商务宴请谈单" },
-  { id: "wedding", label: "a wedding banquet", zh: "婚宴摆席" },
+  { id: "father", label: "Meeting partner's father", zh: "第一次见岳父" },
+  { id: "business", label: "Closing a client dinner", zh: "商务宴请谈单" },
+  { id: "wedding", label: "Wedding banquet", zh: "婚宴摆席" },
   { id: "skewers", label: "2am street skewers", zh: "宵夜撸串" },
-  { id: "uncle", label: "an uncle who says “bring nothing”", zh: "嘴上说别带东西" },
-  { id: "foreigner", label: "a friend’s very first baijiu", zh: "带朋友入坑" },
-];
-
-const REGIONS: { id: RegionId; label: string; zh: string; rule: string }[] = [
-  {
-    id: "north",
-    label: "Beijing & North China",
-    zh: "京津华北",
-    rule: "Respect the elders first and keep pours honest. In Beijing, flashing an overpriced obscure box gets less respect than bringing real Fenjiu or Red Star.",
-  },
-  {
-    id: "guizhou",
-    label: "Guizhou & Southwest",
-    zh: "贵州西南",
-    rule: "Sauce-aroma home turf. Never bring a weak 42% bottle to a Guizhou table — 53% vol pure-grain solid-state (GB/T 26760) is the unspoken baseline.",
-  },
-  {
-    id: "sichuan",
-    label: "Sichuan & Chongqing",
-    zh: "巴蜀川渝",
-    rule: "Home of the Six Golden Flowers. Strong-aroma 52% rules the lazy Susan, and hosts pour generously — pace yourself early before the third toast.",
-  },
-  {
-    id: "jiangsu",
-    label: "Jiangsu & East China",
-    zh: "江浙华东",
-    rule: "Jiangsu tables speak in exact bottle tiers (Haizhilan < Tianzhilan < M6+ < M9). Bringing one tier below the host’s expectation is noticed immediately.",
-  },
-  {
-    id: "anhui",
-    label: "Anhui & Central Plains",
-    zh: "江淮中原",
-    rule: "Local pride runs deep: Gujing Gu 16/20, Kouzijiao, and Yingjia command more instant warmth in Hefei than generic national labels.",
-  },
-  {
-    id: "guangdong",
-    label: "Guangdong & South",
-    zh: "岭南粤港澳",
-    rule: "Less forced bottoms-up (“ganbei”) pressure than the north — smoothness and food pairing matter most. Never bully Cantonese guests into 67% shots.",
-  },
-  {
-    id: "shandong",
-    label: "Shandong",
-    zh: "齐鲁酒桌",
-    rule: "The strictest seating & toasting protocol in China: the host sits facing the door (“zhupeng”), the guest of honor sits to their right, and you do not sip before the host lifts the glass.",
-  },
+  { id: "uncle", label: "Uncle who says 'bring nothing'", zh: "嘴上说别带东西" },
+  { id: "foreigner", label: "First baijiu for foreign friends", zh: "带老外入坑" },
 ];
 
 const BUDGETS: { id: BudgetId; label: string; short: string; range: string }[] = [
@@ -83,25 +38,25 @@ const CURATED_MOMENTS: {
   {
     title: "Meet the Father-in-Law",
     zh: "初次见岳父",
-    meta: "Sichuan · ¥500–1k",
+    meta: "Southwest · ¥500–1k",
     occasion: "father",
-    region: "sichuan",
+    region: "southwest",
     budget: "serious",
   },
   {
-    title: "Shandong Client Table",
-    zh: "齐鲁商务宴",
-    meta: "Shandong · ¥1.5k+",
+    title: "East China Client Table",
+    zh: "华东商务宴",
+    meta: "East · ¥1.5k+",
     occasion: "business",
-    region: "shandong",
+    region: "east",
     budget: "nuclear",
   },
   {
     title: "Wedding Lazy Susan",
     zh: "喜宴红桌",
-    meta: "Sichuan · ¥150–450",
+    meta: "Southwest · ¥150–450",
     occasion: "wedding",
-    region: "sichuan",
+    region: "southwest",
     budget: "mid",
   },
   {
@@ -113,20 +68,12 @@ const CURATED_MOMENTS: {
     budget: "mid",
   },
   {
-    title: "2am Beijing Skewers",
+    title: "2am Northern Skewers",
     zh: "胡同撸串",
-    meta: "Beijing · <¥100",
+    meta: "North · <¥100",
     occasion: "skewers",
     region: "north",
     budget: "street",
-  },
-  {
-    title: "First Sip for Friends",
-    zh: "入门初尝",
-    meta: "Sichuan · ¥150–450",
-    occasion: "foreigner",
-    region: "sichuan",
-    budget: "mid",
   },
 ];
 
@@ -138,7 +85,7 @@ interface Recommendation {
 
 function prescribe(occasion: OccasionId, region: RegionId, budget: BudgetId): Recommendation {
   if (occasion === "skewers") {
-    if (region === "north") {
+    if (region === "north" || region === "northeast") {
       return {
         primaryId: "huanggai",
         insiderId: "hongxing-56",
@@ -146,12 +93,20 @@ function prescribe(occasion: OccasionId, region: RegionId, budget: BudgetId): Re
           "Bringing a ¥800 gift box to a plastic-stool skewer stall looks completely unhinged. Everyone will worry you are about to ask them for a loan.",
       };
     }
-    if (region === "guangdong") {
+    if (region === "south") {
       return {
         primaryId: "yukbing-classic",
         insiderId: "sanhua-52",
         whatGoesWrong:
           "Dropping heavy 53% sauce aroma onto midnight Cantonese claypot rice overwhelms every dish on the table.",
+      };
+    }
+    if (region === "northwest") {
+      return {
+        primaryId: "xifeng-green",
+        insiderId: "yili-tequ",
+        whatGoesWrong:
+          "Over-dressing a charcoal lamb-skewer night kills the vibe — crisp Green Xifeng or Xinjiang Yilite earns immediate respect.",
       };
     }
     return {
@@ -180,7 +135,7 @@ function prescribe(occasion: OccasionId, region: RegionId, budget: BudgetId): Re
   }
 
   if (budget === "nuclear") {
-    if (region === "jiangsu" && occasion === "business") {
+    if (region === "east" && occasion === "business") {
       return {
         primaryId: "feitian",
         insiderId: "mengzhilan-m9",
@@ -192,7 +147,7 @@ function prescribe(occasion: OccasionId, region: RegionId, budget: BudgetId): Re
       primaryId: "feitian",
       insiderId: "jingpin",
       whatGoesWrong:
-        "Bringing only a single bottle to a serious elder gift feels incomplete — Chinese gifting favors pairs (“chengshuang”). Also never open it before confirming the host isn’t saving it.",
+        "Bringing only a single bottle to a serious elder gift feels incomplete — Chinese gifting favors pairs ('chengshuang'). Also never open it before confirming the host isn't saving it.",
     };
   }
 
@@ -205,6 +160,14 @@ function prescribe(occasion: OccasionId, region: RegionId, budget: BudgetId): Re
           "Truthful warning: showing up under ¥100 to meet your future father-in-law or close a business deal only works if you frame it as a nostalgic tasting side-pour alongside a serious bottle.",
       };
     }
+    if (region === "northwest") {
+      return {
+        primaryId: "xifeng-green",
+        insiderId: "yili-tequ",
+        whatGoesWrong:
+          "Buying a flashy supermarket gold box under ¥100 usually means blended GB/T 20822 spirit — stick to honest Green Xifeng or Yilite.",
+      };
+    }
     return {
       primaryId: "huanggai",
       insiderId: "erqu",
@@ -214,35 +177,51 @@ function prescribe(occasion: OccasionId, region: RegionId, budget: BudgetId): Re
   }
 
   if (budget === "serious") {
-    if (region === "jiangsu") {
+    if (region === "east") {
       return {
         primaryId: "mengzhilan-m6",
-        insiderId: "guoyuan",
+        insiderId: "gu20",
         whatGoesWrong:
-          "Bringing Sea Blue or an unfamiliar regional bottle to a Jiangsu serious table quietly signals you did not take the meeting seriously.",
+          "Bringing entry-level Sea Blue or an unfamiliar out-of-region bottle to a serious East China table quietly signals you did not take the meeting seriously.",
       };
     }
-    if (region === "anhui") {
+    if (region === "central") {
       return {
-        primaryId: "gu20",
+        primaryId: "neican",
         insiderId: "guojiao",
         whatGoesWrong:
-          "Skipping Anhui’s hometown flagship Gu 20 for a generic ¥600 secondary label loses instant hometown goodwill.",
+          "Ignoring Central China's local heavyweights like Jiugui Neican for a generic billboard sub-brand misses instant regional prestige.",
       };
     }
-    if (region === "guizhou") {
+    if (region === "northwest") {
       return {
-        primaryId: "junpin",
-        insiderId: "qinghualang",
+        primaryId: "hongxifeng",
+        insiderId: "qinghua-30",
         whatGoesWrong:
-          "Bringing a soft low-proof strong-aroma bottle to a Guizhou sauce-aroma host gets polite smiles and half-full cups at the end of dinner.",
+          "In Xi'an and the Northwest, skipping royal Red Xifeng for a generic ¥600 label leaves hometown prestige on the table.",
+      };
+    }
+    if (region === "northeast") {
+      return {
+        primaryId: "puwu",
+        insiderId: "qinghua-30",
+        whatGoesWrong:
+          "Bringing a weak low-proof bottle to a serious Northeast banquet gets polite nods and quiet jokes after you leave.",
+      };
+    }
+    if (region === "south") {
+      return {
+        primaryId: "qinghua-30",
+        insiderId: "junpin",
+        whatGoesWrong:
+          "Heavy, harsh fire clashes with delicate southern banquets — silky Qinghua 30 or polished celadon Junpin lands far better.",
       };
     }
     return {
       primaryId: occasion === "wedding" ? "puwu" : "guojiao",
       insiderId: "qinghua-30",
       whatGoesWrong:
-        "Buying an obscure “Moutai Town custom reserve” instead of a recognized Tier I/II flagship like 8th-Gen Wuliangye or National Cellar 1573 screams tourist markup.",
+        "Buying an obscure 'Moutai Town custom reserve' instead of a recognized Tier I/II flagship like 8th-Gen Wuliangye or National Cellar 1573 screams tourist markup.",
     };
   }
 
@@ -250,33 +229,49 @@ function prescribe(occasion: OccasionId, region: RegionId, budget: BudgetId): Re
   if (occasion === "wedding") {
     return {
       primaryId: "crystal",
-      insiderId: "honghualang",
+      insiderId: region === "central" ? "jiugui-hongtan" : "honghualang",
       whatGoesWrong:
         "Choosing a white/plain bottle over festive red or crystal packaging for a wedding table gets quietly judged by every auntie before the cold dishes arrive.",
     };
   }
-  if (region === "jiangsu") {
+  if (region === "east") {
     return {
       primaryId: "guoyuan",
+      insiderId: "gu16",
+      whatGoesWrong:
+        "Bringing entry-level Sea Blue when East China tables expect Guoyuan Sikou or Gujing Gu 16 is a classic rookie mistake.",
+    };
+  }
+  if (region === "central") {
+    return {
+      primaryId: "jiugui-hongtan",
+      insiderId: "baiyunbian-cellar",
+      whatGoesWrong:
+        "Skipping Hunan's Jiugui or Hubei's Baiyunbian for a random generic label misses instant hometown warmth across Central China.",
+    };
+  }
+  if (region === "northwest") {
+    return {
+      primaryId: "xifeng-6",
+      insiderId: "yili-tequ",
+      whatGoesWrong:
+        "Bringing an unfamiliar coastal label to a Shaanxi or Xinjiang table when Xifeng 6-Year and Yilite are beloved local anchors.",
+    };
+  }
+  if (region === "northeast") {
+    return {
+      primaryId: "qinghua-20",
+      insiderId: "laobaigan-67",
+      whatGoesWrong:
+        "Paying ¥400 for fancy cardboard instead of clean high-proof pure grain is spotted immediately at a Northeast table.",
+    };
+  }
+  if (region === "south") {
+    return {
+      primaryId: "qinghua-20",
       insiderId: "tianzhilan",
       whatGoesWrong:
-        "Bringing entry-level Sea Blue when the table expects Four-Open Guoyuan is a classic rookie mistake in Nanjing.",
-    };
-  }
-  if (region === "anhui") {
-    return {
-      primaryId: "gu16",
-      insiderId: "kouzi-cellar",
-      whatGoesWrong:
-        "Bringing an unfamiliar out-of-province brand when Anhui locals swear by Gujing Gu 16 and Kouzijiao wastes your budget.",
-    };
-  }
-  if (region === "guizhou") {
-    return {
-      primaryId: "xijiu-1988",
-      insiderId: "zhen-15",
-      whatGoesWrong:
-        "Falling for “Moutai Yingbin” just for the four characters on the label when Xijiu Cellar 1988 drinks circles around it.",
+        "Forcing harsh, aggressive liquor on a Cantonese or Guangxi dinner table ruins food pairing — clean porcelain Qinghua 20 wins everyone over.",
     };
   }
   if (occasion === "uncle") {
@@ -284,12 +279,12 @@ function prescribe(occasion: OccasionId, region: RegionId, budget: BudgetId): Re
       primaryId: "qinghua-20",
       insiderId: "pinwei",
       whatGoesWrong:
-        "Believing him when he says “don’t bring anything” is fatal. “Bring nothing” translates literally to: bring a genuinely tasteful ¥350–¥450 pure-grain bottle.",
+        "Believing him when he says 'don't bring anything' is fatal. 'Bring nothing' translates literally to: bring a genuinely tasteful ¥350–¥450 pure-grain bottle.",
     };
   }
   return {
     primaryId: "crystal",
-    insiderId: "qinghua-20",
+    insiderId: "xijiu-1988",
     whatGoesWrong:
       "Never buy a fancy-box “special commemorative” sub-brand at ¥300 — every seasoned drinker immediately googles the wholesale price and knows it costs ¥68.",
   };
@@ -297,7 +292,7 @@ function prescribe(occasion: OccasionId, region: RegionId, budget: BudgetId): Re
 
 export function TableAdvisor() {
   const [occasion, setOccasion] = useState<OccasionId>("father");
-  const [region, setRegion] = useState<RegionId>("sichuan");
+  const [region, setRegion] = useState<RegionId>("southwest");
   const [budget, setBudget] = useState<BudgetId>("serious");
   const [copied, setCopied] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -311,7 +306,7 @@ export function TableAdvisor() {
     const primaryTier = tierById(primary.tier);
     const primaryNote = fieldNoteFor(primary, primaryAroma?.id);
     const insiderNote = fieldNoteFor(insider, skuAroma(insider)?.id);
-    const regionObj = REGIONS.find((r) => r.id === region)!;
+    const regionObj = REGIONS.find((r) => r.id === region) ?? REGIONS[0];
     const occasionObj = OCCASIONS.find((o) => o.id === occasion)!;
     const budgetObj = BUDGETS.find((b) => b.id === budget)!;
     return {
@@ -338,14 +333,14 @@ export function TableAdvisor() {
     try {
       await downloadTablePrescriptionCard({
         occasion: result.occasionObj.label,
-        region: result.regionObj.label,
+        region: `${result.regionObj.en} (${result.regionObj.provincesSummary})`,
         budget: result.budgetObj.range,
         primarySku: result.primary,
         primaryPrice,
         primaryNote: result.primaryNote,
         insiderName: `${result.insider.nameEn} (${result.insider.nameZh}) — ${result.insiderNote.tableSignal}`,
         whatGoesWrong: result.rec.whatGoesWrong,
-        unspokenRule: result.regionObj.rule,
+        unspokenRule: result.regionObj.tableRule,
       });
     } finally {
       setBusy(false);
@@ -355,7 +350,7 @@ export function TableAdvisor() {
   async function handleCopy() {
     const text = [
       `Chinese Baijiu Guide · 选酒指南`,
-      `Table: ${result.occasionObj.label} · ${result.regionObj.label} (${result.budgetObj.range})`,
+      `Table: ${result.occasionObj.label} · ${result.regionObj.en} (${result.budgetObj.range})`,
       `Pour: ${result.primary.nameEn} (${result.primary.nameZh}) — ${primaryPrice} · ${result.primaryNote.gbCode}`,
       `Palate: ${result.primaryNote.flavorTruth}`,
       `Insider Backup: ${result.insider.nameEn} (${result.insider.nameZh})`,
@@ -458,15 +453,17 @@ export function TableAdvisor() {
           </label>
 
           <span className="guide-phrase">in</span>
+
           <label className="guide-inline-select">
             <span className="visually-hidden">Region</span>
             <select
+              id="advisor-region"
               value={region}
               onChange={(e) => setRegion(e.target.value as RegionId)}
             >
               {REGIONS.map((item) => (
                 <option key={item.id} value={item.id}>
-                  {item.label}
+                  {item.en} ({item.provincesSummary})
                 </option>
               ))}
             </select>
@@ -610,9 +607,9 @@ export function TableAdvisor() {
           </div>
           <div className="guide-note is-rule">
             <span className="warn-kicker">
-              Regional Table Rule · {result.regionObj.zh}潜规则
+              Regional Table Rule · {result.regionObj.en} ({result.regionObj.zh})
             </span>
-            <p>{result.regionObj.rule}</p>
+            <p>{result.regionObj.tableRule}</p>
           </div>
         </div>
       </section>

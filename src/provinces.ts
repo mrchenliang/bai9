@@ -21,14 +21,71 @@ export interface ProvinceEntry {
   houses: RegionalHouse[];
 }
 
-export const REGIONS: { id: RegionId; en: string; zh: string }[] = [
-  { id: "southwest", en: "Southwest", zh: "西南" },
-  { id: "central", en: "Central", zh: "华中" },
-  { id: "east", en: "East", zh: "华东" },
-  { id: "north", en: "North", zh: "华北" },
-  { id: "northwest", en: "Northwest", zh: "西北" },
-  { id: "northeast", en: "Northeast", zh: "东北" },
-  { id: "south", en: "South", zh: "华南" },
+export interface RegionMeta {
+  id: RegionId;
+  en: string;
+  zh: string;
+  provincesSummary: string;
+  tableRule: string;
+}
+
+export const REGIONS: RegionMeta[] = [
+  {
+    id: "southwest",
+    en: "Southwest",
+    zh: "西南",
+    provincesSummary: "Sichuan, Guizhou, Chongqing, Yunnan",
+    tableRule:
+      "Heartland of 52% Sichuan strong aroma and 53% Guizhou sauce aroma. Never bring a weak 42% bottle to a formal southwest table — hosts pour generously, so pace yourself before the third toast.",
+  },
+  {
+    id: "central",
+    en: "Central",
+    zh: "华中",
+    provincesSummary: "Henan, Hunan, Hubei",
+    tableRule:
+      "Warm, toast-heavy hospitality bridging strong, mixed, and fuyu aromas. Hometown pride runs deep: Baiyunbian or Huanghelou in Hubei, Jiugui or Wuling in Hunan, and Yangshao or Baofeng in Henan.",
+  },
+  {
+    id: "east",
+    en: "East",
+    zh: "华东",
+    provincesSummary: "Shandong, Anhui, Jiangsu, Jiangxi, Fujian, Taiwan",
+    tableRule:
+      "Exact hierarchy and formal etiquette rule East China: Shandong enforces strict seating (主陪 faces the door; wait for the host to lift), Jiangsu speaks in Blue Classic tiers, and Anhui expects local Gujing or Kouzijiao.",
+  },
+  {
+    id: "north",
+    en: "North",
+    zh: "华北",
+    provincesSummary: "Beijing, Tianjin, Hebei, Shanxi, Inner Mongolia",
+    tableRule:
+      "Respect the elders first and keep pours honest. In Beijing and Shanxi, flashing an obscure overpriced box earns less warmth than real Fenjiu, Red Star, or crisp northern grain.",
+  },
+  {
+    id: "northwest",
+    en: "Northwest",
+    zh: "西北",
+    provincesSummary: "Shaanxi, Gansu, Qinghai, Xinjiang",
+    tableRule:
+      "Bold frontier hospitality anchored by local icons: beeswax-vat Xifeng in Shaanxi, Jinhui in Gansu, highland barley in Qinghai, and Tianshan-water Yilite in Xinjiang.",
+  },
+  {
+    id: "northeast",
+    en: "Northeast",
+    zh: "东北",
+    provincesSummary: "Heilongjiang, Jilin, Liaoning",
+    tableRule:
+      "Direct, generous winter-table pouring with zero pretense. Keep glasses topped up for elders and bring sturdy high-proof pure grain that holds its own beside rich iron-pot stews.",
+  },
+  {
+    id: "south",
+    en: "South",
+    zh: "华南",
+    provincesSummary: "Guangdong, Guangxi",
+    tableRule:
+      "Far less forced bottoms-up ('ganbei') pressure than the north — smoothness and food pairing come first. Never bully Cantonese or Guangxi guests into harsh high-proof shots.",
+  },
 ];
 
 export const provincesAtlas: ProvinceEntry[] = [

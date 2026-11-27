@@ -691,11 +691,11 @@ export function GiftGuide() {
 
         <div className="gift-table-bridge">
           <div>
-            <span className="signal-kicker">Going to a specific province? · 地域席间指南</span>
-            <h3>Need exact province seating &amp; toasting rules?</h3>
+            <span className="signal-kicker">Going to a specific region? · 地域席间指南</span>
+            <h3>Need exact regional seating &amp; toasting rules?</h3>
             <p>
-              Use our interactive <strong>What Bottle Do I Bring?</strong> desk to match Beijing, Guizhou, Sichuan,
-              Jiangsu, Anhui, Guangdong, or Shandong tables — complete with downloadable PNG prescription cards.
+              Use our interactive <strong>What Bottle Do I Bring?</strong> desk across all 7 Chinese regions (Southwest,
+              Central, East, North, Northwest, Northeast, and South) — complete with downloadable PNG prescription cards.
             </p>
           </div>
           <Link href="/table" className="btn solid">

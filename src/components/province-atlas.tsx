@@ -18,7 +18,7 @@ import { useMuseum } from "@/components/shell";
 
 type AromaFilter = "all" | RegionalHouse["aromaGroup"];
 type ViewMode = "map" | "list";
-type PinDensity = "major" | "all" | "off";
+type PinDensity = "all" | "major" | "off";
 
 const AROMA_FILTERS: { id: AromaFilter; label: string; zh?: string }[] = [
   { id: "all", label: "All aromas" },
@@ -38,10 +38,21 @@ function brandBottleThumb(brandId?: string): string | undefined {
   return list.find((s) => s.image)?.image;
 }
 
-function provinceFill(count: number, isSelected: boolean, isHovered: boolean): string {
-  if (isSelected) return "#c81e1e";
+function provinceFill(
+  count: number,
+  isSelected: boolean,
+  isAllSelected: boolean,
+  isHovered: boolean,
+): string {
   if (count === 0) return "#f1efe9";
+  if (isSelected) return "#c81e1e";
   if (isHovered) return "#1f1f24";
+  if (isAllSelected) {
+    if (count >= 10) return "#c95b49";
+    if (count >= 6) return "#d87e6a";
+    if (count >= 3) return "#e3a18f";
+    return "#ecc0b3";
+  }
   if (count >= 10) return "#d89a84";
   if (count >= 6) return "#e5bcab";
   if (count >= 3) return "#efd5c7";
@@ -60,9 +71,9 @@ export function ProvinceAtlas() {
   const [region, setRegion] = useState<RegionId | "all">("all");
   const [aroma, setAroma] = useState<AromaFilter>("all");
   const [archivedOnly, setArchivedOnly] = useState(false);
-  const [selectedId, setSelectedId] = useState<string>("sichuan");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [pinDensity, setPinDensity] = useState<PinDensity>("major");
+  const [pinDensity, setPinDensity] = useState<PinDensity>("all");
 
   const visibleProvinces = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -77,6 +88,8 @@ export function ProvinceAtlas() {
           return [
             prov.nameZh,
             prov.nameEn,
+            prov.regionEn,
+            prov.regionZh,
             lore?.localTitle ?? "",
             lore?.localTitleZh ?? "",
             lore?.localPairing ?? "",
@@ -101,18 +114,23 @@ export function ProvinceAtlas() {
     [visibleProvinces],
   );
 
-  // Keep selected province in sync when filters narrow the visible set
+  // If a single selected province is filtered out, return cleanly to all-selected mode
   useEffect(() => {
-    if (visibleProvinces.length > 0 && !visibleById.has(selectedId)) {
-      setSelectedId(visibleProvinces[0].id);
+    if (selectedId && !visibleById.has(selectedId)) {
+      setSelectedId(null);
     }
-  }, [visibleProvinces, visibleById, selectedId]);
+  }, [visibleById, selectedId]);
 
-  const selectedProv = visibleById.get(selectedId) ?? visibleProvinces[0] ?? null;
+  const selectedProv = selectedId ? visibleById.get(selectedId) ?? null : null;
   const hoveredProv = hoveredId ? visibleById.get(hoveredId) ?? null : null;
+  const activeRegionMeta = region === "all" ? null : REGIONS.find((r) => r.id === region) ?? null;
   const showingCount = visibleProvinces.reduce((sum, p) => sum + p.houses.length, 0);
-
+  const isAllSelected = selectedProv === null;
   const isFiltered = region !== "all" || aroma !== "all" || archivedOnly || query.trim().length > 0;
+
+  function toggleProvinceSelection(provId: string) {
+    setSelectedId((current) => (current === provId ? null : provId));
+  }
 
   function focusProvinceOnMap(provId: string) {
     setSelectedId(provId);
@@ -129,9 +147,9 @@ export function ProvinceAtlas() {
             Provincial Atlas <span className="zh-inline">各省白酒</span>
           </h1>
           <p className="sub">
-            {provincesAtlas.length} provinces and municipalities, {totalRegionalHouses} regional distilleries mapped by
-            hometown, local drinking culture, and house emblem. Click any province on the China map or switch to list
-            view.
+            {REGIONS.length} regions, {provincesAtlas.length} provinces, {totalRegionalHouses} regional distilleries
+            mapped by hometown, local drinking culture, and house emblem. Click any province on the China map or switch
+            to list view.
           </p>
         </div>
 
@@ -183,9 +201,12 @@ export function ProvinceAtlas() {
             <select
               aria-label="Filter by region"
               value={region}
-              onChange={(e) => setRegion(e.target.value as RegionId | "all")}
+              onChange={(e) => {
+                setRegion(e.target.value as RegionId | "all");
+                setSelectedId(null);
+              }}
             >
-              <option value="all">All regions ({provincesAtlas.length})</option>
+              <option value="all">All regions ({REGIONS.length})</option>
               {REGIONS.map((item) => (
                 <option key={item.id} value={item.id}>
                   {item.en} · {item.zh}
@@ -218,7 +239,7 @@ export function ProvinceAtlas() {
             Full archive only
           </button>
 
-          {isFiltered ? (
+          {isFiltered || selectedId ? (
             <button
               type="button"
               className="atlas-reset"
@@ -226,6 +247,7 @@ export function ProvinceAtlas() {
                 setRegion("all");
                 setAroma("all");
                 setArchivedOnly(false);
+                setSelectedId(null);
               }}
             >
               Reset
@@ -263,18 +285,30 @@ export function ProvinceAtlas() {
                         {selectedProv.nameEn} {selectedProv.nameZh}
                       </strong>
                       <span>
-                        Click any province or brand crest to inspect local houses
+                        Focused province · click again or reset to select all {visibleProvinces.length}
                       </span>
                     </>
-                  ) : null}
+                  ) : activeRegionMeta ? (
+                    <>
+                      <strong>
+                        {activeRegionMeta.en} · {activeRegionMeta.zh} (All {visibleProvinces.length} selected)
+                      </strong>
+                      <span>{activeRegionMeta.provincesSummary}</span>
+                    </>
+                  ) : (
+                    <>
+                      <strong>All {REGIONS.length} Regions · {visibleProvinces.length} Provinces Selected</strong>
+                      <span>Click any province or brand crest to inspect local houses</span>
+                    </>
+                  )}
                 </div>
 
                 <div className="pin-density" role="group" aria-label="Brand pins on map">
                   <span>Pins</span>
                   {(
                     [
-                      { id: "major", label: "Major" },
                       { id: "all", label: "All" },
+                      { id: "major", label: "Major" },
                       { id: "off", label: "Off" },
                     ] as { id: PinDensity; label: string }[]
                   ).map((opt) => (
@@ -305,18 +339,19 @@ export function ProvinceAtlas() {
                       const isSelected = Boolean(entry && selectedProv && entry.id === selectedProv.id);
                       const isHovered = Boolean(entry && hoveredId === entry.id);
                       const interactive = count > 0 && prov.atlasId !== null;
+                      const activeAllHighlight = Boolean(entry && isAllSelected);
 
                       return (
                         <path
                           key={prov.svgId}
                           d={prov.path}
-                          fill={provinceFill(count, isSelected, isHovered)}
+                          fill={provinceFill(count, isSelected, activeAllHighlight, isHovered)}
                           stroke={isSelected ? "#7f1d1d" : "#ffffff"}
                           strokeWidth={isSelected ? 1.5 : 0.9}
                           strokeLinejoin="round"
                           className={
                             interactive
-                              ? isSelected
+                              ? isSelected || activeAllHighlight
                                 ? "map-prov is-interactive is-selected"
                                 : "map-prov is-interactive"
                               : "map-prov is-muted"
@@ -328,7 +363,7 @@ export function ProvinceAtlas() {
                               ? `${entry.nameEn} (${entry.nameZh}), ${entry.houses.length} distilleries`
                               : prov.name
                           }
-                          aria-pressed={interactive ? isSelected : undefined}
+                          aria-pressed={interactive ? isSelected || activeAllHighlight : undefined}
                           onMouseEnter={() => {
                             if (interactive && prov.atlasId) setHoveredId(prov.atlasId);
                           }}
@@ -336,12 +371,12 @@ export function ProvinceAtlas() {
                             if (hoveredId === prov.atlasId) setHoveredId(null);
                           }}
                           onClick={() => {
-                            if (interactive && prov.atlasId) setSelectedId(prov.atlasId);
+                            if (interactive && prov.atlasId) toggleProvinceSelection(prov.atlasId);
                           }}
                           onKeyDown={(e) => {
                             if (interactive && prov.atlasId && (e.key === "Enter" || e.key === " ")) {
                               e.preventDefault();
-                              setSelectedId(prov.atlasId);
+                              toggleProvinceSelection(prov.atlasId);
                             }
                           }}
                         />
@@ -388,7 +423,7 @@ export function ProvinceAtlas() {
                             onMouseLeave={() => {
                               if (hoveredId === prov.id) setHoveredId(null);
                             }}
-                            onClick={() => setSelectedId(prov.id)}
+                            onClick={() => toggleProvinceSelection(prov.id)}
                           >
                             {hasLeader ? (
                               <>
@@ -457,107 +492,193 @@ export function ProvinceAtlas() {
                 <div className="map-legend" aria-label="House density legend">
                   <span>Houses:</span>
                   <i>
-                    <em style={{ background: "#f6e8df" }} /> 1–2
+                    <em style={{ background: isAllSelected ? "#ecc0b3" : "#f6e8df" }} /> 1–2
                   </i>
                   <i>
-                    <em style={{ background: "#efd5c7" }} /> 3–5
+                    <em style={{ background: isAllSelected ? "#e3a18f" : "#efd5c7" }} /> 3–5
                   </i>
                   <i>
-                    <em style={{ background: "#e5bcab" }} /> 6–9
+                    <em style={{ background: isAllSelected ? "#d87e6a" : "#e5bcab" }} /> 6–9
                   </i>
                   <i>
-                    <em style={{ background: "#d89a84" }} /> 10+
+                    <em style={{ background: isAllSelected ? "#c95b49" : "#d89a84" }} /> 10+
                   </i>
                   <i>
-                    <em style={{ background: "#c81e1e" }} /> Selected
+                    <em style={{ background: "#c81e1e" }} /> Focused
                   </i>
                 </div>
                 <span className="map-credit">Vector base: @svg-maps/china (CC BY 4.0)</span>
               </div>
             </div>
 
-            {/* Right: Selected Province Local Lore & Brand Logo Dossier */}
-            {selectedProv ? (
-              <aside className="atlas-inspector" aria-live="polite">
-                <div className="inspector-head">
-                  <div>
-                    <div className="prov-region">
-                      {selectedProv.regionEn} · {selectedProv.regionZh}
-                    </div>
-                    <h2>
-                      {selectedProv.nameEn} <span className="zh-inline">{selectedProv.nameZh}</span>
-                    </h2>
-                  </div>
-                  <span className="inspector-count">
-                    {selectedProv.houses.length} {selectedProv.houses.length === 1 ? "house" : "houses"}
-                  </span>
-                </div>
+            {/* Right: All-Selected Overview OR Focused Province Local Lore & Brand Logo Dossier */}
+            <aside className="atlas-inspector" aria-live="polite">
+              {selectedProv ? (
+                <>
+                  <button
+                    type="button"
+                    className="inspector-back"
+                    onClick={() => setSelectedId(null)}
+                  >
+                    ← Back to all {visibleProvinces.length} selected provinces
+                  </button>
 
-                {provinceLocalLore[selectedProv.id] ? (
-                  <div className="atlas-local-card">
-                    <div className="local-card-top">
-                      <span className="signal-kicker">Local Drinking Culture · 本地酒俗</span>
-                      <span className="local-zh-tag">{provinceLocalLore[selectedProv.id].localTitleZh}</span>
-                    </div>
-                    <h3>{provinceLocalLore[selectedProv.id].localTitle}</h3>
-                    <p>{provinceLocalLore[selectedProv.id].localStory}</p>
-                    <div className="local-pairing">
-                      <span>Local pairing · 下酒菜</span>
-                      <b>{provinceLocalLore[selectedProv.id].localPairing}</b>
-                    </div>
-                  </div>
-                ) : null}
-
-                <div className="inspector-houses-head">
-                  <span>Distilleries &amp; House Marks</span>
-                  <small>Tinted cards open full archive dossier</small>
-                </div>
-
-                <div className="inspector-houses">
-                  {selectedProv.houses.map((house) => {
-                    const bottleThumb = brandBottleThumb(house.brandId);
-                    const inner = (
-                      <>
-                        <BrandMark house={house} size={36} />
-                        <div className="inspector-house-info">
-                          <div className="house-top">
-                            <span className="house-zh">{house.nameZh}</span>
-                            <span className="house-aroma">{house.aromaZh}</span>
-                          </div>
-                          <div className="house-en">{house.nameEn}</div>
-                          <div className="house-meta">
-                            {house.cityEn} {house.cityZh} · {house.aromaEn}
-                          </div>
-                        </div>
-                        {bottleThumb ? (
-                          <div className="inspector-bottle">
-                            <img src={bottleThumb} alt={house.nameEn} />
-                          </div>
-                        ) : null}
-                      </>
-                    );
-
-                    return house.brandId ? (
-                      <Link
-                        key={`${selectedProv.id}-${house.nameZh}`}
-                        href={`/brand/${house.brandId}`}
-                        className="inspector-house-card is-archived"
-                      >
-                        {inner}
-                      </Link>
-                    ) : (
-                      <div key={`${selectedProv.id}-${house.nameZh}`} className="inspector-house-card">
-                        {inner}
+                  <div className="inspector-head">
+                    <div>
+                      <div className="prov-region">
+                        {selectedProv.regionEn} · {selectedProv.regionZh}
                       </div>
-                    );
-                  })}
-                </div>
-              </aside>
-            ) : null}
+                      <h2>
+                        {selectedProv.nameEn} <span className="zh-inline">{selectedProv.nameZh}</span>
+                      </h2>
+                    </div>
+                    <span className="inspector-count">
+                      {selectedProv.houses.length} {selectedProv.houses.length === 1 ? "house" : "houses"}
+                    </span>
+                  </div>
+
+                  {provinceLocalLore[selectedProv.id] ? (
+                    <div className="atlas-local-card">
+                      <div className="local-card-top">
+                        <span className="signal-kicker">Local Drinking Culture · 本地酒俗</span>
+                        <span className="local-zh-tag">{provinceLocalLore[selectedProv.id].localTitleZh}</span>
+                      </div>
+                      <h3>{provinceLocalLore[selectedProv.id].localTitle}</h3>
+                      <p>{provinceLocalLore[selectedProv.id].localStory}</p>
+                      <div className="local-pairing">
+                        <span>Local pairing · 下酒菜</span>
+                        <b>{provinceLocalLore[selectedProv.id].localPairing}</b>
+                      </div>
+                    </div>
+                  ) : null}
+
+                  <div className="inspector-houses-head">
+                    <span>Distilleries &amp; House Marks</span>
+                    <small>Tinted cards open full archive dossier</small>
+                  </div>
+
+                  <div className="inspector-houses">
+                    {selectedProv.houses.map((house) => {
+                      const bottleThumb = brandBottleThumb(house.brandId);
+                      const inner = (
+                        <>
+                          <BrandMark house={house} size={36} />
+                          <div className="inspector-house-info">
+                            <div className="house-top">
+                              <span className="house-zh">{house.nameZh}</span>
+                              <span className="house-aroma">{house.aromaZh}</span>
+                            </div>
+                            <div className="house-en">{house.nameEn}</div>
+                            <div className="house-meta">
+                              {house.cityEn} {house.cityZh} · {house.aromaEn}
+                            </div>
+                          </div>
+                          {bottleThumb ? (
+                            <div className="inspector-bottle">
+                              <img src={bottleThumb} alt={house.nameEn} />
+                            </div>
+                          ) : null}
+                        </>
+                      );
+
+                      return house.brandId ? (
+                        <Link
+                          key={`${selectedProv.id}-${house.nameZh}`}
+                          href={`/brand/${house.brandId}`}
+                          className="inspector-house-card is-archived"
+                        >
+                          {inner}
+                        </Link>
+                      ) : (
+                        <div key={`${selectedProv.id}-${house.nameZh}`} className="inspector-house-card">
+                          {inner}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="inspector-head">
+                    <div>
+                      <div className="prov-region">
+                        {activeRegionMeta
+                          ? `${activeRegionMeta.en} · ${activeRegionMeta.zh}`
+                          : `All ${REGIONS.length} Regions · 全国总览`}
+                      </div>
+                      <h2>
+                        {activeRegionMeta ? (
+                          <>
+                            {activeRegionMeta.en} <span className="zh-inline">{activeRegionMeta.zh}</span>
+                          </>
+                        ) : (
+                          <>
+                            All Provinces <span className="zh-inline">全国{visibleProvinces.length}省</span>
+                          </>
+                        )}
+                      </h2>
+                    </div>
+                    <span className="inspector-count">{showingCount} houses</span>
+                  </div>
+
+                  {activeRegionMeta ? (
+                    <div className="atlas-local-card">
+                      <span className="signal-kicker">Regional Table Culture · {activeRegionMeta.zh}酒俗</span>
+                      <p style={{ marginTop: 5 }}>{activeRegionMeta.tableRule}</p>
+                    </div>
+                  ) : null}
+
+                  <div className="inspector-houses-head">
+                    <span>Click a province to inspect its houses</span>
+                    <small>{visibleProvinces.length} active</small>
+                  </div>
+
+                  <div className="inspector-houses">
+                    {visibleProvinces.map((prov) => {
+                      const flagship = flagshipHouseFor(prov);
+                      const lore = provinceLocalLore[prov.id];
+                      return (
+                        <button
+                          key={`overview-${prov.id}`}
+                          type="button"
+                          className="inspector-prov-btn"
+                          onMouseEnter={() => setHoveredId(prov.id)}
+                          onMouseLeave={() => {
+                            if (hoveredId === prov.id) setHoveredId(null);
+                          }}
+                          onClick={() => setSelectedId(prov.id)}
+                        >
+                          <BrandMark house={flagship} size={34} />
+                          <div className="inspector-house-info">
+                            <div className="house-top">
+                              <span className="house-zh">
+                                {prov.nameEn} <em className="overview-zh">{prov.nameZh}</em>
+                              </span>
+                              <span className="overview-count">{prov.houses.length}</span>
+                            </div>
+                            <div className="overview-local">
+                              {lore?.localTitle ?? flagship.nameEn} · {flagship.nameZh}
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+            </aside>
           </div>
 
           {/* Quick 1-Tap Province Jump Strip */}
           <div className="atlas-prov-strip" aria-label="Quick province jump">
+            <button
+              type="button"
+              className={isAllSelected ? "prov-chip is-on" : "prov-chip"}
+              onClick={() => setSelectedId(null)}
+            >
+              <b>All selected</b>
+              <span>{visibleProvinces.length}</span>
+            </button>
             {visibleProvinces.map((prov) => {
               const isSelected = selectedProv?.id === prov.id;
               const flagship = flagshipHouseFor(prov);
@@ -567,7 +688,7 @@ export function ProvinceAtlas() {
                   key={`strip-${prov.id}`}
                   type="button"
                   className={isSelected ? "prov-chip is-on" : "prov-chip"}
-                  onClick={() => setSelectedId(prov.id)}
+                  onClick={() => toggleProvinceSelection(prov.id)}
                 >
                   <i className="prov-chip-dot" style={{ background: spec.bg }} aria-hidden="true" />
                   <b>{prov.nameEn}</b>
