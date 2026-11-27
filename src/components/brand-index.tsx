@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { aromaById, aromas, brands, skusForBrand, tierRank } from "@/catalog";
 import { useMuseum } from "@/components/shell";
 import { fieldNoteFor } from "@/field-notes";
-import { houseChapters, houseProfiles, houseRules, type HouseChapterId } from "@/houses";
+import { houseChapters, houseProfiles, type HouseChapterId } from "@/houses";
 import type { AromaId, Brand, Sku } from "@/types";
 
 type ViewMode = "guide" | "index";
@@ -129,21 +129,8 @@ export function BrandIndex() {
       </h1>
       <p className="sub">
         {brands.length} archived Chinese distilleries, grouped by the role they actually play on modern tables — from
-        national banquet powers and single-house aroma standards down to Erguotou and everyday grain. Looking for
-        smaller regional producers? <Link href="/provinces">Browse the 27-province atlas →</Link>
+        national banquet powers and single-house aroma standards down to Erguotou and everyday grain.
       </p>
-
-      <div className="banquet-rules">
-        {houseRules.map((rule) => (
-          <div key={rule.titleEn} className="banquet-rule">
-            <div className="banquet-rule-head">
-              <strong>{rule.titleEn}</strong>
-              <span className="zh-inline-sm">{rule.titleZh}</span>
-            </div>
-            <p>{rule.body}</p>
-          </div>
-        ))}
-      </div>
 
       <div className="filters">
         <button

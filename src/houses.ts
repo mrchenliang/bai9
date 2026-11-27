@@ -1,11 +1,5 @@
 export type HouseChapterId = "powers" | "benchmarks" | "regional" | "everyday";
 
-export interface HouseRule {
-  titleEn: string;
-  titleZh: string;
-  body: string;
-}
-
 export interface HouseChapter {
   id: HouseChapterId;
   numeral: string;
@@ -19,24 +13,6 @@ export interface HouseProfile {
   takeaway: string;
   badge?: string;
 }
-
-export const houseRules: HouseRule[] = [
-  {
-    titleEn: "Two basins, most of the prestige",
-    titleZh: "赤水与川南",
-    body: "The Chishui River (Moutai, Langjiu, Xijiu) and the Sichuan basin (Wuliangye, Luzhou, Jiannanchun) produce the majority of China’s top-tier banquet bottles.",
-  },
-  {
-    titleEn: "One house = one aroma",
-    titleZh: "一厂一香",
-    body: "Outside Strong, Sauce, and Light, most of China’s twelve official aroma standards exist because a single historic distillery invented and defined them.",
-  },
-  {
-    titleEn: "Prestige houses pour at ¥50 too",
-    titleZh: "大厂口粮",
-    body: "Fenjiu, Wuliangye, Luzhou, and Gujing all bottle everyday grain alongside their flagships — while Beijing’s Erguotou houses own the kitchen table outright.",
-  },
-];
 
 export const houseChapters: HouseChapter[] = [
   {
