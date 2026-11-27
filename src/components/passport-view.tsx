@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { brandById, skuAroma, skus, tierRank, tiers } from "@/catalog";
 import { useMuseum } from "@/components/shell";
 import { fieldNoteFor } from "@/field-notes";
@@ -22,9 +22,13 @@ export function PassportView({ sharedIds = [] }: PassportViewProps) {
   const [copied, setCopied] = useState(false);
   const [busy, setBusy] = useState(false);
   const [shareStatus, setShareStatus] = useState<string | null>(null);
+  const [selectionPrompt, setSelectionPrompt] = useState<"share" | "download" | "copy" | null>(null);
+  const [promptPulse, setPromptPulse] = useState(0);
+  const stampSectionRef = useRef<HTMLDivElement | null>(null);
 
   const viewingShared = sharedIds.length > 0 && !dismissedShared;
   const activeIds = viewingShared ? sharedIds : tasted;
+  const showSelectionPrompt = selectionPrompt !== null && activeIds.length === 0;
 
   const summary = useMemo(() => computePassportSummary(activeIds), [activeIds]);
 
@@ -66,7 +70,22 @@ export function PassportView({ sharedIds = [] }: PassportViewProps) {
     return encoded ? `${origin}/passport?s=${encodeURIComponent(encoded)}` : `${origin}/passport`;
   }
 
+  function promptToSelect(action: "share" | "download" | "copy") {
+    setShareStatus(null);
+    setSelectionPrompt(action);
+    setPromptPulse((n) => n + 1);
+  }
+
+  function scrollToBottles() {
+    stampSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   function handleShareOnX() {
+    if (activeIds.length === 0) {
+      promptToSelect("share");
+      return;
+    }
+    setSelectionPrompt(null);
     const shareUrl = buildShareUrl();
     const tweetText = buildPassportTweetText(summary);
     const intentUrl = `https://x.com/intent/post?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`;
@@ -105,6 +124,11 @@ export function PassportView({ sharedIds = [] }: PassportViewProps) {
   }
 
   async function handleExport() {
+    if (activeIds.length === 0) {
+      promptToSelect("download");
+      return;
+    }
+    setSelectionPrompt(null);
     setBusy(true);
     try {
       await downloadPassportCard(getCardOptions());
@@ -114,6 +138,11 @@ export function PassportView({ sharedIds = [] }: PassportViewProps) {
   }
 
   async function handleCopy() {
+    if (activeIds.length === 0) {
+      promptToSelect("copy");
+      return;
+    }
+    setSelectionPrompt(null);
     const shareUrl = buildShareUrl();
     const text = `${buildPassportTweetText(summary)}\n\n${shareUrl}`;
     try {
@@ -128,7 +157,20 @@ export function PassportView({ sharedIds = [] }: PassportViewProps) {
   function handleSwitchToOwn() {
     setDismissedShared(true);
     setShareStatus(null);
+    setSelectionPrompt(null);
     router.replace("/passport", { scroll: false });
+  }
+
+  function handleClear() {
+    setSelectionPrompt(null);
+    setShareStatus(null);
+    clearTasted();
+  }
+
+  function handleToggleBottle(id: string) {
+    if (selectionPrompt !== null) setSelectionPrompt(null);
+    if (viewingShared) handleSwitchToOwn();
+    toggleTasted(id);
   }
 
   return (
@@ -203,7 +245,7 @@ export function PassportView({ sharedIds = [] }: PassportViewProps) {
             type="button"
             className="btn solid btn-x"
             onClick={handleShareOnX}
-            disabled={activeIds.length === 0}
+            aria-describedby={showSelectionPrompt ? "passport-select-prompt" : undefined}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path
@@ -217,23 +259,47 @@ export function PassportView({ sharedIds = [] }: PassportViewProps) {
             type="button"
             className="btn"
             onClick={handleExport}
-            disabled={busy || activeIds.length === 0}
+            disabled={busy}
+            aria-describedby={showSelectionPrompt ? "passport-select-prompt" : undefined}
           >
             {busy ? "Printing passport PNG..." : "Download Card (PNG)"}
           </button>
-          <button type="button" className="btn" onClick={handleCopy} disabled={activeIds.length === 0}>
+          <button
+            type="button"
+            className="btn"
+            onClick={handleCopy}
+            aria-describedby={showSelectionPrompt ? "passport-select-prompt" : undefined}
+          >
             {copied ? "Copied Tweet & Link" : "Copy Tweet & Link"}
           </button>
           {!viewingShared && tasted.length > 0 ? (
-            <button type="button" className="btn" onClick={clearTasted}>
+            <button type="button" className="btn" onClick={handleClear}>
               Clear all stamps
             </button>
           ) : null}
         </div>
+        {showSelectionPrompt ? (
+          <div key={promptPulse} id="passport-select-prompt" className="passport-prompt" role="alert">
+            <span className="passport-prompt-chop" aria-hidden="true">
+              选
+            </span>
+            <p className="passport-prompt-copy">
+              <strong>Select at least one bottle first.</strong>{" "}
+              {selectionPrompt === "download"
+                ? "Tap any bottle you’ve tried below to stamp 已饮 before downloading your Passport Card."
+                : selectionPrompt === "share"
+                  ? "Tap any bottle you’ve tried below to stamp 已饮 before sharing your Passport on X."
+                  : "Tap any bottle you’ve tried below to stamp 已饮 before copying your Passport link."}
+            </p>
+            <button type="button" className="passport-prompt-jump" onClick={scrollToBottles}>
+              Select bottles ↓
+            </button>
+          </div>
+        ) : null}
         {shareStatus ? <p className="share-hint">{shareStatus}</p> : null}
       </section>
 
-      <div className="filters">
+      <div ref={stampSectionRef} className="filters passport-filters">
         <button
           type="button"
           className="pill"
@@ -254,7 +320,7 @@ export function PassportView({ sharedIds = [] }: PassportViewProps) {
           </button>
         ))}
         <span className="grow" />
-        <span className="count-inline">
+        <span className={showSelectionPrompt ? "count-inline is-attention" : "count-inline"}>
           {viewingShared ? "Tap any bottle to start your own passport" : "Tap any bottle to stamp 已饮"}
         </span>
       </div>
@@ -270,10 +336,7 @@ export function PassportView({ sharedIds = [] }: PassportViewProps) {
                 type="button"
                 className="stamp-btn"
                 aria-pressed={isStamped}
-                onClick={() => {
-                  if (viewingShared) handleSwitchToOwn();
-                  toggleTasted(sku.id);
-                }}
+                onClick={() => handleToggleBottle(sku.id)}
               >
                 <div className="stamp-thumb">
                   {sku.image ? <img src={sku.image} alt={`${sku.nameEn} (${sku.nameZh})`} /> : null}
