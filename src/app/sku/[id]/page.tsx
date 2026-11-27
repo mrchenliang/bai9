@@ -99,7 +99,7 @@ export default async function SkuPage({ params }: PageProps) {
           {sku.chinaNote ? <p className="caption">{sku.chinaNote}</p> : null}
           {printed ? (
             <p className="caption">
-              The six-band price sheet prints {printed.yuan} for {printed.label}. That figure reflects the reference
+              The six-band price sheet prints ¥{printed.yuan.toLocaleString("en-US")} for {printed.label}. That figure reflects the reference
               sheet rather than today’s spot quote.
             </p>
           ) : null}

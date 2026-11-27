@@ -18,7 +18,7 @@ function Bottle({ spot }: { spot: SheetSpot }) {
   return (
     <Link className="sheet-bottle" href={sku ? `/sku/${sku.id}` : "/sheet"}>
       <div className="sheet-photo">
-        <b className="sheet-yuan">{spot.yuan}</b>
+        <b className="sheet-yuan">¥{spot.yuan.toLocaleString("en-US")}</b>
         {sku?.image ? (
           <img
             src={sku.image}
