@@ -26,7 +26,24 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const sku = skuById(id);
-  if (!sku) return { title: { absolute: "Chinese Baijiu Museum · 酒" } };
+  if (!sku) {
+    return {
+      title: "Page Not Found (查无此页)",
+      description: "That baijiu specimen is not in the Chinese Baijiu Museum archive.",
+      robots: { index: false, follow: true },
+      openGraph: {
+        title: "Page Not Found · 查无此页",
+        description: "That baijiu specimen is not in the Chinese Baijiu Museum archive.",
+        type: "website",
+        siteName: SITE_NAME,
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "Page Not Found · 查无此页",
+        description: "That baijiu specimen is not in the Chinese Baijiu Museum archive.",
+      },
+    };
+  }
   const brand = brandById(sku.brandId);
   const aroma = skuAroma(sku);
   const note = fieldNoteFor(sku, aroma?.id);

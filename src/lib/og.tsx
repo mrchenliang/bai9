@@ -203,3 +203,115 @@ export function brandCrestFor(brandId: string, nameZh: string, aromaId?: string)
   };
   return { ...fallback, glyph: nameZh.slice(0, 1) };
 }
+
+export async function renderNotFoundOgCard(kind: "specimen" | "distillery" | "page" = "page") {
+  const { ImageResponse } = await import("next/og");
+  const { SITE_NAME, SITE_NAME_ZH } = await import("@/lib/site");
+  const subtitle =
+    kind === "specimen"
+      ? "That bottle specimen is not catalogued in the permanent archive."
+      : kind === "distillery"
+        ? "That distillery house dossier is not catalogued in the permanent archive."
+        : "That page is not in the Chinese Baijiu Museum archive.";
+  const { fontOptions, fontRegular, fontSemiBold, fontBold, fontCjk } = await loadMuseumOgFonts(
+    `${SITE_NAME_ZH}查无此页`,
+  );
+
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          position: "relative",
+          overflow: "hidden",
+          background: "linear-gradient(135deg, #f7f4ee 0%, #f1ede5 55%, #e9e3d8 100%)",
+          padding: "46px 56px",
+          fontFamily: fontRegular,
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "radial-gradient(ellipse at 74% 50%, rgba(255,255,255,0.90) 0%, transparent 56%), radial-gradient(circle at 8% 92%, rgba(200,30,30,0.08) 0%, transparent 42%)",
+            display: "flex",
+          }}
+        />
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            background: "#fdfcf9",
+            borderRadius: 28,
+            border: "1px solid rgba(17,17,17,0.085)",
+            boxShadow: "0 24px 52px rgba(17,17,17,0.09)",
+            padding: "42px 52px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <MuseumSealSvg size={40} />
+              <span style={{ fontSize: 14, color: "#767066", letterSpacing: "0.12em", fontFamily: fontBold }}>
+                {SITE_NAME.toUpperCase()}
+              </span>
+            </div>
+            <span
+              style={{
+                fontSize: 13,
+                fontFamily: fontBold,
+                color: "#c81e1e",
+                letterSpacing: "0.14em",
+                padding: "6px 14px",
+                borderRadius: 999,
+                border: "1px solid rgba(200,30,30,0.28)",
+                background: "#fff8f6",
+              }}
+            >
+              404 · NOT IN ARCHIVE
+            </span>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            <div style={{ width: 40, height: 3, borderRadius: 999, background: "#c81e1e", display: "flex" }} />
+            <div style={{ display: "flex", alignItems: "baseline", gap: 20 }}>
+              <span style={{ fontSize: 64, fontFamily: fontBold, color: "#111111", letterSpacing: "-0.03em", lineHeight: 1 }}>
+                Page Not Found
+              </span>
+              <span style={{ fontSize: 38, fontFamily: fontCjk, color: "#c81e1e", letterSpacing: "0.06em" }}>
+                查无此页
+              </span>
+            </div>
+            <div style={{ fontSize: 22, fontFamily: fontRegular, color: "#57524b", lineHeight: 1.4, maxWidth: 760 }}>
+              {subtitle}
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              paddingTop: 18,
+              borderTop: "1px solid rgba(17,17,17,0.08)",
+            }}
+          >
+            <span style={{ fontSize: 15, fontFamily: fontSemiBold, color: "#767066" }}>
+              Explore the collection · China Baijiu Map · Tiers I–IV · Twelve Aromas
+            </span>
+            <span style={{ fontSize: 15, fontFamily: fontCjk, color: "#8a8277", letterSpacing: "0.06em" }}>
+              {SITE_NAME_ZH}
+            </span>
+          </div>
+        </div>
+      </div>
+    ),
+    { ...OG_SIZE, ...fontOptions },
+  );
+}

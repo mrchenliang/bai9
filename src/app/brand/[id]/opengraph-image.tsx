@@ -8,6 +8,7 @@ import {
   OG_CONTENT_TYPE,
   OG_SIZE,
   readPublicImageDataUri,
+  renderNotFoundOgCard,
 } from "@/lib/og";
 import { SITE_NAME, SITE_NAME_ZH } from "@/lib/site";
 
@@ -34,27 +35,7 @@ export default async function BrandOpenGraphImage({
   const brand = brandById(id);
 
   if (!brand) {
-    const { fontOptions, fontBold } = await loadMuseumOgFonts();
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            background: "#f4f2ee",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 44,
-            fontFamily: fontBold,
-            color: "#111111",
-          }}
-        >
-          {SITE_NAME}
-        </div>
-      ),
-      { ...size, ...fontOptions },
-    );
+    return renderNotFoundOgCard("distillery");
   }
 
   const aroma = aromaById(brand.aroma);

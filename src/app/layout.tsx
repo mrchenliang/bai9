@@ -62,9 +62,6 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     title: `${SITE_NAME} · 酒`,
     description: SITE_TAGLINE,
