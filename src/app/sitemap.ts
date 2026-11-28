@@ -14,6 +14,18 @@ const STATIC_PATHS = [
   "/about",
 ];
 
+const STATIC_PRIORITY: Record<string, number> = {
+  "/": 1,
+  "/tiers": 0.9,
+  "/guide": 0.9,
+  "/map": 0.9,
+  "/aromas": 0.85,
+  "/price-bands": 0.85,
+  "/houses": 0.85,
+  "/passport": 0.8,
+  "/about": 0.75,
+};
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const origin = siteOrigin();
   const now = new Date();
@@ -22,13 +34,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${origin}${path}`,
       lastModified: now,
       changeFrequency: path === "/" ? ("daily" as const) : ("weekly" as const),
-      priority: path === "/" ? 1 : path === "/tiers" || path === "/guide" ? 0.9 : 0.7,
+      priority: STATIC_PRIORITY[path] ?? 0.7,
     })),
     ...brands.map((brand) => ({
       url: `${origin}/brand/${brand.id}`,
       lastModified: now,
       changeFrequency: "monthly" as const,
-      priority: 0.5,
+      priority: 0.75,
     })),
     ...skus.map((sku) => ({
       url: `${origin}/sku/${sku.id}`,

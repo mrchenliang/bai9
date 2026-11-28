@@ -1,18 +1,108 @@
 import type { Metadata } from "next";
 import { creditById, creditUrl, moutaiNotice, priceBoard, skus } from "@/catalog";
 import { BaijiuOrigins } from "@/components/baijiu-origins";
+import { SITE_NAME, siteOrigin } from "@/lib/site";
+
+const ABOUT_TITLE = "About Baijiu & Archive Notes (白酒溯源与档案说明)";
+const ABOUT_OG_TITLE = "Origins of Baijiu · 白酒溯源与档案";
+const ABOUT_DESCRIPTION =
+  "What baijiu is, nine millennia of Chinese grain fermentation and solid-state distillation, the five National Famous Liquor tastings (1952–1989), and how the Chinese Baijiu Museum is curated.";
+const ABOUT_SOCIAL_DESCRIPTION =
+  "What is baijiu? From Shang bronze vessels and earthenware zeng stills to the 1952–1989 National Famous Liquor tastings — plus archive methodology.";
 
 export const metadata: Metadata = {
-  title: "About Baijiu & Archive Notes (白酒溯源与档案说明)",
-  description:
-    "What baijiu is, a brief history of Chinese distilled grain spirits, and how the Chinese Baijiu Museum is curated.",
+  title: ABOUT_TITLE,
+  description: ABOUT_DESCRIPTION,
+  keywords: [
+    "what is baijiu",
+    "history of baijiu",
+    "白酒溯源",
+    "白酒历史",
+    "National Famous Liquor",
+    "国家名酒 1952 1963 1979 1984 1989",
+    "solid state fermentation qu",
+    "Chinese distilled grain spirit",
+    "Chinese Baijiu Museum",
+  ],
   alternates: { canonical: "/about" },
+  openGraph: {
+    title: ABOUT_OG_TITLE,
+    description: ABOUT_SOCIAL_DESCRIPTION,
+    url: "/about",
+    type: "article",
+    siteName: SITE_NAME,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: ABOUT_OG_TITLE,
+    description: ABOUT_SOCIAL_DESCRIPTION,
+    creator: "@mr_chenliang",
+  },
 };
 
 export default function AboutPage() {
   const creditedSkus = skus.filter((sku) => sku.creditId);
+  const origin = siteOrigin();
+  const pageUrl = `${origin}/about`;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "AboutPage",
+        name: ABOUT_OG_TITLE,
+        alternateName: ["About Baijiu", "白酒溯源"],
+        url: pageUrl,
+        description: ABOUT_DESCRIPTION,
+        inLanguage: ["en", "zh-Hans"],
+        isPartOf: { "@type": "WebSite", name: SITE_NAME, url: origin },
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "What is baijiu?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Baijiu (白酒) is China’s traditional clear distilled grain spirit, typically fermented in solid state from sorghum, wheat, rice, or corn using grain starter bricks called qu (曲) and distilled in earthenware or metal zeng steamer stills.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "What were China’s five National Famous Liquor (国家名酒) tastings?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "China held five state-run national blind tastings: 4 liquors in Beijing (1952), 8 in Beijing (1963, Old Eight), 8 in Dalian (1979, New Eight), 13 in Taiyuan (1984), and 17 in Hefei (1989), establishing the modern pantheon of Chinese baijiu houses.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "How are bottles ranked in the Chinese Baijiu Museum?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Bottles are curated into four Chinese table ranks — Tier I State Banquet (国宴), Tier II Famous Liquor (名酒), Tier III Fine Grain (佳酿), and Tier IV Everyday Pour (口粮) — with transparent GB/T fermentation standards and reference China street prices.",
+            },
+          },
+        ],
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: SITE_NAME, item: origin },
+          { "@type": "ListItem", position: 2, name: "About Baijiu", item: pageUrl },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <p className="kicker">酒 · About &amp; Archive Notes · 白酒与档案</p>
       <h1>
         About Baijiu &amp; This Archive <span className="zh-inline">白酒溯源</span>

@@ -6,10 +6,17 @@ import { CompareButton, TastedButton } from "@/components/shell";
 import { SkuShareActions } from "@/components/sku-share-actions";
 import { brandById, skuAroma, skuById, skus, skusForBrand, tierById } from "@/catalog";
 import { fieldNoteFor, GB_KIND_META, SHOCK_LABELS } from "@/field-notes";
+import { SITE_NAME, siteOrigin } from "@/lib/site";
 import { sheetSpot } from "@/sheet";
 
 interface PageProps {
   params: Promise<{ id: string }>;
+}
+
+function parseReferenceYuan(raw?: string): number | null {
+  if (!raw) return null;
+  const match = raw.replaceAll(",", "").match(/¥\s*(\d+(?:\.\d+)?)/);
+  return match ? Number(match[1]) : null;
 }
 
 export function generateStaticParams() {
@@ -24,23 +31,38 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const aroma = skuAroma(sku);
   const note = fieldNoteFor(sku, aroma?.id);
   const title = `${sku.nameEn} (${sku.nameZh})`;
+  const ogTitle = `${sku.nameEn} · ${sku.nameZh}`;
   const description = `${note.tableSignal} · ${note.gbCode} (${GB_KIND_META[note.gbKind].zh}) · ${sku.abv}${
     brand ? ` · ${brand.nameEn}` : ""
   }`;
   return {
     title,
     description,
+    keywords: [
+      sku.nameEn,
+      sku.nameZh,
+      brand?.nameEn ?? "",
+      brand?.nameZh ?? "",
+      aroma?.en ?? "baijiu",
+      aroma?.zh ?? "白酒",
+      note.gbCode,
+      "baijiu price",
+      "Chinese Baijiu Museum",
+    ].filter(Boolean),
     alternates: { canonical: `/sku/${id}` },
     openGraph: {
-      title: `${title} · 酒`,
+      title: ogTitle,
       description: note.tableSignal,
       type: "article",
       url: `/sku/${id}`,
+      siteName: SITE_NAME,
+      locale: "en_US",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} · 酒`,
+      title: ogTitle,
       description: note.tableSignal,
+      creator: "@mr_chenliang",
     },
   };
 }
@@ -61,8 +83,66 @@ export default async function SkuPage({ params }: PageProps) {
   const accession = accessionNumber(sku.id);
   const tierNum = tierNumeral(sku.tier);
 
+  const origin = siteOrigin();
+  const pageUrl = `${origin}/sku/${sku.id}`;
+  const referencePrice = parseReferenceYuan(sku.chinaPrice) ?? printed?.yuan ?? null;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Product",
+        name: sku.nameEn,
+        alternateName: sku.nameZh,
+        sku: sku.id,
+        url: pageUrl,
+        description: `${note.tableSignal} ${sku.role}`,
+        ...(sku.image ? { image: `${origin}${sku.image}` } : {}),
+        category: aroma ? `Chinese Baijiu · ${aroma.en}` : "Chinese Baijiu",
+        brand: {
+          "@type": "Brand",
+          name: brand.nameEn,
+          alternateName: brand.nameZh,
+          url: `${origin}/brand/${brand.id}`,
+        },
+        additionalProperty: [
+          { "@type": "PropertyValue", name: "ABV", value: sku.abv },
+          { "@type": "PropertyValue", name: "Volume", value: sku.volume },
+          { "@type": "PropertyValue", name: "GB/T Standard", value: `${note.gbCode} (${gbMeta.zh})` },
+          ...(aroma ? [{ "@type": "PropertyValue", name: "Aroma", value: `${aroma.en} (${aroma.zh})` }] : []),
+          ...(tier ? [{ "@type": "PropertyValue", name: "Table Tier", value: `Tier ${tierNum} · ${tier.en} (${tier.zh})` }] : []),
+          { "@type": "PropertyValue", name: "Origin", value: `${brand.placeEn}, ${brand.provinceEn}` },
+        ],
+        ...(referencePrice
+          ? {
+              offers: {
+                "@type": "Offer",
+                priceCurrency: "CNY",
+                price: referencePrice,
+                availability: "https://schema.org/InStock",
+                url: pageUrl,
+              },
+            }
+          : {}),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: SITE_NAME, item: origin },
+          { "@type": "ListItem", position: 2, name: `Tier ${tierNum}`, item: `${origin}/tiers#${sku.tier}` },
+          { "@type": "ListItem", position: 3, name: brand.nameEn, item: `${origin}/brand/${brand.id}` },
+          { "@type": "ListItem", position: 4, name: sku.nameEn, item: pageUrl },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <p className="crumb">
         <Link href="/">Gallery</Link> · <Link href={`/tiers#${sku.tier}`}>Tier {tierNum}</Link> ·{" "}
         <Link href={`/brand/${brand.id}`}>{brand.nameEn}</Link> · {sku.nameEn}

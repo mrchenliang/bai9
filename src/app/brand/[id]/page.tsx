@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Card } from "@/components/card";
 import { aromaById, brandById, brands, skusForBrand } from "@/catalog";
+import { SITE_NAME, siteOrigin } from "@/lib/site";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -16,22 +17,42 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { id } = await params;
   const brand = brandById(id);
   if (!brand) return { title: { absolute: "Chinese Baijiu Museum · 酒" } };
+  const aroma = aromaById(brand.aroma);
   const title = `${brand.nameEn} (${brand.nameZh})`;
-  const description = `${brand.distilleryEn} · ${brand.placeEn}, ${brand.provinceEn}. ${brand.historyEn.slice(0, 140)}…`;
+  const ogTitle = `${brand.nameEn} · ${brand.nameZh}`;
+  const medalText = brand.medals.length ? ` · National Famous Liquor ${brand.medals.join("/")}` : "";
+  const description = `${brand.distilleryEn} (${brand.placeEn}, ${brand.provinceEn})${
+    aroma ? ` — ${aroma.en} (${aroma.zh})` : ""
+  }${medalText}. ${brand.historyEn.slice(0, 125)}…`;
+
   return {
     title,
     description,
+    keywords: [
+      brand.nameEn,
+      brand.nameZh,
+      brand.distilleryEn,
+      brand.distilleryZh,
+      `${brand.nameEn} baijiu`,
+      `${brand.provinceEn} baijiu`,
+      aroma?.en ?? "baijiu",
+      aroma?.zh ?? "白酒",
+      "Chinese Baijiu Museum",
+    ],
     alternates: { canonical: `/brand/${id}` },
     openGraph: {
-      title: `${title} · 酒`,
+      title: ogTitle,
       description,
       type: "article",
       url: `/brand/${id}`,
+      siteName: SITE_NAME,
+      locale: "en_US",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} · 酒`,
+      title: ogTitle,
       description,
+      creator: "@mr_chenliang",
     },
   };
 }
@@ -42,8 +63,50 @@ export default async function BrandPage({ params }: PageProps) {
   if (!brand) notFound();
   const aroma = aromaById(brand.aroma);
   const bottles = skusForBrand(brand.id);
+  const origin = siteOrigin();
+  const pageUrl = `${origin}/brand/${brand.id}`;
+  const heroImg = bottles.find((b) => b.image)?.image;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Brand",
+        name: brand.nameEn,
+        alternateName: [brand.nameZh, brand.distilleryEn, brand.distilleryZh],
+        url: pageUrl,
+        description: brand.historyEn,
+        ...(heroImg ? { image: `${origin}${heroImg}` } : {}),
+        ...(brand.official ? { sameAs: [brand.official.url] } : {}),
+      },
+      {
+        "@type": "ItemList",
+        name: `${brand.nameEn} (${brand.nameZh}) Archive Bottles`,
+        numberOfItems: bottles.length,
+        itemListElement: bottles.map((sku, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: `${sku.nameEn} (${sku.nameZh})`,
+          url: `${origin}/sku/${sku.id}`,
+        })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: SITE_NAME, item: origin },
+          { "@type": "ListItem", position: 2, name: "Distillery Houses", item: `${origin}/houses` },
+          { "@type": "ListItem", position: 3, name: brand.nameEn, item: pageUrl },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <p className="crumb">
         <Link href="/houses">Houses</Link> · {brand.provinceEn} ({brand.provinceZh})
       </p>
